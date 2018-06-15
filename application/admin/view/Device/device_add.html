@@ -1,0 +1,152 @@
+{include file="../application/admin/view/Public/_header.html"/}
+<body>
+<article class="page-container">
+	<form method="post" class="form form-horizontal" id="form-member-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>设备编号：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="number" name="number">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>类型：</label>
+			<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+				<div class="radio-box">
+					<input name="appa" type="radio" id="appa1" value="血压计" checked>
+					<label for="appa1">血压计</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" id="appa2" value="血糖仪" name="appa">
+					<label for="appa2">血糖仪</label>
+				</div>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>端口：</label>
+			<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+				<div class="radio-box">
+					<input name="port" type="radio" id="null" value="无" checked>
+					<label for="null">无</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" id="A" value="A" name="port">
+					<label for="A">A</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" id="B" value="B" name="port">
+					<label for="B">B</label>
+				</div>
+			</div>
+		</div>
+		{if condition="$type == 1"}
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机构：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" style="width: 50%" class="input-text" value={$userMsg.name} placeholder="" id="unit" name="unit">&nbsp&nbsp<input class="btn btn-primary radius" type="button" id="select" value="搜索"><br>
+			<span id="unit_info"></span>
+			<i style="display:none" id="icon" class="Hui-iconfont Hui-iconfont-weigouxuan"></i>
+			<input type="hidden" value='' id="unit_value">
+			<input type="hidden" value={$userMsg.id} id="unit_id">
+			</div>
+		</div>
+		{else/}
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机构：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" disabled="true" style="width: 50%" class="input-text" value={$userMsg.name} placeholder="" id="unit" name="unit">
+			<input type="hidden" value='' id="unit_value">
+			<input type="hidden" value={$userMsg.id} id="unit_id">
+			</div>
+		</div>
+		{/if}
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+</article>
+
+{include file="../application/admin/view/Public/_footer.html"/}
+
+<!-- <script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>  -->
+
+<script type="text/javascript">
+//表单验证
+$("#form-member-add").validate({
+    rules:{
+    	number:{
+            required:true,
+        },
+        unit:{
+            required:true,
+        },
+    },
+    onkeyup:false,
+    focusCleanup:true,
+    success:"valid",
+    submitHandler:function(form){
+        $(form).ajaxSubmit({
+            dataType:'json',
+            type:'post',
+            success:function (res) {
+                if (res.code == 1){
+                	alert('ok');
+                	layer_close();
+                }else {
+
+                }
+            }
+        });
+    }
+});
+
+$("#select").click(function(){
+	var select = $("#unit").val();
+	$.ajax({
+        url:"{:url('Admin/Device/device_add')}",
+        type:'GET',
+        dataType:'json',
+        data:{select_admin:'1',content:select},
+        success:function(data){
+            if(data.code==1){
+            	$("#icon").show();
+            	$("#unit_info").replaceWith(function(){
+                    return data.msg;
+                });
+            	$("#unit_value").val(data.msg);
+            }else{
+                layer.msg(data.msg);
+            }
+        }
+    });
+});
+
+$("#icon").click(function(){
+	var iconclass = $('#icon').attr('class');
+	var unit_value = $('#unit_value').val();
+	if (iconclass == 'Hui-iconfont Hui-iconfont-weigouxuan') {
+		$("#icon").removeClass("Hui-iconfont Hui-iconfont-weigouxuan");
+		$("#icon").addClass("Hui-iconfont Hui-iconfont-gouxuan");
+		$("#unit").val(unit_value);
+	}else{
+		$("#icon").removeClass("Hui-iconfont Hui-iconfont-gouxuan");
+		$("#icon").addClass("Hui-iconfont Hui-iconfont-weigouxuan");
+		$("#unit").val('');
+	}
+});
+	
+
+
+$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	
+});
+</script> 
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

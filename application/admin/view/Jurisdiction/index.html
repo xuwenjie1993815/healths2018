@@ -1,0 +1,92 @@
+{include file="../application/admin/view/Public/_header.html"/}
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 权限管理 <span class="c-gray en">&gt;</span> 权限列表 
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+	<!-- <button onclick="removeIframe()" class="btn btn-primary radius">关闭选项卡</button> -->
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-responsive table-sort">
+			<thead>
+				<tr class="text-c">
+					<th>姓名</th>
+					<th>电话</th>
+					<th>血压</th>
+					<th>预警等级</th>
+					<th>时间</th>
+					<th>预警信息</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="text-c">
+					<td id="number">章思赞</td>
+					<td class="text-l">18622225555</td>
+					<td>140</td>
+					<td>2级</td>
+					<td>2018-06-13 08:44:48</td>
+					<td>当日超过临界值:3次,预警平均血压:142</td>
+					<td class="f-14 td-manage">
+						<a style="text-decoration:none" class="ml-5" onClick="article_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+					</td>
+				</tr>
+				<tr class="text-c">
+					<td>蒋金容</td>
+					<td class="text-l">18966665555</td>
+					<td>145</td>
+					<td>1级</td>
+					<td>2018-06-13 08:26:04</td>
+					<td>当日超过临界值:3次,预警平均血压:154</td>
+					<td class="f-14 td-manage">
+						<a style="text-decoration:none" class="ml-5" onClick="article_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{include file="../application/admin/view/Public/_footer.html"/}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+$('.table-sort').dataTable({
+	"aaSorting": [[ 1, "desc" ]],//默认第几个排序
+	"bStateSave": true,//状态保存
+	"pading":false,
+	"aoColumnDefs": [
+	  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+	  {"orderable":false,"aTargets":[0,6]}// 不参与排序的列
+	]
+});
+
+/*设备-删除*/
+function article_del(obj,id){
+	var number = $('#number').text();
+	layer.confirm('删除即解除此设备所有关联,确认要删除吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: "{:url('Admin/Device/device_remove')}",
+			data:{number:number},
+			dataType: 'json',
+			success: function(data){
+				$(obj).parents("tr").remove();
+				layer.msg('已删除!',{icon:1,time:1000});
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});		
+	});
+}
+
+
+
+</script> 
+</body>
+</html>

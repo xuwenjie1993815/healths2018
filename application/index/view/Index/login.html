@@ -1,0 +1,88 @@
+{include file="../application/index/view/Public/header.html"/}
+	<body>
+			<div id="particles-js"></div>
+		
+			<ul class="cb-slideshow">
+	            <li></li>
+	            <li></li>
+	            <li></li>
+	            <li></li>
+	            <li></li>
+	            <li></li>
+	        </ul>
+
+			<div class="container-fluid">
+				<div class="row cb-slideshow-text-container ">
+					<div class= "tm-content col-xl-6 col-sm-8 col-xs-8 ml-auto section">
+					<header class="mb-5"><h1>欢迎</h1></header>
+					<P class="mb-5">输入邮箱登陆一下</P>
+					
+                    <!-- <form action="#" method="get" class="subscribe-form"> -->
+               	    	<div class="row form-section">
+
+							<div class="col-md-7 col-sm-7 col-xs-7">
+			                      <input name="email" type="text" class="form-control" id="contact" placeholder="Your Email..." required/>
+				  			</div>
+				  			<div class="col-md-7 col-sm-7 col-xs-7">
+			                      <input name="password" type="text" class="form-control" id="password" placeholder="Your Password..." required/>
+				  			</div>
+							<div class="col-md-5 col-sm-5 col-xs-5">
+								<button type="submit" id="submit"  class="tm-btn-subscribe">Subscribe</button>
+							</div>
+						
+						</div>
+                    <!-- </form> -->
+                    
+					<!-- <div class="tm-social-icons-container text-xs-center">
+	                    <a href="#" class="tm-social-link"><i class="fa fa-facebook"></i></a>
+	                    <a href="#" class="tm-social-link"><i class="fa fa-google-plus"></i></a>
+	                    <a href="#" class="tm-social-link"><i class="fa fa-twitter"></i></a>
+	                    <a href="#" class="tm-social-link"><i class="fa fa-linkedin"></i></a>
+	                </div> -->
+
+					</div>
+				</div>	
+			</div>	
+	</body>
+	
+	{include file="../application/index/view/Public/footer.html"}
+
+	<script type="text/javascript">
+	$('#submit').click(function(){
+		var	contact=$('#contact').val();
+		var	password=$('#password').val();
+		// var	code=$('#code').val();
+		if(contact==''){
+			layer.msg('请输入账号');
+			return;
+		}
+		if(password==''){
+			layer.msg('请输入密码');
+			return;
+		}
+		// if(code==''){
+		// 	layer.msg('请输入验证码');
+		// 	return false;
+		// }
+		$.ajax({
+			url:"{:url('index/Index/login')}",
+			type:'post',
+			dataType:'json',
+			data:{
+				name:contact,
+				password:password
+			},
+			success:function(data){
+
+				if(data.code==1){
+					layer.msg(1);
+				}else{
+					layer.msg(2);
+				}
+			}
+		});
+	});
+
+
+</script>
+</html>

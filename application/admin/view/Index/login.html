@@ -1,0 +1,110 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>慢友邦</title>
+
+<link rel="Bookmark" href="__PUBLIC__/title.png" >
+<link rel="Shortcut Icon" href="__PUBLIC__/title.png" />
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400">  <!-- Google web font "Open Sans" -->
+  <link rel="stylesheet" href="__PUBLIC__/css/font-awesome.min.css">
+  <link rel="stylesheet" href="__PUBLIC__/css/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="__PUBLIC__/css/demo.css" />
+  <link rel="stylesheet" href="__PUBLIC__/css/templatemo-style.css">
+  
+  <script type="text/javascript" src="__PUBLIC__/js/modernizr.custom.86080.js"></script>
+		
+</head>
+	<body>
+			<div id="particles-js"></div>
+		
+			<ul class="cb-slideshow">
+	            <li></li>
+	            <li></li>
+	            <li></li>
+	            <li></li>
+	            <li></li>
+	            <li></li>
+	        </ul>
+
+			<div class="container-fluid">
+				<div class="row cb-slideshow-text-container ">
+					<div class= "tm-content col-xl-6 col-sm-8 col-xs-8 ml-auto section">
+					<header class="mb-5"><h1>欢迎</h1></header>
+					<P class="mb-5">慢友邦管理系统</P>
+					
+                    <!-- <form action="#" method="get" class="subscribe-form"> -->
+               	    	<div class="row form-section">
+
+							<div class="col-md-7 col-sm-7 col-xs-7">
+			                      <input name="email" type="text" class="form-control" id="contact" placeholder="请输入账号" required/>
+				  			</div>
+				  			<div class="col-md-7 col-sm-7 col-xs-7">
+			                      <input name="password" type="password" class="form-control" id="password" placeholder="请输入密码" required/>
+				  			</div>
+							<div class="col-md-5 col-sm-5 col-xs-5">
+								<button type="submit" id="submit"  class="tm-btn-subscribe">登录</button>
+							</div>
+						
+						</div>
+					</div>
+				</div>	
+			</div>	
+	</body>
+	
+<script type="text/javascript" src="__PUBLIC__/js/particles.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/app.js"></script>
+{include file="../application/admin/view/Public/_footer.html"/}
+
+<script type="text/javascript">
+	$(document).keyup(function(event){
+	  if(event.keyCode ==13){
+	    $("#submit").trigger("click");
+	  }
+	});
+	$('#submit').click(function(){
+		var	contact=$('#contact').val();
+		var	password=$('#password').val();
+		// var	code=$('#code').val();
+		if(contact==''){
+			layer.msg('请输入账号');
+			return;
+		}
+		if(password==''){
+			layer.msg('请输入密码');
+			return;
+		}
+		// if(code==''){
+		// 	layer.msg('请输入验证码');
+		// 	return false;
+		// }
+		$.ajax({
+			url:"{:url('admin/Index/index')}",
+			type:'post',
+			dataType:'json',
+			data:{
+				name:contact,
+				password:password
+			},
+			success:function(data){
+				if(data.code==1){
+					layer.msg('登录成功,请稍等..', {
+				  		icon: 1,
+				  		time: 1000,
+						end:function(){
+							location.href='http://www.fx.com/public/admin';
+						}
+					}); 
+				}else{
+					layer.msg(2);
+				}
+			}
+		});
+	});
+
+
+</script>
+</html>

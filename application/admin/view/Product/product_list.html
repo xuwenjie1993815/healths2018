@@ -1,0 +1,130 @@
+{include file="../application/admin/view/Public/_header.html"/}
+
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+			<thead>
+				<tr class="text-c">
+					<th>服务包名称</th>
+					<th>类型</th>
+					<th>价格</th>
+					<th>单位数量(天)</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="text-c">
+					<td>健多食广健康管理有限公司</td>
+					<td>服务包</td>
+					<td id="price">360</td>
+					<td id="unit">30</td>
+					<td class="f-14 td-manage">
+						<div class="row">
+							<div class="col-lg-6">
+							   <div class="input-group">
+							     <span class="input-group-btn">
+							       <button class="btn btn-default" type="button" id="reduce">-</button>
+							     </span>
+							     <input type="number" min="1" class="form-control" placeholder="请输入或加减数量" id="number" value="1">
+							     <span class="input-group-btn">
+							       <button class="btn btn-default" type="button" id="add">+</button>
+							     </span>
+							   </div>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<input type="hidden" value={$id} id="id">
+		<div style="float: right;margin-right:10% ">结算价格:<span id="total">360</span>元
+				<button onClick="checking_out();" class="btn btn-primary radius" type="submit">提交</button>
+		</div>
+	</div>
+{include file="../application/admin/view/Public/_footer.html"/}
+<script>
+
+//结算
+function checking_out() {
+	var id = $("#id").val();
+	var number = parseInt($("#number").val());
+	var price = $("#price").text();
+	var unit = $("#unit").text();
+
+	var total = $("#total").text();
+	var type = '';
+	layer.confirm('选择购买方式', {
+	  btn: ['赠送','线下支付'] //按钮
+	}, function(){
+		type = 1;
+		$.ajax({
+		type: 'POST',
+		url: "{:url('Admin/Product/checking_out')}",
+		dataType: 'json',
+		data:{id:id,number:number,price:price,unit:unit,type:type},
+		success: function(data){
+			if (data.code == 1) {
+					layer.msg('赠送成功', {icon: 1});
+				}
+			}
+		});
+	}, function(){
+		  layer.confirm('本次订单支付总额:'+total+'元(请确认线下已收款)', {
+		    btn: ['确定', '取消']
+		  },function(){
+		  	type = 2;
+		  	$.ajax({
+			type: 'POST',
+			url: "{:url('Admin/Product/checking_out')}",
+			dataType: 'json',
+			data:{id:id,number:number,price:price,unit:unit,type:type},
+			success: function(data){
+				if (data.code == 1) {
+						layer.msg('购买成功', {icon: 1});
+					}
+				}
+			});
+		  },function(){
+		  	layer.msg('已取消', {icon: 2});return;
+		  }
+		  );
+	});
+}
+
+$("input").blur(function(){
+	var number = parseInt($("#number").val());
+	if (!number || number < 1) {
+  		$("#number").val(1);
+	}
+	//计算价格
+	Settlement(parseInt($("#number").val()),$("#price").text(),$("#unit").text());
+});
+
+
+$("#add").click(function(){
+	var number = parseInt($("#number").val());
+	if (number>0) {
+		$("#number").val(number+parseInt(1));
+	}else{
+		$("#number").val(1);
+	}
+	//计算价格
+	Settlement(parseInt($("#number").val()),$("#price").text(),$("#unit").text());
+});
+
+$("#reduce").click(function(){
+	var number = parseInt($("#number").val());
+	if (number > 1) {
+		$("#number").val(number-parseInt(1));
+	}else{
+		$("#number").val(1);
+	}
+	//计算价格
+	Settlement(parseInt($("#number").val()),$("#price").text(),$("#unit").text());
+});
+
+function Settlement(number,price,unit) {
+	var price = parseInt(price);
+	var total = number*price;
+	$("#total").text(total);
+}
+</script>
