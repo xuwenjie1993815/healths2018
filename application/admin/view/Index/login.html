@@ -66,6 +66,7 @@
 	  }
 	});
 	$('#submit').click(function(){
+		var k_host = window.location.host;
 		var	contact=$('#contact').val();
 		var	password=$('#password').val();
 		// var	code=$('#code').val();
@@ -95,7 +96,7 @@
 				  		icon: 1,
 				  		time: 1000,
 						end:function(){
-							location.href='http://www.fx.com/public/admin';
+							location.href='http://'+k_host+'/public/admin';
 						}
 					}); 
 				}else{
