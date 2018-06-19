@@ -8,6 +8,8 @@ class Patient extends Controller
 {
 	//获取患者列表
 	public function index(){
+		//星级标识
+		$this->assign('star',1);
 		return $this->fetch('index');die;
 		// $a = Db::table('patient')->where('id',67)->find();
 
@@ -30,7 +32,6 @@ class Patient extends Controller
 					$where.=' and gid='.$_SESSION['userMsg']['uid'].'';
 					break;
 			}
-
 		return $this->fetch('index');die;
 	}
 
@@ -54,6 +55,28 @@ class Patient extends Controller
 
 	public function patient_add(){
 		//新增患者接口
+		return $this->fetch();
+	}
+
+	//标记星级用户
+	public function star_set(){
+		$id = input('post.id');
+		//(接口)
+		return array('code' => 1);
+	}
+
+	//取消星级用户
+	public function star_cancel(){
+		$id = input('post.id');
+		//(接口)
+		return array('code' => 1);
+	}
+
+	//设置分组
+	public function group_set(){
+		$id = input('id');
+		//通过用户id查询当前组别
+		$this->assign('id',$id);
 		return $this->fetch();
 	}
 
