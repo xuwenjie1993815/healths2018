@@ -75,10 +75,23 @@ class Patient extends Controller
 	//设置分组
 	public function group_set(){
 		$id = input('id');
+		if (input('?post.p_id') AND input('?post.type')) {
+			$data = array('code' => 1,'ys' => array('12' => '朱玉婷','13' => '徐医生'),'yz' => array('255' => '肖莉','620' => '杨涛'));
+			$this->assign('data',$data['ys']);
+			return array('code' => 1);
+		}else{
+			$this->assign('data','1');
+		}
 		//通过用户id查询当前组别
 		$this->assign('id',$id);
 		return $this->fetch();
 	}
 
+	//根据机构查找医生医助
+	public function jg(){
+		$id = input('post.id');
+		$data = array('code' => 1,'ys' => array('12' => '朱玉婷','13' => '徐医生'),'yz' => array('255' => '肖莉','620' => '杨涛'));
+		return array('code' => 1);
+	}
 
 }

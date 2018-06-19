@@ -1,10 +1,73 @@
 {include file="../application/admin/view/Public/_header.html"/}
-{$id}
+<div class="page-container" style="width: 100%;">
+	<a onclick="jg('12')">
+		<table cellspacing="0"  class="leve-table table" data-id='' style="width: 25%;float: left;background-color:#00ff00;" >
 
+			<tr>
+				<td rowspan="2" id="leve-ta">
+					<img class="tou-img" src="http://www.healths2017.com" onerror="this.src='__PUBLIC__/images/star.png'">
+				</td>
+				<td class="leve-tb yd">
+					<p>机构1</p>
+				</td>
+			</tr>
+
+			<tr>
+				<td class="leve-tb xd">
+					<p>asdasd</p>
+				</td>
+			</tr>
+		</table>
+	</a>
+	<table cellspacing="0"  class="leve-table table" data-id=''  style="width: 25%;float: left;">
+		<tr>
+			<!-- <td colspan="2" rowspan="2">1</td> -->
+			<td rowspan="2" id="leve-ta"><img class="tou-img" src="http://www.healths2017.com" onerror="this.src='__PUBLIC__/images/star1.png'"></a></td>
+			<td class="leve-tb yd"><p>机构2</p></td>
+		</tr>
+		<tr>
+			<td class="leve-tb xd"><p>asdasd</p></td>
+		</tr>
+	</table>
+</div>
+<div class="page-container" id="aa" style="display: none;">
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+			<thead>
+				<tr class="text-c">
+					<th>姓名</th>
+					<th>联系电话</th>
+				</tr>
+			</thead>
+			<tbody>
+				{volist name="data" id="vo"}
+				<tr class="text-c">
+					<th>{$vo}</th>
+					<th>1123</th>
+				</tr>
+				{/volist}
+			</tbody>
+		</table>
+	</div>
+</div>
 {include file="../application/admin/view/Public/_footer.html"/}
 
 <!-- <script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>  -->
 
 <script type="text/javascript">
-
+function jg(id) {
+	$.ajax({
+		type: 'POST',
+		url: "{:url('Admin/patient/group_set')}",
+		dataType: 'json',
+		data:{p_id:id,type:'1'},
+		success: function(data){
+			if (data.code == 1) {
+				$("#aa").css('display','block');
+			}else{
+				layer.msg('设置失败');
+			}
+		}
+	});
+}
 </script> 
