@@ -74,14 +74,21 @@ class Patient extends Controller
 
 	//设置分组
 	public function group_set(){
-		$id = input('id');
-		if (input('?post.p_id') AND input('?post.type')) {
-			$data = array('code' => 1,'ys' => array('12' => '朱玉婷','13' => '徐医生'),'yz' => array('255' => '肖莉','620' => '杨涛'));
-			$this->assign('data',$data['ys']);
+		//提交表单
+		if (input("?post.submit_set")) {
+			//id:患者id
+			//jg_id:机构id
+			//doctor:医生id
+			//yz:医助id
+			$id = input("post.id");
+			$jg_id = input("post.jg_id");
+			$doctor = input("post.doctor");
+			$yz = input("post.yz");
+			//修改组别(接口)
 			return array('code' => 1);
-		}else{
-			$this->assign('data','1');
 		}
+
+		$id = input('id');
 		//通过用户id查询当前组别
 		$this->assign('id',$id);
 		return $this->fetch();
@@ -89,9 +96,34 @@ class Patient extends Controller
 
 	//根据机构查找医生医助
 	public function jg(){
-		$id = input('post.id');
-		$data = array('code' => 1,'ys' => array('12' => '朱玉婷','13' => '徐医生'),'yz' => array('255' => '肖莉','620' => '杨涛'));
-		return array('code' => 1);
+		$id = input('post.p_id');
+		//根据机构id获取数据(接口)
+		
+		if (input('post.p_id') == 11) {
+			$data = array('ys' => array('12' => array('name' => '朱玉婷','tel' => '1322131513'),'13' => array('name' => '徐医生','tel' => '56445112313')),'yz' => array('255' => array('name' => '肖莉','tel' => '22251111'),'620' => array('name' => '杨涛','tel' => '669955442')));
+		}
+		if (input('post.p_id') == 12) {
+			$data = array('ys' => array('12' => array('name' => '徐医生','tel' => '1322131513'),'13' => array('name' => '杨医生','tel' => '56445112313')),'yz' => array('255' => array('name' => '谢晓燕','tel' => '22251111'),'620' => array('name' => '嘻嘻嘻','tel' => '669955442')));
+		}
+
+		$html.="<tbody id='list'>";
+		$html_yz.="<tbody id='list_yz'>";
+		foreach ($data['ys'] as $key => $value) {
+			$html.="<tr class='text-c'><td><input name='doctor' type='radio' value=".$key." id='doctor'></td><td>".$value['name']."</td><td>".$value['tel']."</td>";
+		}
+		foreach ($data['yz'] as $key => $value) {
+			$html_yz.="<tr class='text-c'><td><input name='yz' type='radio' value=".$key." id='yz'></td><td>".$value['name']."</td><td>".$value['tel']."</td>";
+		}
+
+		// if (input('post.p_id') == 11) {
+		// 	$html.="<tr><td>".'朱玉婷'."</td><td>".'136665522221'."</td>";
+		// }
+		// if (input('post.p_id') == 12) {
+		// 	$html.="<tr><td>".'徐医生'."</td><td>".'136665522221'."</td>";
+		// }
+		$html.="</tbody>";
+		$html_yz.="</tbody>";
+		return array('code' => 1,'data' => $data,'html' => $html,'html_yz' => $html_yz);
 	}
 
 }

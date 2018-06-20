@@ -1,11 +1,11 @@
 {include file="../application/admin/view/Public/_header.html"/}
 <div class="page-container" style="width: 100%;">
-	<a onclick="jg('12')">
-		<table cellspacing="0"  class="leve-table table" data-id='' style="width: 25%;float: left;background-color:#00ff00;" >
+		<a href="#">
+		<table onclick="jg('12')" id="12" border="1" cellspacing="0"  class="leve-table table" data-id='' style="width: 24%;float: left; background-color:yellow">
 
 			<tr>
-				<td rowspan="2" id="leve-ta">
-					<img class="tou-img" src="http://www.healths2017.com" onerror="this.src='__PUBLIC__/images/star.png'">
+				<td rowspan="2" id="leve-ta" >
+					<img style="width: 50px; height: 50px;" class="tou-img" src="http://www.healths2017.com" onerror="this.src='__PUBLIC__/images/1517275559.jpg'">
 				</td>
 				<td class="leve-tb yd">
 					<p>机构1</p>
@@ -18,56 +18,136 @@
 				</td>
 			</tr>
 		</table>
-	</a>
-	<table cellspacing="0"  class="leve-table table" data-id=''  style="width: 25%;float: left;">
-		<tr>
-			<!-- <td colspan="2" rowspan="2">1</td> -->
-			<td rowspan="2" id="leve-ta"><img class="tou-img" src="http://www.healths2017.com" onerror="this.src='__PUBLIC__/images/star1.png'"></a></td>
-			<td class="leve-tb yd"><p>机构2</p></td>
-		</tr>
-		<tr>
-			<td class="leve-tb xd"><p>asdasd</p></td>
-		</tr>
-	</table>
+		</a>
+		<a href="#">
+		<table onclick="jg('11')" id="11" border="1" cellspacing="0"  class="leve-table table" data-id=''  style="width: 24%;float: left;">
+			<tr>
+				<!-- <td colspan="2" rowspan="2">1</td> -->
+				<td rowspan="2" id="leve-ta"><img class="tou-img" style="width: 50px; height: 50px;" src="http://www.healths2017.com" onerror="this.src='__PUBLIC__/images/1521601030.jpg'"></a></td>
+				<td class="leve-tb yd"><p>机构2</p></td>
+			</tr>
+			<tr>
+				<td class="leve-tb xd"><p>asdasd</p></td>
+			</tr>
+		</table>
+		</a>
 </div>
-<div class="page-container" id="aa" style="display: none;">
+
+<form action="" method="post" class="form form-horizontal" id="form-group-set">
+<div class="page-container" id="aa" >
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
 			<thead>
 				<tr class="text-c">
+					<th>选择</th>
 					<th>姓名</th>
 					<th>联系电话</th>
 				</tr>
 			</thead>
-			<tbody>
-				{volist name="data" id="vo"}
+			<tbody id="list">
 				<tr class="text-c">
-					<th>{$vo}</th>
-					<th>1123</th>
+					<td>
+						<input name="doctor" type="radio" value="1" id="doctor">
+					</td>
+					<td>默认医生</td>
+					<td>1123</td>
 				</tr>
-				{/volist}
+				<tr class="text-c">
+					<td>
+						<input name="doctor" type="radio" value="1" id="doctor">
+					</td>
+					<td>默认医生2</td>
+					<td>1123</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
 </div>
+
+<div class="page-container" id="yz" >
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+			<thead>
+				<tr class="text-c">
+					<th>选择</th>
+					<th>姓名</th>
+					<th>联系电话</th>
+				</tr>
+			</thead>
+			<tbody id="list_yz">
+				<tr class="text-c">
+					<td>
+						<input name="yz" type="radio" value="1" id="yz">
+					</td>
+					<td>默认医助</td>
+					<td>1123</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<input type="hidden" value={$id} name="id">
+<input type="hidden" value="" id="jg_id" name="jg_id">
+<input type="hidden" value="1" name="submit_set">
+<div class="row cl">
+	<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+		<input id="tj" class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+	</div>
+</div>
+</form>
 {include file="../application/admin/view/Public/_footer.html"/}
 
 <!-- <script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>  -->
 
 <script type="text/javascript">
+//表单验证
+$("#form-group-set").validate({
+    onkeyup:false,
+    focusCleanup:true,
+    success:"valid",
+    submitHandler:function(form){
+        $(form).ajaxSubmit({
+            dataType:'json',
+            type:'post',
+            success:function (data) {
+                if (data.code == 1){
+                    layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
+						parent.location.reload();
+					})
+                }else {
+                    layer.msg('设置失败');
+                }
+                
+                
+            }
+        });
+    }
+});
+
+
+
 function jg(id) {
+	$('table').css({'background-color':''});
+	$('#'+id).css({'background-color':'yellow'});
+	$('#jg_id').val(id);
 	$.ajax({
 		type: 'POST',
-		url: "{:url('Admin/patient/group_set')}",
+		url: "{:url('Admin/patient/jg')}",
 		dataType: 'json',
 		data:{p_id:id,type:'1'},
 		success: function(data){
 			if (data.code == 1) {
-				$("#aa").css('display','block');
+				$("#list").replaceWith(function(){
+                    return data.html;
+                });
+                $("#list_yz").replaceWith(function(){
+                    return data.html_yz;
+                });
 			}else{
 				layer.msg('设置失败');
 			}
 		}
 	});
 }
+
 </script> 
