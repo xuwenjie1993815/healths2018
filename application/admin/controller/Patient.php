@@ -10,6 +10,7 @@ class Patient extends Controller
 	public function index(){
 		//星级标识
 		$this->assign('star',1);
+		$this->assign('id',10001);
 		return $this->fetch('index');die;
 		// $a = Db::table('patient')->where('id',67)->find();
 
@@ -37,6 +38,14 @@ class Patient extends Controller
 
 	//患者详情
 	public function details(){
+		$id = input('id');
+		$this->assign('id',$id);
+		//基本信息
+		//既往病史
+		//体检报告
+		//用药记录
+		//测量统计
+		//服务记录
 		return $this->fetch();
 	}
 
@@ -50,7 +59,6 @@ class Patient extends Controller
 		$family_phone = $_POST['family_phone'];
 		$sex = $_POST['sex'];
 		//基本信息提交修改接口
-		var_dump($_POST);
 	}
 
 	public function patient_add(){
@@ -115,15 +123,20 @@ class Patient extends Controller
 			$html_yz.="<tr class='text-c'><td><input name='yz' type='radio' value=".$key." id='yz'></td><td>".$value['name']."</td><td>".$value['tel']."</td>";
 		}
 
-		// if (input('post.p_id') == 11) {
-		// 	$html.="<tr><td>".'朱玉婷'."</td><td>".'136665522221'."</td>";
-		// }
-		// if (input('post.p_id') == 12) {
-		// 	$html.="<tr><td>".'徐医生'."</td><td>".'136665522221'."</td>";
-		// }
 		$html.="</tbody>";
 		$html_yz.="</tbody>";
 		return array('code' => 1,'data' => $data,'html' => $html,'html_yz' => $html_yz);
+	}
+
+	//添加用药记录
+	public function add_drug_record(){
+		$data['time'] = strtotime($_POST['data2']);
+		$data['drug_name'] = $_POST['drug_name'];
+		$data['consumption'] = $_POST['consumption'];
+		$data['regular'] = $_POST['regular'];
+		$data['id'] = input('id');
+		//添加用药记录(接口)
+		return $this->fetch();
 	}
 
 }

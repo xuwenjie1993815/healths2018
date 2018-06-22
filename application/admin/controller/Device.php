@@ -45,5 +45,44 @@ class Device extends Controller{
 		//获取设备编号或id,调用接口进行解绑,删除操作
 		// input('post.number');
 	}
+
+	//用户绑定/解绑设备
+	public function bangding(){
+		//解绑设备
+		if (input('post.remove') == 1) {
+			$dataid = input('post.id');
+			$p_id = input('post.p_id');
+			//解绑(接口)
+			return array('code' => '1','msg' => '解绑成功');
+		}
+		//绑定设备
+		if (input('post.bangding') == 1) {
+			$dataid = input('post.id');
+			$p_id = input('post.p_id');
+			//绑定(接口)
+			if (1==2) {
+				return array('code' => '1','msg' => '绑定成功');
+			}else{
+				return array('code' => '2','msg' => '你已经绑定xxxxx,确认更换绑定设备吗？');
+			}
+		}
+		//替换以前的设备
+		if (input('post.change') == 1) {
+			$data['pid']=$_POST['p_id'];
+			$data['id']=$_POST['id'];
+			return array('code' => '1','msg' => '绑定成功');
+		}
+		//搜索
+		if (input('?post.pid') and input('post.info') == 1) {
+			$pid = input('post.pid');
+			$select = input('post.select');
+			//根据搜索内容查询设备列表(接口)
+			
+		}
+		$id = input('id');
+		$this->assign('id',$id);
+		return $this->fetch();
+	}
+
 	
 }

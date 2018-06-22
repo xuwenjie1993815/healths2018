@@ -1,0 +1,76 @@
+{include file="../application/admin/view/Public/_header.html"/}
+<title>服药记录</title>
+</head>
+<body>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="form-drug-record-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>药名：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="含量(mg/片)" id="drug_name" name="drug_name">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>用法用量：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="(片/次,次/天)" id="consumption" name="consumption">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>用药时间：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input  class="input-text" onClick="laydate()" name="data2" id="time" value="{$stab}">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>是否规律用药：</label>
+			<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+				<div class="radio-box">
+					<input name="regular" type="radio" value="1" id="regular-1" checked>
+					<label for="regular-1">规律</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" id="regular-2" value="2" name="regular">
+					<label for="regular-2">间断</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" id="regular-3" value="3" name="regular">
+					<label for="regular-3">不服药</label>
+				</div>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+</article>
+
+<script src="__STATIC__/lib/layer/laydate/laydate.js"></script>
+{include file="../application/admin/view/Public/_footer.html"/}
+<script type="text/javascript">
+laydate.render({
+  elem: '#time',
+  type: 'datetime'
+});
+//表单验证
+$("#form-drug-record-add").validate({
+    onkeyup:false,
+    focusCleanup:true,
+    success:"valid",
+    submitHandler:function(form){
+        $(form).ajaxSubmit({
+            dataType:'json',
+            type:'post',
+            success:function (res) {
+                if (res.status == 1){
+                    var icon_n = '1';
+                }else {
+                    var icon_n = '2';
+                }
+            }
+        });
+    }
+});
+</script>

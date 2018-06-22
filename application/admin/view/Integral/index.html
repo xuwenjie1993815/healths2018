@@ -1,0 +1,92 @@
+{include file="../application/admin/view/Public/_header.html"/}
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 积分管理 <span class="c-gray en">&gt;</span> 积分列表 
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+	<!-- <button onclick="removeIframe()" class="btn btn-primary radius">关闭选项卡</button> -->
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-responsive table-sort">
+			<thead>
+				<tr class="text-c">
+					<th>姓名</th>
+					<th>剩余积分</th>
+					<th>总积分</th>
+					<th>已用积分</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="text-c">
+					<td>黄强</td>
+					<td>0</td>
+					<td>18</td>
+					<td>18</td>
+					<td class="f-14 td-manage">
+						<input class="btn btn-primary radius" type="button" onClick="integral_exchange('积分兑换','{:url('Admin/Integral/integral_exchange',array('id' => 125))}')" value="兑换">
+						<input class="btn btn-primary radius" type="button" onClick="integral_record('历史记录','{:url('Admin/Integral/integral_record',array('id' => 125))}')" value="历史记录">
+					</td>
+				</tr>
+				<tr class="text-c">
+					<td>赵艳东</td>
+					<td>4</td>
+					<td>19</td>
+					<td>15</td>
+					<td class="f-14 td-manage">
+						<input class="btn btn-primary radius" type="button" value="兑换">
+						<input class="btn btn-primary radius" type="button" value="历史记录">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{include file="../application/admin/view/Public/_footer.html"/}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+$('.table-sort').dataTable({
+	"aaSorting": [[ 1, "desc" ]],//默认第几个排序
+	"bStateSave": true,//状态保存
+	"pading":false,
+	"aoColumnDefs": [
+	  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+	  //{"orderable":false,"aTargets":[0,4]}// 不参与排序的列
+	]
+});
+
+/*积分兑换*/
+function integral_exchange(title,url){
+	layer.open({
+	  title:title,
+	  type: 2,
+	  area: ['650px', '250px'],
+	  fixed: false, //不固定
+	  maxmin: true,
+	  content: [url,'no']
+	});
+}
+
+/*历史记录*/
+function integral_record(title,url){
+	layer.open({
+	  title:title,
+	  type: 2,
+	  area: ['650px', '500px'],
+	  fixed: false, //不固定
+	  maxmin: true,
+	  content: [url,'no']
+	});
+}
+
+
+
+</script> 
+</body>
+</html>
