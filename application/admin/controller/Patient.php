@@ -139,4 +139,11 @@ class Patient extends Controller
 		return $this->fetch();
 	}
 
+	//患者病史设置
+	public function patient_record_set(){
+		var_dump($_POST);die;
+		//设置病史(接口)
+	}
+
+
 }

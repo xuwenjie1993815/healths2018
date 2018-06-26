@@ -81,4 +81,28 @@ class Index extends Controller
         Session::delete('userMsg');
         return array('code' => 1,'msg' => '退出成功');
     }
+
+    //查找机构
+    public function select_admin(){
+        $select_c = input('get.content');
+        //根据机构名称/id查询机构详情
+        $data = "<tr onClick='admin_jg(1)' style='cursor:Pointer;' id='jg1'><th>1</th><td>健康源</td></tr>";
+        return array('code' => 1,'msg' => $data);
+    }
+
+    //查找医生
+    public function select_doctor(){
+        $ys_id = input('get.content');
+        //根据机构id查询机构医生
+        $data = "<tr onClick='admin_ys(124)' style='cursor:Pointer;' id='ys124'><td>朱玉婷</td></tr>";
+        return array('code' => 1,'msg' => $data);
+    }
+
+    //查找医助
+    public function select_yz(){
+        $yz_id = input('get.content');
+        //根据机构id查询机构医生
+        $data = "<tr onClick='admin_yz(243)' style='cursor:Pointer;' id='yz243'><td>肖莉</td></tr>";
+        return array('code' => 1,'msg' => $data);
+    }
 }

@@ -28,4 +28,9 @@ class Integral extends Controller
 	public function integral_record(){
 		return $this->fetch();
 	}
+
+	//积分清零
+	public function reset(){
+		return array('code' => 1);
+	}
 }

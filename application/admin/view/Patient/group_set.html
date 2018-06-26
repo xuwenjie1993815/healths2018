@@ -1,38 +1,33 @@
 {include file="../application/admin/view/Public/_header.html"/}
-<div class="page-container" style="width: 100%;">
-		<a href="#">
-		<table onclick="jg('12')" id="12" border="1" cellspacing="0"  class="leve-table table" data-id='' style="width: 24%;float: left; background-color:yellow">
-
-			<tr>
-				<td rowspan="2" id="leve-ta" >
-					<img style="width: 50px; height: 50px;" class="tou-img" src="http://www.healths2017.com" onerror="this.src='__PUBLIC__/images/1517275559.jpg'">
-				</td>
-				<td class="leve-tb yd">
-					<p>机构1</p>
-				</td>
-			</tr>
-
-			<tr>
-				<td class="leve-tb xd">
-					<p>asdasd</p>
-				</td>
-			</tr>
-		</table>
-		</a>
-		<a href="#">
-		<table onclick="jg('11')" id="11" border="1" cellspacing="0"  class="leve-table table" data-id=''  style="width: 24%;float: left;">
-			<tr>
-				<!-- <td colspan="2" rowspan="2">1</td> -->
-				<td rowspan="2" id="leve-ta"><img class="tou-img" style="width: 50px; height: 50px;" src="http://www.healths2017.com" onerror="this.src='__PUBLIC__/images/1521601030.jpg'"></a></td>
-				<td class="leve-tb yd"><p>机构2</p></td>
-			</tr>
-			<tr>
-				<td class="leve-tb xd"><p>asdasd</p></td>
-			</tr>
-		</table>
-		</a>
+<div class="page-container" style="width: 20%; float: left; cursor:pointer;">
+	<table onclick="jg('12')" id="12" border="1" cellspacing="0"  class="leve-table table" data-id='' style="background-color:#C0C0C0">
+		<tr>
+			<td rowspan="2" id="leve-ta" >
+				<img style="width: 50px; height: 50px;" class="tou-img" src="http://www.healths2017.com" onerror="this.src='__PUBLIC__/images/1517275559.jpg'">
+			</td>
+			<td class="leve-tb yd">
+				<p>机构1</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="leve-tb xd">
+				<p>asdasd</p>
+			</td>
+		</tr>
+	</table>
 </div>
-
+<div class="page-container" style="width: 20%;float: left; cursor:pointer;">
+	<table onclick="jg('11')" id="11" border="1" cellspacing="0"  class="leve-table table" data-id=''>
+		<tr>
+			<td rowspan="2" id="leve-ta"><img class="tou-img" style="width: 50px; height: 50px;" src="http://www.healths2017.com" onerror="this.src='__PUBLIC__/images/1521601030.jpg'">
+			</td>
+			<td class="leve-tb yd"><p>机构2</p></td>
+		</tr>
+		<tr>
+			<td class="leve-tb xd"><p>asdasd</p></td>
+		</tr>
+	</table>
+</div>
 <form action="" method="post" class="form form-horizontal" id="form-group-set">
 <div class="page-container" id="aa" >
 	<div class="mt-20">
@@ -128,7 +123,7 @@ $("#form-group-set").validate({
 
 function jg(id) {
 	$('table').css({'background-color':''});
-	$('#'+id).css({'background-color':'yellow'});
+	$('#'+id).css({'background-color':'#C0C0C0'});
 	$('#jg_id').val(id);
 	$.ajax({
 		type: 'POST',

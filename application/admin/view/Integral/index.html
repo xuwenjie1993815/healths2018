@@ -30,6 +30,7 @@
 					<td class="f-14 td-manage">
 						<input class="btn btn-primary radius" type="button" onClick="integral_exchange('积分兑换','{:url('Admin/Integral/integral_exchange',array('id' => 125))}')" value="兑换">
 						<input class="btn btn-primary radius" type="button" onClick="integral_record('历史记录','{:url('Admin/Integral/integral_record',array('id' => 125))}')" value="历史记录">
+						<input class="btn btn-primary radius" type="button" onClick="reset('积分清零','{:url('Admin/Integral/reset')}','12')" value="积分清零">
 					</td>
 				</tr>
 				<tr class="text-c">
@@ -40,6 +41,7 @@
 					<td class="f-14 td-manage">
 						<input class="btn btn-primary radius" type="button" value="兑换">
 						<input class="btn btn-primary radius" type="button" value="历史记录">
+						<input class="btn btn-primary radius" type="button" onClick="reset('积分清零','{:url('Admin/Integral/reset')}','13')" value="积分清零">
 					</td>
 				</tr>
 			</tbody>
@@ -82,6 +84,27 @@ function integral_record(title,url){
 	  fixed: false, //不固定
 	  maxmin: true,
 	  content: [url,'no']
+	});
+}
+
+/*积分清零*/
+function reset(title,url,id){
+	layer.confirm('确认要把该用户的积分清零吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: 'reset',
+			dataType: 'json',
+			data:{id:id},
+			success: function(data){
+				if (data.code == 1) {
+					layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
+						location.reload();
+					})
+				}else{
+					layer.msg('设置失败');
+				}
+			}
+		});		
 	});
 }
 

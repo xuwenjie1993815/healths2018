@@ -54,12 +54,60 @@
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3">身份证：</label>
+			<label class="form-label col-xs-4 col-sm-3">身份证号码：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input type="text" class="input-text" value="" placeholder="" id="card" name="card">
 			</div>
 		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机构：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" style="width: 50%" class="input-text" placeholder="" id="unit" name="unit" value={$userMsg.name}>&nbsp&nbsp<input class="btn btn-primary radius" type="button" id="select" value="搜索"><br>
+				<table style="display:none" id="unit_data" class="table table-border table-bordered">
+		            <thead>
+		              <tr>
+		                <th>机构编码</th>
+		                <th>机构名称</th>
+		              </tr>
+		            </thead>
+		            <tbody id="admin_info">
+		              <tr>
+		                <th>1</th>
+		                <td>健康源</td>
+		              </tr>
+		            </tbody>
+		        </table>
 
+		        <table style="display:none;width: 50%;float: left;" id="doctor_data" class="table table-border table-bordered">
+		            <thead>
+		              <tr>
+		                <th>医生姓名</th>
+		              </tr>
+		            </thead>
+		            <tbody id="doctor_info">
+		              <tr>
+		                <th>1</th>
+		                <td>选择</td>
+		              </tr>
+		            </tbody>
+		        </table>
+		        <table style="display:none;width: 50%;float: left;" id="yz_data" class="table table-border table-bordered">
+		            <thead>
+		              <tr>
+		                <th>医助姓名</th>
+		              </tr>
+		            </thead>
+		            <tbody id="yz_info">
+		              <tr>
+		                <th>1</th>
+		              </tr>
+		            </tbody>
+		        </table>
+			<input type="hidden" name="unit_id" id="unit_id"  value={$userMsg.id}>
+			<input type="hidden" name="ys_id" id="ys_id" value=''>
+			<input type="hidden" name="yz_id" id="yz_id" value=''>
+			</div>
+		</div>
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
 				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
@@ -71,53 +119,111 @@
 
 {include file="../application/admin/view/Public/_footer.html"/}
 <script type="text/javascript">
+$("#select").click(function(){
+	var select = $("#unit").val();
+	$.ajax({
+        url:"{:url('Admin/index/select_admin')}",
+        type:'GET',
+        dataType:'json',
+        data:{content:select},
+        success:function(data){
+            if(data.code==1){
+            	$("#unit_data").show();
+            	$("#admin_info").replaceWith(function(){
+            		return data.msg;
+                });
+            }else{
+                layer.msg(data.msg);
+            }
+        }
+    });
+});
+
+function admin_jg(id) {
+	$('tr').css({'background-color':''});
+	if (id != $("#unit_id").val()) {
+		$("#jg"+id).css({'background-color':'#C0C0C0'});
+		$("#unit_id").val(id);
+		$.ajax({
+	        url:"{:url('Admin/index/select_doctor')}",
+	        type:'GET',
+	        dataType:'json',
+	        data:{content:id},
+	        success:function(data){
+	            if(data.code==1){
+	            	$("#doctor_data").show();
+	            	$("#doctor_info").replaceWith(function(){
+	            		return data.msg;
+	                });
+	            }else{
+	                layer.msg(data.msg);
+	            }
+	        }
+	    });
+	    $.ajax({
+	        url:"{:url('Admin/index/select_yz')}",
+	        type:'GET',
+	        dataType:'json',
+	        data:{content:id},
+	        success:function(data){
+	            if(data.code==1){
+	            	$("#yz_data").show();
+	            	$("#yz_info").replaceWith(function(){
+	            		return data.msg;
+	                });
+	            }else{
+	                layer.msg(data.msg);
+	            }
+	        }
+	    });
+	}else{
+		//取消选择
+		$("#unit_id").val('');
+		$("#doctor_data").hide();
+		$("#yz_data").hide();
+		$("#ys_id").val('');
+		$("#yz_id").val('');
+	}
+}
+
+function admin_ys(id) {
+	$('#doctor_data tr').css({'background-color':''});
+	$("#ys"+id).css({'background-color':'#C0C0C0'});
+	$("#ys_id").val(id);
+}
+
+function admin_yz(id) {
+	$('#yz_data tr').css({'background-color':''});
+	$("#yz"+id).css({'background-color':'#C0C0C0'});
+	$("#yz_id").val(id);
+}
+
 $(function(){
-	// $(".permission-list dt input:checkbox").click(function(){
-	// 	$(this).closest("dl").find("dd input:checkbox").prop("checked",$(this).prop("checked"));
-	// });
-	// $(".permission-list2 dd input:checkbox").click(function(){
-	// 	var l =$(this).parent().parent().find("input:checked").length;
-	// 	var l2=$(this).parents(".permission-list").find(".permission-list2 dd").find("input:checked").length;
-	// 	if($(this).prop("checked")){
-	// 		$(this).closest("dl").find("dt input:checkbox").prop("checked",true);
-	// 		$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",true);
-	// 	}
-	// 	else{
-	// 		if(l==0){
-	// 			$(this).closest("dl").find("dt input:checkbox").prop("checked",false);
-	// 		}
-	// 		if(l2==0){
-	// 			$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",false);
-	// 		}
-	// 	}
-	// });
-
-
 	$('.skin-minimal input').iCheck({
 		checkboxClass: 'icheckbox-blue',
 		radioClass: 'iradio-blue',
 		increaseArea: '20%'
 	});
 	
-		//表单验证
-        $("#form-patient-add").validate({
-            onkeyup:false,
-            focusCleanup:true,
-            success:"valid",
-            submitHandler:function(form){
-                $(form).ajaxSubmit({
-                    dataType:'json',
-                    type:'post',
-                    success:function (res) {
-                        if (res.status == 1){
-                            var icon_n = '1';
-                        }else {
-                            var icon_n = '2';
-                        }
+	//表单验证
+    $("#form-patient-add").validate({
+        onkeyup:false,
+        focusCleanup:true,
+        success:"valid",
+        submitHandler:function(form){
+            $(form).ajaxSubmit({
+                dataType:'json',
+                type:'post',
+                success:function (res) {
+                    if (res.status == 1){
+                        var icon_n = '1';
+                    }else {
+                        var icon_n = '2';
                     }
-                });
-            }
-        });
+                }
+            });
+        }
+    });
 });
 </script> 
 <!--/请在上方写此页面业务相关的脚本-->
