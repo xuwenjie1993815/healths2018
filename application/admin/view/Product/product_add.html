@@ -1,9 +1,4 @@
 {include file="../application/admin/view/Public/_header.html"/}
-<!--[if IE 6]>
-<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
-<script>DD_belatedPNG.fix('*');</script>
-<![endif]-->
-<!--/meta 作为公共模版分离出去-->
 
 <link href="__STATIC__/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
 </head>
@@ -17,14 +12,27 @@
 				<input type="text" class="input-text" value="" placeholder="" id="" name="">
 			</div>
 		</div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>商品类型:</label>
+            <div class="formControls col-xs-8 col-sm-9 skin-minimal">
+                <div class="radio-box">
+                    <input name="product_type" type="radio" value="1" id="product_type-1" checked>
+                    <label for="product_type-1">服务包</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" id="product_type-2" value="2" name="product_type">
+                    <label for="product_type-2">实物商品</label>
+                </div>
+            </div>
+        </div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2">商品价格：</label>
+			<label class="form-label col-xs-4 col-sm-2">商品单价：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" name="" id="" placeholder="" value="" class="input-text" style="width:90%">
+				<input type="number" name="price" min="0" id="price" value="" class="input-text" style="width:90%">
 				元</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2">产品摘要：</label>
+			<label class="form-label col-xs-4 col-sm-2">商品摘要：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<textarea name="" cols="" rows="" class="textarea"  placeholder="简单的介绍产品.." datatype="*10-100" dragonfly="true" nullmsg="产品摘要不能为空！" onKeyUp="$.Huitextarealength(this,200)">
 				</textarea>
@@ -63,7 +71,6 @@
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
 				<button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存并提交审核</button>
-				<button onClick="article_save();" class="btn btn-secondary radius" type="button"><i class="Hui-iconfont">&#xe632;</i> 保存草稿</button>
 				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
 			</div>
 		</div>
@@ -766,6 +773,13 @@ $(function(){
 
 $(function(){
 	var ue = UE.getEditor('editor');
+});
+
+$("#price").blur(function(){
+    var number = parseInt($("#price").val());
+    if (!number || number < 1) {
+        $("#price").val(1);
+    }
 });
 </script>
 </body>

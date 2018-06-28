@@ -3,13 +3,25 @@
 <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
+<style>
+#head{
+margin-left:0;
+}
+#foot{
+width:100%;
+background:#0099CC;
+border-top:1px solid #f00;
+}
+</style>
 </head>
 <body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 权限管理 <span class="c-gray en">&gt;</span> 权限列表
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 分级管理 <span class="c-gray en">&gt;</span> 分级列表
 	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
 </nav>
-
-
+{if condition="$usertype eq 1"}
+<div id="head">
+	<button onClick="unit_add('新增机构','{:url('Admin/Jurisdiction/unit_add')}')" class="btn btn-success-outline radius">新增机构</button>
+</div>
 
 <div class="page-container" style="width: 20%; float: left; cursor:pointer;">
 	<table onclick="jg('12')" id="12" border="1" cellspacing="0"  class="leve-table table" data-id='' style="background-color:#C0C0C0">
@@ -40,74 +52,90 @@
 		</tr>
 	</table>
 </div>
-<form action="" method="post" class="form form-horizontal" id="form-group-set">
-<div class="page-container" id="aa" >
-	<div class="mt-20">
-		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
-			<thead>
-				<tr class="text-c">
-					<th>选择</th>
-					<th>姓名</th>
-					<th>联系电话</th>
-				</tr>
-			</thead>
-			<tbody id="list">
-				<tr class="text-c">
-					<td>
-						<input name="doctor" type="radio" value="1" id="doctor">
-					</td>
-					<td>默认医生</td>
-					<td>1123</td>
-				</tr>
-				<tr class="text-c">
-					<td>
-						<input name="doctor" type="radio" value="1" id="doctor">
-					</td>
-					<td>默认医生2</td>
-					<td>1123</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
+{/if}
 
-<div class="page-container" id="yz" >
-	<div class="mt-20">
-		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
-			<thead>
-				<tr class="text-c">
-					<th>选择</th>
-					<th>姓名</th>
-					<th>联系电话</th>
-				</tr>
-			</thead>
-			<tbody id="list_yz">
-				<tr class="text-c">
-					<td>
-						<input name="yz" type="radio" value="1" id="yz">
-					</td>
-					<td>默认医助</td>
-					<td>1123</td>
-				</tr>
-			</tbody>
-		</table>
+<div id="content">
+	<div class="page-container" id="aa">
+		<div class="mt-20">
+			<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+				{if condition="($usertype eq 1) OR ($usertype eq 2)"}
+				<thead>
+					<tr>
+						<th style="width: 10%">医生列表</th>
+						<th><button onClick="doctor_add('新增医生','{:url('Admin/Jurisdiction/unit_add',array('g_id' => 125))}')" class="btn btn-success-outline radius">新增医生</button></th>
+					</tr>
+				</thead>
+				{/if}
+				<thead>
+					<tr class="text-c">
+						<th>姓名</th>
+						<th>头像</th>
+						<th>联系电话</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody id="list">
+					<tr class="text-c">
+						<td>默认医生</td>
+						<td><img src="__PUBLIC__/images/1517275559.jpg" alt="" style="width: 50px;height: 50px;"></td>
+						<td>18623525288</td>
+						<td>编辑</td>
+					</tr>
+					<tr class="text-c">
+						<td>默认医生2</td>
+						<td><img src="__PUBLIC__/images/1521601030.jpg" alt="" style="width: 50px;height: 50px;"></td>
+						<td>17769562269</td>
+						<td>编辑</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
-</div>
-<input type="hidden" value={$id} name="id">
-<input type="hidden" value="" id="jg_id" name="jg_id">
-<input type="hidden" value="1" name="submit_set">
-<div class="row cl">
-	<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-		<input id="tj" class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
-	</div>
-</div>
-</form>
 
+	<div class="page-container" id="yz">
+		<div class="mt-20">
+			<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+				{if condition="($usertype eq 1) OR ($usertype eq 2)"}
+				<thead>
+					<tr>
+						<th style="width: 10%">医助列表</th>
+						<th><button onclick="assistant_doctor_add()" class="btn btn-success-outline radius">新增医助</button></th>
+					</tr>
+				</thead>
+				{/if}
+				<thead>
+					<tr class="text-c">
+						<th>姓名</th>
+						<th>头像</th>
+						<th>联系电话</th>
+						<th>性别</th>
+						<th>个人简介</th>
+						<th>患者</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody id="list_yz">
+					<tr class="text-c">
+						<td>默认医助</td>
+						<td><img src="__PUBLIC__/images/1517275559.jpg" alt="" style="width: 50px;height: 50px;"></td>
+						<td>15683302556</td>
+						<td>女</td>
+						<td>默认显示</td>
+						<td>10</td>
+						<td>操作</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<input type="hidden" value={$id} name="id">
+	<input type="hidden" value="" id="jg_id" name="jg_id">
+	<input type="hidden" value="1" name="submit_set">
+</div>
 {include file="../application/admin/view/Public/_footer.html"/}
 
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript">
-
 //表单验证
 $("#form-group-set").validate({
     onkeyup:false,
@@ -140,7 +168,7 @@ function jg(id) {
 	$('#jg_id').val(id);
 	$.ajax({
 		type: 'POST',
-		url: "{:url('Admin/patient/jg')}",
+		url: "{:url('Admin/patient/jg_fj')}",
 		dataType: 'json',
 		data:{p_id:id,type:'1'},
 		success: function(data){
@@ -157,6 +185,44 @@ function jg(id) {
 		}
 	});
 }
+
+//新增机构
+	function unit_add(title,url) {
+		layer.open({
+			title:title,
+			type: 2,
+			area: ['600px', '600px'],
+			fixed: false, //不固定
+			maxmin: true,
+			content: url
+		});
+	}
+
+//新增医生
+	function doctor_add(title,url) {
+		var jg_id = $('#jg_id').val();
+		layer.open({
+			title:title,
+			type: 2,
+			area: ['600px', '600px'],
+			fixed: false, //不固定
+			maxmin: true,
+			content: '/public/Admin/jurisdiction/unit_add?g_id='+jg_id+'&type=1'
+		});
+	}
+
+//新增医助
+	function assistant_doctor_add() {
+		var jg_id = $('#jg_id').val();
+		layer.open({
+			title:'新增医助',
+			type: 2,
+			area: ['600px', '600px'],
+			fixed: false, //不固定
+			maxmin: true,
+			content: '/public/Admin/jurisdiction/unit_add?g_id='+jg_id+'&type=2'
+		});
+	}
 
 
 </script> 

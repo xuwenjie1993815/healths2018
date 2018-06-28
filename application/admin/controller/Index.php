@@ -16,7 +16,8 @@ class Index extends Controller
     public function index()
     {
         if (input('post.password') and input('post.name')) {
-            Session::set('userMsg','thinkphp');
+            Session::set('userMsg.id','1');
+            Session::set('userMsg.type','1');
             return array('code' => '1');die;
         }
         

@@ -145,5 +145,36 @@ class Patient extends Controller
 		//设置病史(接口)
 	}
 
+	//患者体检报告设置
+	public function patient_inspect_set(){
+		var_dump($_POST);die;
+	}
+
+	//根据机构查找医生医助(分级)
+	public function jg_fj(){
+		$id = input('post.p_id');
+		//根据机构id获取数据(接口)
+		
+		if (input('post.p_id') == 11) {
+			$data = array('ys' => array('12' => array('name' => '朱玉婷','tel' => '1322131513','img' => '头像'),'13' => array('name' => '徐医生','tel' => '56445112313','img' => '头像')),'yz' => array('255' => array('name' => '肖莉','tel' => '22251111'),'620' => array('name' => '杨涛','tel' => '669955442')));
+		}
+		if (input('post.p_id') == 12) {
+			$data = array('ys' => array('12' => array('name' => '徐医生','tel' => '1322131513'),'13' => array('name' => '杨医生','tel' => '56445112313')),'yz' => array('255' => array('name' => '谢晓燕','tel' => '22251111'),'620' => array('name' => '嘻嘻嘻','tel' => '669955442')));
+		}
+
+		$html.="<tbody id='list'>";
+		$html_yz.="<tbody id='list_yz'>";
+		foreach ($data['ys'] as $key => $value) {
+			$html.="<tr class='text-c'><td>".$value['name']."</td><td>".'头像'."</td><td>".$value['tel']."</td><td>".'操作'."</td>";
+		}
+		foreach ($data['yz'] as $key => $value) {
+			$html_yz.="<tr class='text-c'><td>".$value['name']."</td><td>".$value['tel']."</td>";
+		}
+
+		$html.="</tbody>";
+		$html_yz.="</tbody>";
+		return array('code' => 1,'data' => $data,'html' => $html,'html_yz' => $html_yz);
+	}
+
 
 }

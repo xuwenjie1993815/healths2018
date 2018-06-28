@@ -95,6 +95,35 @@
 <!-- <script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>  -->
 
 <script type="text/javascript">
+
+$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	
+	//表单验证
+    $("#form-patient-add").validate({
+        onkeyup:false,
+        focusCleanup:true,
+        success:"valid",
+        submitHandler:function(form){
+            $(form).ajaxSubmit({
+                dataType:'json',
+                type:'post',
+                success:function (res) {
+                    if (res.status == 1){
+                        var icon_n = '1';
+                    }else {
+                        var icon_n = '2';
+                    }
+                }
+            });
+        }
+    });
+});
+
 //表单验证
 $("#form-group-set").validate({
     onkeyup:false,
