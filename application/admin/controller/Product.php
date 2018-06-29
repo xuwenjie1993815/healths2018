@@ -74,4 +74,18 @@ class Product extends Controller
         //下架商品
         return array('code' => 1,'msg' => '下架成功');
     }
+
+    //商品上架
+    public function product_up(){
+        $id = $_POST['id'];
+        //上架商品
+        return array('code' => 1,'msg' => '上架成功');
+    }
+
+    //删除商品
+    public function product_del(){
+        $id = $_POST['id'];
+        //删除商品
+        return array('code' => 1,'msg' => '删除成功');
+    }
 }
