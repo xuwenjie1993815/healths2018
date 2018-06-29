@@ -18,10 +18,10 @@ class Product extends Controller
             }
             switch ($value['status']) {
                 case '1':
-                    $goodList[$key]['status'] = '上架';
+                    $goodList[$key]['status'] = '已发布';
                     break;
                 case '2':
-                    $goodList[$key]['status'] = '下架';
+                    $goodList[$key]['status'] = '已下架';
                     break;
             }
             $goodList[$key]['createTime'] = date('y-m-d h:i:s',$value['createTime']);
@@ -66,5 +66,12 @@ class Product extends Controller
     	//提交订单(接口)
     	//增加天数(接口)
     	return array('code' => 1);
+    }
+
+    //商品下架
+    public function product_stop(){
+        $id = $_POST['id'];
+        //下架商品
+        return array('code' => 1,'msg' => '下架成功');
     }
 }
