@@ -1,5 +1,21 @@
 {include file="../application/admin/view/Public/_header.html"/}
-<div class="page-container" style="width: 20%; float: left; cursor:pointer;">
+<div class="page-container">
+		<ul class="cl portfolio-area">
+			<li class="item">
+				<div class="portfoliobox" onclick="jg('12')" id="12">
+					<div class="picbox"><img src="__PUBLIC__/images/1517275559.jpg"></div>
+					<div class="textbox">机构1 </div>
+				</div>
+			</li>
+			<li class="item">
+				<div class="portfoliobox"  onclick="jg('11')" id="11">
+					<div class="picbox "><img src="__PUBLIC__/images/1521601030.jpg"></div>
+					<div class="textbox">机构2 </div>
+				</div>
+			</li>
+		</ul>
+</div>
+<!-- <div class="page-container" style="width: 20%; float: left; cursor:pointer;">
 	<table onclick="jg('12')" id="12" border="1" cellspacing="0"  class="leve-table table" data-id='' style="background-color:#C0C0C0">
 		<tr>
 			<td rowspan="2" id="leve-ta" >
@@ -27,7 +43,7 @@
 			<td class="leve-tb xd"><p>asdasd</p></td>
 		</tr>
 	</table>
-</div>
+</div> -->
 <form action="" method="post" class="form form-horizontal" id="form-group-set">
 <div class="page-container" id="aa" >
 	<div class="mt-20">
@@ -95,7 +111,9 @@
 <!-- <script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>  -->
 
 <script type="text/javascript">
-
+$(function(){
+	$(".portfolio-area li").Huihover();
+});
 $(function(){
 	$('.skin-minimal input').iCheck({
 		checkboxClass: 'icheckbox-blue',
@@ -151,7 +169,7 @@ $("#form-group-set").validate({
 
 
 function jg(id) {
-	$('table').css({'background-color':''});
+	$('div').css({'background-color':''});
 	$('#'+id).css({'background-color':'#C0C0C0'});
 	$('#jg_id').val(id);
 	$.ajax({

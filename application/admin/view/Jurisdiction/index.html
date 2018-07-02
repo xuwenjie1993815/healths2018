@@ -22,8 +22,23 @@ border-top:1px solid #f00;
 <div id="head">
 	<button onClick="unit_add('新增机构','{:url('Admin/Jurisdiction/unit_add')}')" class="btn btn-success-outline radius">新增机构</button>
 </div>
-
-<div class="page-container" style="width: 20%; float: left; cursor:pointer;">
+<div class="page-container">
+		<ul class="cl portfolio-area">
+			<li class="item">
+				<div class="portfoliobox" onclick="jg('12')" id="12">
+					<div class="picbox"><img src="__PUBLIC__/images/1517275559.jpg"></div>
+					<div class="textbox">健康源</div>
+				</div>
+			</li>
+			<li class="item">
+				<div class="portfoliobox"  onclick="jg('11')" id="11">
+					<div class="picbox "><img src="__PUBLIC__/images/1521601030.jpg"></div>
+					<div class="textbox">微健康</div>
+				</div>
+			</li>
+		</ul>
+</div>
+<!-- <div class="page-container" style="width: 20%; float: left; cursor:pointer;">
 	<table onclick="jg('12')" id="12" border="1" cellspacing="0"  class="leve-table table" data-id='' style="background-color:#C0C0C0">
 		<tr>
 			<td rowspan="2" id="leve-ta" >
@@ -51,7 +66,7 @@ border-top:1px solid #f00;
 			<td class="leve-tb xd"><p>asdasd</p></td>
 		</tr>
 	</table>
-</div>
+</div> -->
 {/if}
 
 <div id="content">
@@ -136,6 +151,9 @@ border-top:1px solid #f00;
 
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript">
+$(function(){
+	$(".portfolio-area li").Huihover();
+});
 //表单验证
 $("#form-group-set").validate({
     onkeyup:false,
@@ -163,7 +181,7 @@ $("#form-group-set").validate({
 
 
 function jg(id) {
-	$('table').css({'background-color':''});
+	$('div').css({'background-color':''});
 	$('#'+id).css({'background-color':'#C0C0C0'});
 	$('#jg_id').val(id);
 	$.ajax({
@@ -222,6 +240,33 @@ function jg(id) {
 			maxmin: true,
 			content: '/public/Admin/jurisdiction/unit_add?g_id='+jg_id+'&type=2'
 		});
+	}
+
+//编辑医生
+	function doctor_edit(id) {
+		// body...
+	}
+
+//编辑医助
+	function assistant_doctor_edit(id) {
+		var jg_id = $('#jg_id').val();
+		layer.open({
+			title:'编辑医助',
+			type: 2,
+			area: ['600px', '600px'],
+			fixed: false, //不固定
+			maxmin: true,
+			content: '/public/Admin/jurisdiction/assistant_doctor_edit?assistant_doctor_id='+id+'&type=1&g_id='+jg_id
+		});
+	}
+//删除医生
+	function doctor_del(id) {
+		// body...
+	}
+
+//删除医助
+	function assistant_doctor_del(id) {
+		alert(id);
 	}
 
 

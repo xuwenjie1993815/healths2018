@@ -32,10 +32,28 @@ class Jurisdiction extends Controller{
 			return $this->fetch();
 			die;
 		}
+		//新增机构
 		if (input('?post.imgone') AND input('?get.g_id') == false) {
 			var_dump($_POST);die;
 			//新增机构接口
 		}
 		return $this->fetch();
+	}
+
+
+	//编辑医助
+	public function assistant_doctor_edit(){
+		if (!$_POST) {
+			$assistant_doctor_id = input('get.assistant_doctor_id');
+			//获取医助信息(接口)
+			$assistant_doctor_info = array('imgone' => 'http://www.healths2018.com/public/images/1521601030.jpg','username' => '肖莉','mobile' => '18623525272','real_name' => '肖莉');
+			$this->assign('info',$assistant_doctor_info);
+			$this->assign('g_id',$g_id);
+			$this->assign('type',1);
+			$this->assign('assistant_doctor_id',$assistant_doctor_id);
+			return $this->fetch('unit_add');die;
+		}
+		var_dump($_POST);
+		
 	}
 }

@@ -156,7 +156,7 @@ class Patient extends Controller
 		//根据机构id获取数据(接口)
 		
 		if (input('post.p_id') == 11) {
-			$data = array('ys' => array('12' => array('name' => '朱玉婷','tel' => '1322131513','img' => '头像'),'13' => array('name' => '徐医生','tel' => '56445112313','img' => '头像')),'yz' => array('255' => array('name' => '肖莉','tel' => '22251111'),'620' => array('name' => '杨涛','tel' => '669955442')));
+			$data = array('ys' => array('12' => array('name' => '朱玉婷','tel' => '1322131513','img' => '头像'),'13' => array('name' => '徐医生','tel' => '56445112313','img' => '头像')),'yz' => array('255' => array('name' => '肖莉','tel' => '22251111','img' => '/public/images/1517275559.jpg','sex' => '1','introduce' => '一位合格的医助','patient_num' => '10'),'620' => array('name' => '杨涛','tel' => '669955442','img' => '/public/images/1521601030.jpg','sex' => '1','introduce' => '第二位合格的医助','patient_num' => '15')));
 		}
 		if (input('post.p_id') == 12) {
 			$data = array('ys' => array('12' => array('name' => '徐医生','tel' => '1322131513'),'13' => array('name' => '杨医生','tel' => '56445112313')),'yz' => array('255' => array('name' => '谢晓燕','tel' => '22251111'),'620' => array('name' => '嘻嘻嘻','tel' => '669955442')));
@@ -168,7 +168,15 @@ class Patient extends Controller
 			$html.="<tr class='text-c'><td>".$value['name']."</td><td>".'头像'."</td><td>".$value['tel']."</td><td>".'操作'."</td>";
 		}
 		foreach ($data['yz'] as $key => $value) {
-			$html_yz.="<tr class='text-c'><td>".$value['name']."</td><td>".$value['tel']."</td>";
+			switch ($value['sex']) {
+				case '1':
+					$sex = '男';
+					break;
+				case '2':
+					$sex = '女';
+					break;
+			}
+			$html_yz.="<tr class='text-c'><td>".$value['name']."</td><td><img style='width:50px;height:50px' src=".$value['img']."></td><td>".$value['tel']."</td><td>".$sex."</td><td>".$value['introduce']."</td><td>".$value['patient_num']."</td><td><a style='text-decoration:none' class='ml-5' onclick='assistant_doctor_edit(".$key.")'><i class='Hui-iconfont'>&#xe6df;</i></a><a style='text-decoration:none' class='ml-5' onClick='assistant_doctor_del(".$key.")' href='javascript:;'' title='删除''><i class='Hui-iconfont'>&#xe6e2;</i></a></td>";
 		}
 
 		$html.="</tbody>";

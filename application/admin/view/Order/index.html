@@ -3,7 +3,26 @@
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 订单管理 <span class="c-gray en">&gt;</span> 订单列表 
 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
 </nav>
+
+
+
 <div class="page-container">
+		<ul class="cl portfolio-area">
+			<li class="item">
+				<div class="portfoliobox" style="border:1px solid #C0C0C0;">
+					<div style="height: 25%;border-bottom:1px solid #C0C0C0;"><span class="label label-success radius">今日数据</span></div>
+					<div style="height: 25%">成交量:2</div>
+					<div style="height: 25%">成交额:￥2</div>
+				</div>
+			</li>
+			<li class="item">
+				<div class="portfoliobox" style="border:1px solid #C0C0C0;">
+					<div style="height: 25%;border-bottom:1px solid #C0C0C0;"><span class="label label-success radius">昨日数据</span></div>
+					<div style="height: 25%">成交量:10</div>
+					<div style="height: 25%">成交额:￥20</div>
+				</div>
+			</li>
+		</ul>
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover table-responsive table-sort">
 			<thead>
@@ -11,7 +30,8 @@
 					<th>姓名</th>
 					<th>订单号</th>
 					<th>商品信息</th>
-					<th>商品价格/数量</th>
+					<th>商品价格</th>
+					<th>数量</th>
 					<th>订单价格</th>
 					<th>下单时间</th>
 					<th>订单状态</th>
@@ -23,21 +43,23 @@
 					<td>张三</td>
 					<td>XXXXX001</td>
 					<td><u>"智能动态监测+营养行为干预"高血压管理服务包</u></td>
-					<td>360/1</td>
 					<td>360</td>
-					<td>2018-06-25</td>
-					<td><u>未付款</u></td>
-					<td><input class="btn btn-primary radius" type="button" value="删除"></td>
+					<td>1</td>
+					<td>360</td>
+					<td>2018-06-25 15:24:00</td>
+					<td>未付款</td>
+					<td><input class="btn btn-primary radius" type="button" onClick="order_del('删除订单','{:url('Admin/Order/order_del')}','12')" value="删除"></td>
 				</tr>
 				<tr class="text-c">
 					<td>李四</td>
 					<td>XXXXX002</td>
 					<td><u>"智能动态监测+营养行为干预"高血压管理服务包</u></td>
-					<td>360/1</td>
+					<td>360</td>
+					<td>12</td>
 					<td>0</td>
-					<td>2018-06-25</td>
-					<td><u>已完成</u></td>
-					<td><input class="btn btn-primary radius" type="button" value="删除"></td>
+					<td>2018-06-25 07:18:20</td>
+					<td>已完成</td>
+					<td><input class="btn btn-primary radius" type="button" onClick="order_del('删除订单','{:url('Admin/Order/order_del')}','12')" value="删除"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -55,4 +77,25 @@ $('.table-sort').dataTable({
 	  //{"orderable":false,"aTargets":[0,4]}// 不参与排序的列
 	]
 });
+
+/*资讯-删除*/
+function order_del(title,url,id){
+	layer.confirm('确认要删除吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: url,
+			dataType: 'json',
+			data:{id:id},
+			success: function(data){
+					if(data.code==1){
+						layer.msg('删除成功..稍等', {icon:1,time:500},function(){
+							location.reload();
+						});
+					}else{
+						layer.msg('删除失败');
+				}
+			},
+		});		
+	});
+}
 </script>
