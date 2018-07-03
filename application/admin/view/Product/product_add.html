@@ -34,7 +34,8 @@
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>商品描述：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <textarea name="goodDescription" cols="" rows="" class="textarea" placeholder="简单的介绍产品..最少10个字" datatype="*10-100" dragonfly="true" nullmsg="产品描述不能为空！" onkeyup="$.Huitextarealength(this,200)">{$goodInfo.goodDescription}</textarea>
+                <textarea class="textarea valid" placeholder="简单的介绍产品...最少输入10个字符" name="goodDescription" aria-required="true" aria-invalid="false"></textarea>
+                <!-- <textarea name="goodDescription" cols="" rows="" class="textarea" placeholder="简单的介绍产品..最少10个字" datatype="*10-100" dragonfly="true" nullmsg="产品描述不能为空！" onkeyup="$.Huitextarealength(this,200)">{$goodInfo.goodDescription}</textarea> -->
             </div>
         </div>
         <div class="row cl">
@@ -78,7 +79,7 @@
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>商品备注：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <textarea name="remark" cols="" rows="" class="textarea" placeholder="产品备注" datatype="*10-100" dragonfly="true" nullmsg="产品备注不能为空！" onkeyup="$.Huitextarealength(this,200)">{$goodInfo.remark}</textarea>
+                <textarea name="remark" cols="" rows="" class="textarea" placeholder="商品备注" datatype="*10-100" dragonfly="true" nullmsg="商品备注不能为空！" onkeyup="$.Huitextarealength(this,200)">{$goodInfo.remark}</textarea>
             </div>
         </div>
         <div class="row cl">
@@ -101,7 +102,10 @@
 <script type="text/javascript" src="__STATIC__/lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
 <script type="text/javascript" src="__STATIC__/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript">
-
+$(".textarea").Huitextarealength({
+    minlength:10,
+    maxlength:144
+});
 
     //实例化编辑器
     var o_ueditorupload = UE.getEditor('j_ueditorupload',

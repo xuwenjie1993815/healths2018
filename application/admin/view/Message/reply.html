@@ -1,0 +1,38 @@
+{include file="../application/admin/view/Public/_header.html"/}
+<textarea class="textarea valid" placeholder="说点什么...最少输入5个字符" name="content" id="content" aria-required="true" aria-invalid="false"></textarea>
+<button style="margin-left:1%" class="btn btn-primary radius" id="submit" type="button"><i class="Hui-iconfont">&#xe632;</i> 提交</button>
+<input type="hidden" id="id" value={$id}>
+<p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
+{include file="../application/admin/view/Public/_footer.html"/}
+<script>
+$(".textarea").Huitextarealength({
+	minlength:5,
+	maxlength:100
+});
+
+$('#submit').click(function(){
+	var	content=$('#content').val();
+	var	id=$('#id').val();
+	if(content==''){
+		layer.msg('请填写内容');
+		return;
+	}
+	$.ajax({
+		url:"{:url('Admin/Message/reply')}",
+		type:'post',
+		dataType:'json',
+		data:{
+			content:content,id:id
+		},
+		success:function(data){
+			if(data.code==1){
+				layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
+                    parent.location.reload();
+                })
+			}else{
+				layer.msg('操作失败');
+			}
+		}
+	});
+});
+</script>
