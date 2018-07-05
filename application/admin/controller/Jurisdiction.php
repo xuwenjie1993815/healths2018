@@ -16,6 +16,7 @@ class Jurisdiction extends Controller{
 
 	//新增机构
 	public function unit_add(){
+		//新增医生
 		if (input('get.g_id') != '' AND input('get.type') == 1) {
 			$g_id = input('get.g_id');
 			$type = input('get.type');
@@ -24,6 +25,7 @@ class Jurisdiction extends Controller{
 			return $this->fetch();
 			die;
 		}
+		//新增医助
 		if (input('get.g_id') != '' AND input('get.type') == 2) {
 			$g_id = input('get.g_id');
 			$type = input('get.type');

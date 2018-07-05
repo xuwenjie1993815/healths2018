@@ -374,9 +374,96 @@
 			</form>
 		</div>
 <!-- 预警设置 -->
-		<div class="tabCon">
-			预警设置
+	<div class="tabCon">
+		<div class="page-container">
+			<!-- 头部 -->
+			<table class="table table-border table-bordered" style="width: 50%;">
+				<thead>
+					<tr class="text-l">
+						<th>汪维江</th>
+						<th>66</th>
+						<th>男</th>
+						<th>654001195203251111</th>
+						<th>
+							<span class="select-box">
+							<select class="select" size="1" id="warning_type" name="select" onchange="return jumpPage()">
+							<option value="1" selected>血压</option>
+							<option value="2">血糖</option>
+							</select>
+							</span>
+						</th>
+					</tr>
+				</thead>
+			</table>
+				<!-- title_end -->
+			<table class="table table-border table-bordered" id="bloodData" style="width: 50%;">
+			<form action="/Public/Admin/Patient/detail_warning" method="post" class="form form-horizontal" id="form-detail-warning">
+				<p style="color:#f00;font-size:12px;margin:1%;">注：设置数值提醒预警</p>
+					<tr>
+						<td>舒张压</td>
+						<td>
+							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="blood_sz_min" value="" id="blood_sz_min" placeholder="最小值">
+							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="blood_sz_max" id="blood_sz_max" value="{$early['blood_sz_max']}" id="blood_sz_max" placeholder="最大值">
+						</td>
+						<td>预警差</td>
+						<td><input type="number" min="0" class="input-text" name="blood_sz_diff" value="{$early['blood_sz_diff']}" id="blood_sz_diff" placeholder="预警差"></td>
+					</tr>
+					<tr>
+						<td>收缩压</td>
+						<td>
+							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="blood_ss_min" value="" id="blood_ss_min" placeholder="最小值">
+							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="blood_ss_max" value="{$early['blood_ss_max']}" id="blood_ss_max" placeholder="最大值">
+						</td>
+						<td>预警差</td>
+						<td><input type="number" min="0" class="input-text" name="blood_ss_diff" value="{$early['blood_ss_diff']}" id="blood_ss_diff" placeholder="预警差"></td>
+					</tr>
+					<tr>
+						<td>心率</td>
+						<td>
+							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="heart_min" value="" id="heart_min" placeholder="最小值">
+							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="heart_max" value="{$early['heart_max']}" id="heart_max" placeholder="最大值">
+						</td>
+						<td>预警差</td>
+						<td><input type="number" min="0" class="input-text" name="heart_diff" value="{$early['heart_diff']}" id="heart_diff" placeholder="预警差"></td>
+					</tr>
+				</table>
+				<div class="row cl"  id="blood_button">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+						<button class="btn btn-primary radius" type="submit" style="margin-top:1% "><i class="Hui-iconfont">&#xe632;</i> 提交</button>
+					</div>
+				</div>
+			</form>
+
+			<!-- 血糖 -->
+			<table class="table table-border table-bordered" id="bloodSugarData" style="width: 50%;display: none;">
+			<form action="/Public/Admin/Patient/detail_sugar_warning" method="post" class="form form-horizontal" id="form-detail-sugar-warning">
+					<tr>
+						<td>最小值</td>
+						<td>
+							<input style="width: 100%;float: left;" type="number" min="0" class="input-text" name="blood_sz_min" value="" id="blood_sz_min" placeholder="最小值">
+						</td>
+					</tr>
+					<tr>
+						<td>早空腹最大值</td>
+						<td>
+							<input style="width: 100%;float: left;" type="number" min="0" class="input-text" name="blood_ss_min" value="" id="blood_ss_min" placeholder="最小值">
+						</td>
+					</tr>
+					<tr>
+						<td>随机值最大值</td>
+						<td>
+							<input style="width: 100%;float: left;" type="number" min="0" class="input-text" name="heart_min" value="" id="heart_min" placeholder="最小值">
+						</td>
+					</tr>
+				</table>
+				<div class="row cl" style="display: none;" id="sugar_button">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+						<button class="btn btn-primary radius" type="submit" style="margin-top:1% "><i class="Hui-iconfont">&#xe632;</i> 提交</button>
+					</div>
+				</div>
+			</form>
 		</div>
+	</div>
 <!-- 用药记录 -->
 		<div class="tabCon">
 			<div class="page-container">
@@ -419,57 +506,122 @@
 			</div>
 		</div>
 <!-- 测量统计 -->
-		<div class="tabCon">
-			<div class="page-container">
-				<div class="text-c">
+	<div class="tabCon">
+		<div class="page-container">
+			<div class="text-c">
+				<form action="/Public/Admin/Patient/details" method="post">
+					<input type="hidden" name="id" value="{$id}">
 				 	<span class="select-box inline">
-						<select name="" class="select">
-							<option value="0">类型</option>
-							<option value="1">血压数据</option>
+						<select name="statistics_type" id="statistics_type" class="select" onchange="return jumpPage_statistics()">
+							<option value="1" checked>血压数据</option>
 							<option value="2">血糖数据</option>
 						</select>
-					</span> 日期范围：
-					<input type="text" onfocus="WdatePicker()" id="logmin" class="input-text Wdate" style="width:120px;">
+					</span> 
+					日期范围：
+					<input type="text" onfocus="WdatePicker()" id="logmin" value="" class="input-text Wdate" style="width:120px;">
 					-
-					<input type="text" onfocus="WdatePicker()" id="logmax" class="input-text Wdate" style="width:120px;">
+					<input type="text" onfocus="WdatePicker()" id="logmax" value="" class="input-text Wdate" style="width:120px;">
+					时间范围：
+					<input type="text" onfocus="WdatePicker({dateFmt: 'H:mm:ss'})" value="" id="data_blood" class="input-text Wdate" style="width:120px;">
+					-
+					<input type="text" onfocus="WdatePicker({dateFmt: 'H:mm:ss'})" value="" id="data_blood2" class="input-text Wdate" style="width:120px;">
 					<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
-				</div>
-
-				<!-- 血压表格 -->
-				<div class="mt-20">
-					<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive" >
-						<thead>
-							<tr class="text-c">
-								<th>时间</th>
-								<th>收缩压</th>
-								<th>舒张压</th>
-								<th>心率</th>
-								<th>操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr class="text-c">
-								<td>2014-6-11 11:11:42</td>
-								<td>140</td>
-								<td>84</td>
-								<td>102</td>
-								<td class="f-14 td-manage"> <a style="text-decoration:none" class="ml-5" onClick="article_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="mt-20">
+				</form>
+			</div>
+			<!-- 血压表格 -->
+			<div class="mt-20" id="statistics_blood_data">
+				<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive" >
+					<thead>
+						<tr class="text-c">
+							<th>时间</th>
+							<th>收缩压</th>
+							<th>舒张压</th>
+							<th>心率</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="text-c">
+							<td>2014-6-11 11:11:42</td>
+							<td>140</td>
+							<td>84</td>
+							<td>102</td>
+							<td class="f-14 td-manage"> <a style="text-decoration:none" class="ml-5" onClick="article_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+						</tr>
+					</tbody>
+				</table>
 				<!-- 血压趋势图 -->
-					<div id="main" style="width:600px;height:400px;margin-top: 50px;"></div>
-					<div id="main1" style="width:600px;height:400px;margin-top: 50px;"></div>
-				</div>
+				<div id="main" style="width:600px;height:400px;margin-top: 50px;"></div>
+				<div id="main1" style="width:600px;height:400px;margin-top: 50px;"></div>
 			</div>
 
+			<!-- 血糖表格 -->
+			<div class="mt-20" id="statistics_sugar_data" style="display: none;">
+				<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive" >
+					<thead>
+						<tr class="text-c">
+							<th>日期</th>
+							<th>餐前</th>
+							<th>餐后</th>
+							<th>其他时间</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="text-c">
+							<td>2018-04-02</td>
+							<td id="sugar_info">5.9mmol/L(测量时间:00:00:00)
+								<img src="__PUBLIC__/images/change.png" alt="编辑" onclick="sugar_edit('{:url("Admin/patient/sugar_edit",array('id'=>12))}','12')">
+		            			<img src="__PUBLIC__/images/del.png" alt="删除" onclick="sugar_del('{:url("Admin/patient/sugar_del",array('id'=>$v['id']))}')"><br/></td>
+							<td>6.9mmol/L(测量时间:15:30:22)
+								<img src="__PUBLIC__/images/change.png" alt="编辑" onclick="sugar_edit('{:url("Admin/patient/sugar_edit",array('id'=>$v['id']))}','700px','500px')">
+		            			<img src="__PUBLIC__/images/del.png" alt="删除" onclick="sugar_del('{:url("Admin/patient/sugar_del",array('id'=>$v['id']))}')"></td>
+							<td>8.6mmol/L(测量时间:23:59:59)
+								<img src="__PUBLIC__/images/change.png" alt="编辑" onclick="sugar_edit('{:url("Admin/patient/sugar_edit",array('id'=>$v['id']))}','700px','500px')">
+		            			<img src="__PUBLIC__/images/del.png" alt="删除" onclick="sugar_del('{:url("Admin/patient/sugar_del",array('id'=>$v['id']))}')"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
+	</div>
 <!-- 服务记录 -->
-		<div class="tabCon">
-			服务记录
+	<div class="tabCon">
+		<div class="page-container">
+			<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"> <a class="btn btn-primary radius" data-title="添加记录" onClick="add_service_record('添加记录','{:url('Admin/Patient/add_service_record',array('id' => $id))}','700px','600px',)" title="添加记录"><i class="Hui-iconfont">&#xe600;</i> 添加记录</a></span> </div>
+			<div class="mt-20">
+				<table class="table table-border table-bordered table-bg table-hover table-responsive table-sort">
+					<thead>
+						<tr class="text-c">
+							<th>标题</th>
+							<th>上传人</th>
+							<th>上传时间</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="text-c">
+							<td>张医生:3/29用药</td>
+							<td>朱玉婷</td>
+							<td>2018-03-29</td>
+							<td class="f-14 td-manage">
+								<a style="text-decoration:none" class="ml-5" onClick="service_record_edit('编辑服务记录','{:url('Admin/Patient/add_service_record',array('re_id' => '55'))}','700px','600px',)" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a>
+								<a style="text-decoration:none" class="ml-5" onClick="service_record_del('10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+							</td>
+						</tr>
+						<tr class="text-c">
+							<td>ABC:吧</td>
+							<td>健康源</td>
+							<td>2018-03-30</td>
+							<td class="f-14 td-manage">
+								<a style="text-decoration:none" class="ml-5" onClick="service_record_edit('编辑服务记录','{:url('Admin/Patient/add_service_record',array('re_id' => '56'))}','700px','600px',)" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a>
+								<a style="text-decoration:none" class="ml-5" onClick="service_record_del('10002')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
+	</div>
 	</div>
 </div>
 {include file="../application/admin/view/Public/_footer.html"/}
@@ -696,6 +848,144 @@ $("#form-patient-inspect-set").validate({
         });
     }
 });
+
+//预警血压表单验证
+$("#form-detail-warning").validate({
+    onkeyup:false,
+    focusCleanup:true,
+    success:"valid",
+    submitHandler:function(form){
+        $(form).ajaxSubmit({
+            dataType:'json',
+            type:'post',
+            success:function (res) {
+                if (res.code == 1){
+                    layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
+						parent.location.reload();
+					})
+                }else {
+                    layer.msg('设置失败');
+                }
+            }
+        });
+    }
+});
+
+//预警血糖表单验证
+$("#form-detail-sugar-warning").validate({
+    onkeyup:false,
+    focusCleanup:true,
+    success:"valid",
+    submitHandler:function(form){
+        $(form).ajaxSubmit({
+            dataType:'json',
+            type:'post',
+            success:function (res) {
+                if (res.code == 1){
+                    layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
+						parent.location.reload();
+					})
+                }else {
+                    layer.msg('设置失败');
+                }
+            }
+        });
+    }
+});
+
+function jumpPage() {
+	// 血压
+	if ($("#warning_type").val()=='1') {
+		$("#bloodSugarData").hide();
+		$("#bloodData").show();
+		$("#blood_button").show();
+		$("#sugar_button").hide();
+	}
+	// 血糖
+	if ($("#warning_type").val()=='2') {
+		$("#bloodData").hide();
+		$("#bloodSugarData").show();
+		$("#blood_button").hide();
+		$("#sugar_button").show();
+	}
+}
+
+//测量统计视图切换
+function jumpPage_statistics() {
+	// 血压
+	if ($("#statistics_type").val()=='1') {
+		$("#statistics_sugar_data").hide();
+		$("#statistics_blood_data").show();
+	}
+	// 血糖
+	if ($("#statistics_type").val()=='2') {
+		$("#statistics_blood_data").hide();
+		$("#statistics_sugar_data").show();
+	}
+}
+
+//血糖数据修改
+function sugar_edit(url,id){
+	var sugar_info = $("#sugar_info").text();
+	var sugar_info = sugar_info.split('mmol/L')[0];
+	layer.open({
+	  title:'血糖数据修改',
+	  type: 2,
+	  offset: 'auto',
+	  fixed: false, //不固定
+	  maxmin: true,
+	  scrollbar: false,
+	  content: "/public/Admin/patient/sugar_edit?id="+id+"&sugar_info="+sugar_info
+	});
+}
+
+//血糖数据删除
+function sugar_del(url){
+var sure=confirm('确认删除吗？'); 
+	if (1==sure){
+		$.ajax({
+			url:url,
+			type:'post',
+			dataType:'json',
+			data:{},
+			success:function(data){
+				if(data.code==1){
+					layer.msg(data.msg, {shift: -1},function(){
+						window.setTimeout("location.href=location.href",500);
+					});
+				}else{
+					layer.msg(data.msg);
+				}
+			}
+		})
+	}else{
+		alert( '已取消');
+	}
+}
+
+//添加服务记录
+function add_service_record(title,url,w,h) {
+	layer.open({
+		title:title,
+		type: 2,
+		area: [w, h],
+		fixed: false, //不固定
+		maxmin: true,
+		content: url
+	});
+}
+
+//编辑服务记录
+function service_record_edit(title,url,w,h) {
+	layer.open({
+		title:title,
+		type: 2,
+		area: [w, h],
+		fixed: false, //不固定
+		maxmin: true,
+		content: url
+	});
+}
 </script>
 <!--/请在上方写此页面业务相关的脚本-->
 </body>

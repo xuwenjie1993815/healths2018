@@ -219,6 +219,9 @@ function jg(id) {
 //新增医生
 	function doctor_add(title,url) {
 		var jg_id = $('#jg_id').val();
+		if (!jg_id) {
+			layer.msg("请先选择机构",{icon:2});return;
+		}
 		layer.open({
 			title:title,
 			type: 2,
@@ -232,6 +235,9 @@ function jg(id) {
 //新增医助
 	function assistant_doctor_add() {
 		var jg_id = $('#jg_id').val();
+		if (!jg_id) {
+			layer.msg("请先选择机构",{icon:2});return;
+		}
 		layer.open({
 			title:'新增医助',
 			type: 2,

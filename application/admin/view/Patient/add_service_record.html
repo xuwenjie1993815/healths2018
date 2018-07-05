@@ -1,0 +1,69 @@
+{include file="../application/admin/view/Public/_header.html"/}
+<title>服务记录</title>
+</head>
+<body>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="form-drug-record-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>标题：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$info.title}" placeholder="标题(用于展示)" id="drug_name" name="drug_name">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>服务时间：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input  class="input-text" onClick="laydate()" name="data2" id="time" value="{$info.time}">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>签名：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input class="input-text" type="text" value="{$info.sign}" placeholder="" id="consumption" name="consumption">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>内容：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+                <textarea name="remark" cols="" rows="" class="textarea" placeholder="服务内容" datatype="*5-100" dragonfly="true" nullmsg="服务内容不能为空!" onkeyup="$.Huitextarealength(this,200)">{$info.remark}</textarea>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+</article>
+
+<script src="__STATIC__/lib/layer/laydate/laydate.js"></script>
+{include file="../application/admin/view/Public/_footer.html"/}
+<script type="text/javascript">
+$(".textarea").Huitextarealength({
+    minlength:5,
+    maxlength:100
+});
+laydate.render({
+  elem: '#time',
+  type: 'datetime'
+});
+//表单验证
+$("#form-drug-record-add").validate({
+    onkeyup:false,
+    focusCleanup:true,
+    success:"valid",
+    submitHandler:function(form){
+        $(form).ajaxSubmit({
+            dataType:'json',
+            type:'post',
+            success:function (res) {
+                if (res.status == 1){
+                    var icon_n = '1';
+                }else {
+                    var icon_n = '2';
+                }
+            }
+        });
+    }
+});
+</script>

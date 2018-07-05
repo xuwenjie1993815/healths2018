@@ -27,7 +27,7 @@
 			</thead>
 			<tbody>
 				<tr class="text-c">
-					<td><input type="checkbox" value="" name=""></td>
+					<td><input type="checkbox" value="15" name="id"></td>
 					<td id="number">10001</td>
 					<td class="text-l"><u style="cursor:pointer" class="text-primary" onClick="article_edit('查看','article-zhang.html','10001')" title="查看">血压计</u></td>
 					<td>A</td>
@@ -39,7 +39,7 @@
 					</td>
 				</tr>
 				<tr class="text-c">
-					<td><input type="checkbox" value="" name=""></td>
+					<td><input type="checkbox" value="28" name="id"></td>
 					<td>10002</td>
 					<td class="text-l"><u style="cursor:pointer" class="text-primary" onClick="article_edit('查看','article-zhang.html','10002')" title="查看">血糖仪</u></td>
 					<td>B</td>
@@ -89,6 +89,30 @@ function article_del(obj,id){
 			},
 			error:function(data) {
 				console.log(data.msg);
+			},
+		});		
+	});
+}
+
+//批量删除
+function datadel() {
+    var checkedbox = $("input[name^='id']:checked");
+    var ids = new Array();
+    checkedbox.each(function(){
+        ids.push(this.value);
+    });
+    layer.confirm('删除即解除设备所有关联,确认要删除吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: "{:url('Admin/Device/device_remove')}",
+			data:{ids:ids,del_type:2},
+			dataType: 'json',
+			success: function(data){
+				if (data.code == 1) {
+					layer.msg('已删除'+data.len+'个设备',{icon:1,time:500},function() {
+						location.reload();
+					});
+				}
 			},
 		});		
 	});

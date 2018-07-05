@@ -95,7 +95,7 @@ class Index extends Controller
     public function select_doctor(){
         $ys_id = input('get.content');
         //根据机构id查询机构医生
-        $data = "<tr onClick='admin_ys(124)' style='cursor:Pointer;' id='ys124'><td>朱玉婷</td></tr>";
+        $data = "<tr onClick='admin_ys(124)' style='cursor:Pointer;' id='ys124'><td>朱玉婷</td></tr><tr onClick='admin_ys(123)' style='cursor:Pointer;' id='ys123'><td>徐医生</td></tr>";
         return array('code' => 1,'msg' => $data);
     }
 
@@ -103,7 +103,7 @@ class Index extends Controller
     public function select_yz(){
         $yz_id = input('get.content');
         //根据机构id查询机构医生
-        $data = "<tr onClick='admin_yz(243)' style='cursor:Pointer;' id='yz243'><td>肖莉</td></tr>";
+        $data = "<tr onClick='admin_yz(243)' style='cursor:Pointer;' id='yz243'><td>肖莉</td></tr><tr onClick='admin_yz(245)' style='cursor:Pointer;' id='yz245'><td>杨涛</td></tr>";
         return array('code' => 1,'msg' => $data);
     }
 }

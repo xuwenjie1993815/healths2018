@@ -81,7 +81,7 @@
 		        <table style="display:none;width: 50%;float: left;" id="doctor_data" class="table table-border table-bordered">
 		            <thead>
 		              <tr>
-		                <th>医生姓名</th>
+		                <th>医生</th>
 		              </tr>
 		            </thead>
 		            <tbody id="doctor_info">
@@ -94,7 +94,7 @@
 		        <table style="display:none;width: 50%;float: left;" id="yz_data" class="table table-border table-bordered">
 		            <thead>
 		              <tr>
-		                <th>医助姓名</th>
+		                <th>医助</th>
 		              </tr>
 		            </thead>
 		            <tbody id="yz_info">
@@ -187,12 +187,20 @@ function admin_jg(id) {
 }
 
 function admin_ys(id) {
+	if (id == $("#ys_id").val()) {
+		$("#ys"+id).css({'background-color':''});
+		$("#ys_id").val('');return;
+	}
 	$('#doctor_data tr').css({'background-color':''});
 	$("#ys"+id).css({'background-color':'#C0C0C0'});
 	$("#ys_id").val(id);
 }
 
 function admin_yz(id) {
+	if (id == $("#yz_id").val()) {
+		$("#yz"+id).css({'background-color':''});
+		$("#yz_id").val('');return;
+	}
 	$('#yz_data tr').css({'background-color':''});
 	$("#yz"+id).css({'background-color':'#C0C0C0'});
 	$("#yz_id").val(id);

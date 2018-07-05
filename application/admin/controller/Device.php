@@ -44,6 +44,10 @@ class Device extends Controller{
 	public function device_remove(){
 		//获取设备编号或id,调用接口进行解绑,删除操作
 		// input('post.number');
+		//批量删除
+		$ids = $_POST['ids'];
+		$len = count($ids);
+		return array('code' => 1,'len' => $len);
 	}
 
 	//用户绑定/解绑设备

@@ -98,6 +98,10 @@ class Patient extends Controller
 
 		$id = input('id');
 		//通过用户id查询当前组别
+		$this->assign('jg_id','12');
+		$this->assign('doctor_id','122');
+		$this->assign('assistant_doctor_id','619');
+
 		$this->assign('id',$id);
 		return $this->fetch();
 	}
@@ -108,19 +112,28 @@ class Patient extends Controller
 		//根据机构id获取数据(接口)
 		
 		if (input('post.p_id') == 11) {
-			$data = array('ys' => array('12' => array('name' => '朱玉婷','tel' => '1322131513'),'13' => array('name' => '徐医生','tel' => '56445112313')),'yz' => array('255' => array('name' => '肖莉','tel' => '22251111'),'620' => array('name' => '杨涛','tel' => '669955442')));
+			$data = array('ys' => array('121' => array('name' => '朱玉婷','tel' => '1322131513'),'131' => array('name' => '徐医生','tel' => '56445112313')),'yz' => array('255' => array('name' => '肖莉','tel' => '22251111'),'620' => array('name' => '杨涛','tel' => '669955442')));
 		}
 		if (input('post.p_id') == 12) {
-			$data = array('ys' => array('12' => array('name' => '徐医生','tel' => '1322131513'),'13' => array('name' => '杨医生','tel' => '56445112313')),'yz' => array('255' => array('name' => '谢晓燕','tel' => '22251111'),'620' => array('name' => '嘻嘻嘻','tel' => '669955442')));
+			$data = array('ys' => array('122' => array('name' => '徐医生','tel' => '1322131513'),'132' => array('name' => '杨医生','tel' => '56445112313')),'yz' => array('254' => array('name' => '谢晓燕','tel' => '22251111'),'619' => array('name' => '嘻嘻嘻','tel' => '669955442')));
 		}
 
 		$html.="<tbody id='list'>";
 		$html_yz.="<tbody id='list_yz'>";
 		foreach ($data['ys'] as $key => $value) {
-			$html.="<tr class='text-c'><td><input name='doctor' type='radio' value=".$key." id='doctor'></td><td>".$value['name']."</td><td>".$value['tel']."</td>";
+			if (input('post.doctor_id') == $key) {
+				$html.="<tr class='text-c'><td><input name='doctor' type='radio' value=".$key." id='doctor' checked></td><td>".$value['name']."</td><td>".$value['tel']."</td>";
+			}else{
+				$html.="<tr class='text-c'><td><input name='doctor' type='radio' value=".$key." id='doctor'></td><td>".$value['name']."</td><td>".$value['tel']."</td>";
+			}
+			
 		}
 		foreach ($data['yz'] as $key => $value) {
-			$html_yz.="<tr class='text-c'><td><input name='yz' type='radio' value=".$key." id='yz'></td><td>".$value['name']."</td><td>".$value['tel']."</td>";
+			if (input('post.assistant_doctor_id') == $key) {
+				$html_yz.="<tr class='text-c'><td><input name='yz' type='radio' value=".$key." id='yz' checked></td><td>".$value['name']."</td><td>".$value['tel']."</td>";
+			}else{
+				$html_yz.="<tr class='text-c'><td><input name='yz' type='radio' value=".$key." id='yz'></td><td>".$value['name']."</td><td>".$value['tel']."</td>";
+			}
 		}
 
 		$html.="</tbody>";
@@ -184,5 +197,33 @@ class Patient extends Controller
 		return array('code' => 1,'data' => $data,'html' => $html,'html_yz' => $html_yz);
 	}
 
+	//患者管理->预警设置(血压)
+	public function detail_warning(){
+		var_dump($_POST);
+	}
+
+	//患者管理->预警设置(血糖)
+	public function detail_suger_warning(){
+		var_dump($_POST);
+	}
+
+	//血糖数据编辑
+	public function sugar_edit(){
+		$id = input('id');
+		$sugar_info = input('sugar_info');
+		$this->assign('sugar_info',$sugar_info);
+		$this->assign('id',$id);
+		return $this->fetch();	
+	}
+
+	//添加服务记录
+	public function add_service_record(){
+		if (input('re_id')) {
+			//接口,根据服务记录id查询记录详情
+			$arrayName = array('id' => input('re_id'),'title' => '张医生:3/29用药','time' => '2018-03-29','sign' => '朱玉婷','remark' => '这是内容');
+			$this->assign('info',$arrayName);
+		}
+		return $this->fetch();
+	}
 
 }
