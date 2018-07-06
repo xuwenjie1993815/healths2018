@@ -30,7 +30,10 @@ class Device extends Controller{
 		if (input('?get.select_admin') != false AND input('get.select_admin') == '1'){
 			$content = input('get.content');
 			//机构信息(接口)
-			return array('code' => '1','msg' => '健康源,机构编号:1');
+			//根据机构名称/id查询机构详情
+	        $data = "<tr onClick='admin_jg(1)' style='cursor:Pointer;' id='jg1'><th>1</th><td>健康源</td></tr>";
+	        return array('code' => 1,'msg' => $data);
+			// return array('code' => '1','msg' => '健康源,机构编号:1');
 		}
 		if (input('?post.number') != false) {
 			$number = input('post.number');

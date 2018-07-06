@@ -7,13 +7,20 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>药名：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="含量(mg/片)" id="drug_name" name="drug_name">
+				<input type="text" class="input-text" value="" placeholder="药名" id="drug_name" name="drug_name">
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>用法用量：</label>
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>药品含量：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="(片/次,次/天)" id="consumption" name="consumption">
+				<input type="text" class="input-text" value="" placeholder="mg/片" id="drug_name" name="drug_name">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>用法用量(片/次)：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input style="width: 10%" type="text" class="input-text" value="" placeholder="片" id="usage_number" name="usage_number">/次
+				<input style="width: 10%" type="text" class="input-text" value="" placeholder="次" id="usage_day" name="usage_day">/天
 			</div>
 		</div>
 		<div class="row cl">
@@ -72,5 +79,14 @@ $("#form-drug-record-add").validate({
             }
         });
     }
+});
+
+$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	
 });
 </script>

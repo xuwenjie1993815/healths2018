@@ -226,4 +226,18 @@ class Patient extends Controller
 		return $this->fetch();
 	}
 
+	//删除服务记录
+	public function del_service_record(){
+		$id = $_POST['id'];
+		//删除服务记录(接口)
+		return array('code' => 1);
+	}
+
+	//删除患者
+	public function patient_del(){
+		$id = $_POST['id'];
+		//删除用户(接口)
+		return array('code' => 1);
+	}
+
 }
