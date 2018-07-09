@@ -1,0 +1,50 @@
+{include file="../application/admin/view/Public/_header.html"/}
+<div class="page-container">
+	<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive" >
+		<tbody>
+			<tr class="text-l">
+				<td><span>其他疾病史与治疗史:</span>
+					曾患湿疹<i class="Hui-iconfont">&#xe609;</i>
+					<input style="width: 20%;" type="text" class="input-text" value="{$goodInfo.goodName}" placeholder="" id="" name="goodName">
+					<!-- <a class="btn btn-primary radius" data-title="添加病史" onClick="patient_case_add('添加病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px')" title="添加病史">
+					<i class="Hui-iconfont">&#xe600;</i></a> -->
+				</td>
+				<td><span>吸烟饮酒史:</span>
+					<!-- <a class="btn btn-primary radius" data-title="添加病史" onClick="patient_case_add('添加病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px')" title="添加病史">
+					<i class="Hui-iconfont">&#xe600;</i></a> -->
+				</td>
+				<td><span>过敏史:</span>
+					<!-- <a class="btn btn-primary radius" data-title="添加病史" onClick="patient_case_add('添加病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px')" title="添加病史">
+					<i class="Hui-iconfont">&#xe600;</i></a> -->
+				</td>
+				<td><span>家族遗传病史:</span>
+					<!-- <a class="btn btn-primary radius" data-title="添加病史" onClick="patient_case_add('添加病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px')" title="添加病史">
+					<i class="Hui-iconfont">&#xe600;</i></a> -->
+				</td>
+				<td><span>服用药物:</span>
+					<!-- <a class="btn btn-primary radius" data-title="添加病史" onClick="patient_case_add('添加病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px')" title="添加病史">
+					<i class="Hui-iconfont">&#xe600;</i></a> -->
+				</td>
+			</tr>
+		</tbody>
+	</table>
+<!-- 	<div class="row cl">
+        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>其他疾病史与治疗史:</label>
+		<span class="l"> 
+			<u>曾患湿疹</u>
+			<a class="btn btn-primary radius" data-title="添加病史" onClick="patient_case_add('添加病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px',)" title="添加病史">
+				<i class="Hui-iconfont">&#xe600;</i>
+			</a>
+		</span> 
+    </div> -->
+</div>
+{include file="../application/admin/view/Public/_footer.html"/}
+<script>
+$(document).keyup(function(event){
+  if(event.keyCode ==13){
+  	var aa = $(this).val();
+  	alert(aa);
+    $("#submit").trigger("click");
+  }
+});
+</script>

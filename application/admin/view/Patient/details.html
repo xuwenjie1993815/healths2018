@@ -88,280 +88,142 @@
 			</form>
 		</div>
 <!-- 既往病史 -->
-		<div class="tabCon">
-		<form action="/public/admin/patient/patient_record_set" method="post" class="form form-horizontal" id="form-patient-record-set">
-			<table style="width: 30%;float: left;" class="table table-border table-bordered table-striped">
-				<thead>
-					<tr>
-						<th>其他疾病史与治疗史</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<textarea name="history" cols="" rows="" class="textarea radius" placeholder="其他疾病史与治疗史..."></textarea>
-						</td>
-					</tr>
-				</tbody>
-				<thead>
-					<tr>
-						<th>吸烟饮酒史</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<textarea name="cation" cols="" rows="" class="textarea radius" placeholder="吸烟饮酒史..."></textarea>
-						</td>
-					</tr>
-				</tbody>
-				<thead>
-					<tr>
-						<th>过敏史</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<textarea name="country" cols="" rows="" class="textarea radius" placeholder="过敏史..."></textarea>
-						</td>
-					</tr>
-				</tbody>
-				<thead>
-					<tr>
-						<th>家族遗传病史</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<textarea name="drug" cols="" rows="" class="textarea radius" placeholder="家族遗传病史..."></textarea>
-						</td>
-					</tr>
-				</tbody>
-				<thead>
-					<tr>
-						<th>服用药物</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<textarea name="Other" cols="" rows="" class="textarea radius" placeholder="服用药物..."></textarea>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<table style="width: 30%;float: left;" class="table table-border table-bordered table-striped">
-					<thead>
-						<tr>
-							<th>伴随临床疾患</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>是否患有糖尿病</td>
-							<td>
-								<span class="select-box">
-									<select class="select" size="1" name="diabetes">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-						<tr>
-							<td>是否有脑血管病</td>
-							<td>							
-								<span class="select-box">
-									<select class="select" size="1" name="cerebral_vascular_disease">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-						<tr>
-							<td>是否有心脏疾病</td>
-							<td>							
-								<span class="select-box">
-									<select class="select" size="1" name="heart_disease">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-						<tr>
-							<td>是否有肾脏疾病</td>
-							<td>							
-								<span class="select-box">
-									<select class="select" size="1" name="kidney_disease">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-						<tr>
-							<td>周围血管病</td>
-							<td>							
-								<span class="select-box">
-									<select class="select" size="1" name="peripheral_angiopathy">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-						<tr>
-							<td>视网膜病变</td>
-							<td>							
-								<span class="select-box">
-									<select class="select" size="1" name="retinopathy">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<table style="width: 30%;float: left;" class="table table-border table-bordered table-striped">
-					<thead>
-						<tr>
-							<th>靶器官损害</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>左心室肥厚</td>
-							<td>
-								<span class="select-box">
-									<select class="select" size="1" name="left_ventricular_hypertrophy">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-						<tr>
-							<td>颈动脉超声IMT>=0.9mm或动脉粥样硬化斑块</td>
-							<td>							
-								<span class="select-box">
-									<select class="select" size="1" name="IMT">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-						<tr>
-							<td>颈股动脉PWV>=12m/s</td>
-							<td>							
-								<span class="select-box">
-									<select class="select" size="1" name="PWV">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-						<tr>
-							<td>ABI<'0.9'</td>
-							<td>							
-								<span class="select-box">
-									<select class="select" size="1" name="ABI">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-						<tr>
-							<td>eGFR异常</td>
-							<td>							
-								<span class="select-box">
-									<select class="select" size="1" name="eGFR">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-						<tr>
-							<td>尿微量白蛋白30~300mg/24h或白蛋白/肌酐>=30mg/g</td>
-							<td>							
-								<span class="select-box">
-									<select class="select" size="1" name="albumin">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<table style="width: 30%;float: left;" class="table table-border table-bordered table-striped">
-					<thead>
-						<tr>
-							<th>心血管危险因素</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>是否吸烟</td>
-							<td>
-								<span class="select-box">
-									<select class="select" size="1" name="smoke">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-						<tr>
-							<td>血脂是否异常</td>
-							<td>							
-								<span class="select-box">
-									<select class="select" size="1" name="blood_fat">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-						<tr>
-							<td>早发心血管病家族史</td>
-							<td>							
-								<span class="select-box">
-									<select class="select" size="1" name="family_hypertension">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-						<tr>
-							<td>腹型肥胖</td>
-							<td>							
-								<span class="select-box">
-									<select class="select" size="1" name="belly_obesity">
-										<option value="0" selected="">否</option>
-										<option value="1">是</option>
-									</select>
-								</span> 
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="row cl">
-					<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
-						<button class="btn btn-primary radius" type="submit" style="width:150px; height: 40px; position:fixed; right:0; top:90%;z-index:999"><i class="Hui-iconfont">&#xe632;</i> 提交</button>
-					</div>
-				</div>
-			</form>
+	<div class="tabCon">
+		<!-- 头部 -->
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+			<a class="btn btn-primary radius" data-title="编辑病史" onClick="patient_case_add('编辑病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px',)" title="编辑病史">
+				<i class="Hui-iconfont">&#xe600;</i> 编辑病史
+			</a>
+			<a class="btn btn-primary radius" data-title="编辑影响因素" onClick="patient_case_add('编辑影响因素','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px',)" title="编辑影响因素">
+				<i class="Hui-iconfont">&#xe600;</i> 编辑影响因素
+			</a>
 		</div>
+		<!-- 基本信息 -->
+		<div style="width:50%; margin: 0 20% 0 20%;">
+			<sapn style="font-size:15px;">姓名:徐闻洁</span>
+			<sapn style="font-size:15px;padding-left: 10%;">年龄:25</span>
+			<sapn style="font-size:15px;padding-left: 10%;">性别:男</span>
+			<sapn style="font-size:15px;padding-left: 10%;">血压等级:1</span>
+			<sapn style="font-size:15px;padding-left: 10%;">危险等级:2</span>
+			<div style="border-top:1px solid #000;border-bottom:1px solid #000;">
+				其他疾病史与治疗史:
+				<table class="table table-border table-bordered">
+					<tr>
+						<td>胸椎手术史</td>
+						<td>慢性肾病</td>
+					</tr>
+				</table>
+				吸烟饮酒史:
+				<table class="table table-border table-bordered">
+					<tr>
+						<td>已戒烟4+年，偶有饮酒</td>
+					</tr>
+				</table>
+				过敏史:
+				<table class="table table-border table-bordered">
+					<tr>
+						<td>xxx药物过敏</td>
+					</tr>
+				</table>
+				家族遗传病史:
+				<table class="table table-border table-bordered">
+					<tr>
+						<td>父亲高血压病</td>
+					</tr>
+				</table>
+				服用药物:
+				<table class="table table-border table-bordered">
+					<tr>
+						<td>科素亚(氯沙坦钾)100mg/片   1片/次/天</td>
+						<td>美托洛尔  45mg/片   1片/次/天</td>
+					</tr>
+				</table>
+			</div>
+			<!-- 影响因素 -->
+			<div class="row cl">
+				<div class="formControls col-xs-8 col-sm-9">
+					<dl class="permission-list">
+						<dt>
+							<label>
+								伴随临床疾患
+							</label>
+						</dt>
+						<dd>
+							<label class="">
+								<input checked="checked" type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-0">
+								糖尿病</label>
+							<label class="">
+								<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-1">
+								脑血管病</label>
+							<label class="">
+								<input checked="checked" type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-2">
+								心脏疾病</label>
+							<label class="">
+								<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-3">
+								肾脏疾病</label>
+							<label class="">
+								<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-4">
+								周围血管病</label>
+							<label class="">
+								<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-5">
+								视网膜病变</label>
+						</dd>
+					</dl>
+					<dl class="permission-list">
+						<dt>
+							<label>
+								心血管危险因素
+							</label>
+						</dt>
+						<dd>
+							<label class="">
+								<input checked="checked" type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-0">
+								吸烟</label>
+							<label class="">
+								<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-1">
+								血脂是否异常</label>
+							<label class="">
+								<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-2">
+								早发心血管病家族史</label>
+							<label class="">
+								<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-3">
+								腹型肥胖</label>
+						</dd>
+					</dl>
+					<dl class="permission-list">
+						<dt>
+							<label>
+								靶器官损害
+							</label>
+						</dt>
+						<dd>
+							<label class="">
+								<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-0">
+								左心室肥厚</label>
+							<label class="">
+								<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-1">
+								IMT>=0.9mm或动脉粥样硬化斑块</label>
+							<label class="">
+								<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-2">
+								PWV>=12m/s</label>
+							<label class="">
+								<input checked="checked" type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-3">
+								ABI<'0.9'</label>
+							<label class="">
+								<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-3">
+								eGFR异常</label>
+							<label class="">
+								<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-3">
+								尿微量白蛋白30~300mg/24h</label>
+							<label class="">
+								<input checked="checked" type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-3">
+								白蛋白/肌酐>=30mg/g</label>
+						</dd>
+					</dl>
+				</div>
+			</div>
+		</div>
+	</div>
 <!-- 体检报告 -->
 		<div class="tabCon">
 			<form action="/public/admin/patient/patient_inspect_set" method="post" class="form form-horizontal" id="form-patient-inspect-set">
@@ -600,7 +462,7 @@
 					</thead>
 					<tbody>
 						<tr class="text-c">
-							<td>张医生:3/29用药</td>
+							<td><u>3/29用药</u></td>
 							<td>朱玉婷</td>
 							<td>2018-03-29</td>
 							<td class="f-14 td-manage">
@@ -609,7 +471,7 @@
 							</td>
 						</tr>
 						<tr class="text-c">
-							<td>ABC:吧</td>
+							<td><u>吧</u></td>
 							<td>健康源</td>
 							<td>2018-03-30</td>
 							<td class="f-14 td-manage">
@@ -801,6 +663,19 @@ function add_drug_record(title,url,w,h) {
 	  content: url
 	});
 }
+
+//添加病史
+function patient_case_add(title,url,w,h) {
+	layer.open({
+	  title:title,
+	  type: 2,
+	  area: [w, h],
+	  fixed: false, //不固定
+	  maxmin: true,
+	  content: url
+	});
+}
+
 //既往病史表单验证
 $("#form-patient-record-set").validate({
     onkeyup:false,

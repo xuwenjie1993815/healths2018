@@ -240,4 +240,9 @@ class Patient extends Controller
 		return array('code' => 1);
 	}
 
+	//添加病史
+	public function patient_case_add(){
+		return $this->fetch();
+	}
+
 }
