@@ -245,4 +245,38 @@ class Patient extends Controller
 		return $this->fetch();
 	}
 
+	//上传体检报告
+	public function examination(){
+
+
+		
+		if ($_FILES['file1']['size']) {
+            foreach ($_FILES as $key => $value) {
+            	var_dump($value);
+            }die;
+        }
+
+		$id = input('id');
+		$ex_id = input('ex_id');
+		//编辑标识
+		if ($ex_id) {
+			//根据id查出信息
+			$examination = array('name' => 'XXX体检报告','imgUrl' => '__PUBLIC__/images/1517275559.jpg','remark' => '这是XXX在第二人民医院的体检报告','date' => '2018-03-14');
+			$this->assign('examination',$examination);
+		}
+		return $this->fetch();
+	}
+
+	//查看体检报告
+	public function picture_show(){
+		$id = input('id');
+		return $this->fetch();
+	}
+
+	//删除体检报告
+	public function examination_del(){
+		
+		return array('code' => 1);
+	}
+
 }
