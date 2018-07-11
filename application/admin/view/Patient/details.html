@@ -90,7 +90,7 @@
 <!-- 既往病史 -->
 	<div class="tabCon">
 		<!-- 头部 -->
-		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+		<div class="cl pd-5 bg-1 bk-gray mt-20">
 			<a class="btn btn-primary radius" data-title="编辑病史" onClick="patient_case_add('编辑病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px',)" title="编辑病史">
 				<i class="Hui-iconfont">&#xe600;</i> 编辑病史
 			</a>
@@ -112,6 +112,8 @@
 				<table class="table table-border table-bordered">
 					<tr>
 						<td>胸椎手术史</td>
+						<td>慢性肾病</td>
+						<td>慢性肾病</td>
 						<td>慢性肾病</td>
 					</tr>
 				</table>
@@ -243,7 +245,6 @@
 		<table class="table table-border table-bordered table-bg table-hover table-sort">
 			<thead>
 				<tr class="text-c">
-					<th><input name="" type="checkbox" value=""></th>
 					<th>报告名称</th>
 					<th>封面图</th>
 					<th>报告说明</th>
@@ -253,7 +254,6 @@
 			</thead>
 			<tbody>
 				<tr class="text-c">
-					<td><input name="" type="checkbox" value=""></td>
 					<td>XXX体检报告</td>
 					<td><a href="javascript:;" onClick="service_record_edit('查看体检报告','{:url('Admin/Patient/picture_show',array('id' => $id))}','700px','600px')"><img style='width:50px;height:50px;' class="picture-thumb" src="__PUBLIC__/images/1517275559.jpg"></a></td>
 					<td>这是XXX在第二人民医院的体检报告</td>
@@ -493,7 +493,7 @@
 					</thead>
 					<tbody>
 						<tr class="text-c">
-							<td><u>3/29用药</u></td>
+							<td><u style="cursor:pointer" onClick="service_record_check()">3/29用药</u></td>
 							<td>朱玉婷</td>
 							<td>2018-03-29</td>
 							<td class="f-14 td-manage">
@@ -502,7 +502,7 @@
 							</td>
 						</tr>
 						<tr class="text-c">
-							<td><u>吧</u></td>
+							<td><u style="cursor:pointer">吧</u></td>
 							<td>健康源</td>
 							<td>2018-03-30</td>
 							<td class="f-14 td-manage">
@@ -933,6 +933,19 @@
 				},
 			});	
 		}, function(){
+		});
+	}
+
+	//查看服务记录
+	function service_record_check() {
+		layer.open({
+  		  area: ['300px', '300px'],
+		  type: 1,
+		  skin: 'layui-layer-demo', //样式类名
+		  // closeBtn: 0, //不显示关闭按钮
+		  anim: 2,
+		  shadeClose: true, //开启遮罩关闭
+		  content: '这是内容'
 		});
 	}
 </script>

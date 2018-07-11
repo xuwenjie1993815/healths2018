@@ -1,29 +1,72 @@
 {include file="../application/admin/view/Public/_header.html"/}
-<link href="__STATIC__/lib/lightbox2/2.8.1/css/lightbox.css" rel="stylesheet" type="text/css" >
-<div class="page-container">
-	<div class="portfolio-content">
-		<ul class="cl portfolio-area">
-			<li class="item">
-				<div class="portfoliobox">
-					<!-- <input class="checkbox" name="" type="checkbox" value=""> -->
-					<div class="picbox"><a href="__PUBLIC__/images/tijian.jpg" data-lightbox="gallery" data-title="体检报告"><img src="__PUBLIC__/images/tijian.jpg"></a></div>
-					<div class="textbox">体检报告 </div>
-				</div>
-			</li>
-			<li class="item">
-				<div class="portfoliobox">
-					<!-- <input class="checkbox" name="" type="checkbox" value=""> -->
-					<div class="picbox "><a href="__PUBLIC__/images/1521601030.jpg" data-lightbox="gallery" data-title="体检报告"><img src="__PUBLIC__/images/1521601030.jpg"></a></div>
-					<div class="textbox">体检报告 </div>
-				</div>
-			</li>
+<!-- <link href="__STATIC__/lib/lightbox2/2.8.1/css/lightbox.css" rel="stylesheet" type="text/css" > -->
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/artZoom/jquery.artZoom.css"/>
+<style type="text/css">
+    .artZoom {
+        padding: 3px;
+        background: #FFF;
+        border: 1px solid #EBEBEB;
+    }
+    img {
+        border: 0 none;
+    }
+    
+    #demo {
+        width: 540px;
+        padding: 5px;
+        background: #FBFCFD;
+    }
+    ul.imgList {
+	}
+	ul.imgList li {
+		border: 2px solid #EBEBEB;
+		margin-top:10px;
+	}
+</style>
+<!-- <div class="page-container"> -->
+<!-- 	<ul class="cl portfolio-area">
+		<li class="item">
+			<div class="portfoliobox">
+				<div class="picbox"><a href="__PUBLIC__/images/tijian.jpg" data-lightbox="gallery1" data-title="体检报告"><img src="__PUBLIC__/images/tijian.jpg"></a></div>
+				<div class="textbox">体检报告 </div>
+			</div>
+		</li>
+		<li class="item">
+			<div class="portfoliobox">
+				<div class="picbox "><a href="__PUBLIC__/images/1521601030.jpg" data-lightbox="gallery2" data-title="体检报告"><img src="__PUBLIC__/images/1521601030.jpg"></a></div>
+				<div class="textbox">体检报告 </div>
+			</div>
+		</li>
+	</ul> -->	
+	<div id="demo">
+		<ul class="imgList">
+	    <li><a href="__PUBLIC__/images/tijian.jpg"><img style="width: 200px; height: 200px;" class="artZoom" src="__PUBLIC__/images/tijian.jpg"/></a></li>
+	    <li><a href="__PUBLIC__/images/1521601030.jpg"><img style="width: 200px; height: 200px;" class="artZoom" src="__PUBLIC__/images/1521601030.jpg"/></a></li>
+	    <li><a href="__PUBLIC__/images/timg.jpg"><img style="width: 200px; height: 200px;" class="artZoom" src="__PUBLIC__/images/min.jpg"/></a></li>
 		</ul>
 	</div>
-</div>
+<!-- </div> -->
 {include file="../application/admin/view/Public/_footer.html"/}
-<script type="text/javascript" src="__STATIC__/lib/lightbox2/2.8.1/js/lightbox.min.js"></script>
+<!-- <script type="text/javascript" src="__STATIC__/lib/lightbox2/2.8.1/js/lightbox.min.js"></script> -->
+<script src="__PUBLIC__/js/artZoom/jquery.artZoom.js"></script>
 <script type="text/javascript">
-$(function(){
-	$(".portfolio-area li").Huihover();
-});
+	jQuery(function ($) {
+         $('.artZoom').artZoom({
+             path: './public/images',    // 设置artZoom图片文件夹路径
+             preload: true,        // 设置是否提前缓存视野内的大图片
+             blur: true,            // 设置加载大图是否有模糊变清晰的效果
+             
+             // 语言设置
+             left: '左旋转',        // 左旋转按钮文字
+             right: '右旋转',        // 右旋转按钮文字
+             source: '看原图'        // 查看原图按钮文字
+         });
+     });
+// lightbox.option({
+// 	'resizeDuration': 200,
+// 	'wrapAround': true
+// })
+// $(function(){
+// 	$(".portfolio-area li").Huihover();
+// });
 </script>

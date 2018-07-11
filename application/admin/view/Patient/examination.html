@@ -84,7 +84,6 @@
 				<input  class="input-text" onClick="laydate()" name="date" id="time" value="{$examination.date}">
 			</div>
 		</div>
-
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3">上传体检报告：</label>
             <div class="formControls col-xs-8 col-sm-9">
@@ -93,6 +92,7 @@
                     <div class="license1">
                       <div class="preview prev">
                         <div class="add_pic">
+                            <input type="hidden" name="key" value="">
                             <input type="file" id="picture" name="file1" onchange="preview1(this)"/>
                             <img src="__PUBLIC__/images/jia_pic.png" alt="">
                         </div>
@@ -101,6 +101,7 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" id="imgkey" value="">
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
                 <button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 提交</button>
@@ -114,9 +115,9 @@
 
 
 {include file="../application/admin/view/Public/_footer.html"/}
-<!--请在下方写此页面业务相关的脚本--> 
+<!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript" src="__STATIC__/lib/ueditor/1.4.3/ueditor.config.js"></script>
-<script type="text/javascript" src="__STATIC__/lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="__STATIC__/lib/ueditor/1.4.3/ueditor.all.min.js"></script>
 <script type="text/javascript" src="__STATIC__/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
 <script src="__STATIC__/lib/layer/laydate/laydate.js"></script>
 <script type="text/javascript">
@@ -167,6 +168,7 @@ $(function(){
         radioClass: 'iradio-blue',
         increaseArea: '20%'
     });
+
 });
 
     // 图片上传
@@ -207,11 +209,35 @@ $(function(){
                     }
                 };
                 reader.readAsDataURL(file.files[0]);
+                //在这里ajax提交file信息(file.files[0])到接口保存,并通过获取的返回的图片信息进行保存
+                $.ajax({
+                    type: 'POST',
+                    url: "http://up-z2.qiniup.com/",
+                    dataType: 'json',
+                    data:{key:'123',token:'123',file:file.files[0]},
+                    success: function(data){
+                        var hash = data.hash;
+                        var key = data.key;
+                        var imgurl = "http://pbngsysl7.bkt.clouddn.com/key";//图片展示地址
+                        //保存已上传图片key值
+                        var imgkey = $("imgkey").val();
+                        if (imgkey) {
+                            $("#imgkey").val(imgkey+','+key);
+                        }else{
+                            $("#imgkey").val(key);
+                        }
+                    },
+                    error: function (data) {  
+                        console.log(data);  
+                    }  
+                });  
+                
             }else{
                 prevDiv.innerHTML = '<div class="img" src=file.value></div>';
             }
     }
     function del_pic1(obj){
+            //删除此张已上传的图片,并删除页面上保存的key值
             $(obj).parent().parent().remove()
             if($(".prev").length == 1){
                 p2 = 0;

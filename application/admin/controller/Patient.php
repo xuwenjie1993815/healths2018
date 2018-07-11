@@ -25,7 +25,7 @@ class Patient extends Controller
 			switch ($_SESSION['userMsg']['type']) {
 				case '1':
 					$where.=' and yid='.$_SESSION['userMsg']['uid'].'';
-					break;
+					break;	
 				case '2':
 					$where.=' and (pid='.$_SESSION['userMsg']['uid'].' or wid like "%'.$_SESSION['userMsg']['uid'].'%")';
 					break;
@@ -51,6 +51,7 @@ class Patient extends Controller
 
 	//基本信息修改
 	public function patient_info_submit(){
+		var_dump($_POST);die;
 		$name = $_POST['name'];
 		$age = $_POST['age'];
 		$card = $_POST['card'];
@@ -247,7 +248,7 @@ class Patient extends Controller
 
 	//上传体检报告
 	public function examination(){
-
+		var_dump($_POST);
 
 		
 		if ($_FILES['file1']['size']) {
@@ -278,5 +279,4 @@ class Patient extends Controller
 		
 		return array('code' => 1);
 	}
-
 }
