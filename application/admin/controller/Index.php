@@ -16,14 +16,35 @@ class Index extends Controller
     public function index()
     {
         if (input('post.password') and input('post.name')) {
-            Session::set('userMsg.id','1');
-            Session::set('userMsg.type','1');
-            return array('code' => '1');die;
+            //登陆
+            ini_set("error_reporting","E_ALL & ~E_NOTICE");
+            // $obj->userName = input('post.name');
+            // $obj->passWord = input('post.password');
+            // $data =  json_encode($obj);
+            $data['userName']=input('post.name');
+            $data['passWord']=input('post.password');
+            $url = "106.14.142.72:8763/login";
+            $res = http_request($url, $data);
+            $res = json_decode($res,true);
+            if ($res['token']) {
+                //判断是否删除
+                if ($res['userMapper']['isDeleted'] == '2') {
+                    return array('code' => '2','msg' => '该用户已删除');die;
+                }
+                Session::set('userMsg.id',$res['userMapper']['id']);
+                Session::set('userMsg.type',$res['userMapper']['type']);
+                Session::set('userMsg.info',$res['userMapper']);
+                return array('code' => '1');die;
+            }else{
+                return array('code' => '2','msg' => $res['message']?:'服务器暂无响应..请稍候');die;
+            }
         }
         
         if (!Session::get('userMsg')) {
             return $this->fetch('login');die;
         }else{
+            $userMsg = Session::get('userMsg');
+            $this->assign('userMsg',$userMsg);
             return $this->fetch('index');die;
         }
 
@@ -57,7 +78,6 @@ class Index extends Controller
         //昨日新增患者
         
         //昨日订单
-        
         return $this->fetch();
     }
 
@@ -79,8 +99,16 @@ class Index extends Controller
 
     //退出登录
     public function sign_out(){
-        Session::delete('userMsg');
-        return array('code' => 1,'msg' => '退出成功');
+        $userMsg = Session::get('userMsg');
+        $url = "106.14.142.72:8763/logout/id=".$userMsg['id'];
+        $res = http_request($url, $data);
+        $res = json_decode($res,true);
+        if ($res === true) {
+            Session::delete('userMsg');
+            return array('code' => 1,'msg' => '退出成功');
+        }else{
+            return array('code' => 2,'msg' => $res['message']?:'服务器暂无响应..请稍候');
+        }
     }
 
     //查找机构

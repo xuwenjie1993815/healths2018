@@ -28,38 +28,34 @@
 				</tr>
 			</thead>
 			<tbody>
+				{volist name="info" id="vo"}
 				<tr class="text-c">
-					<td class="text-l"><u style="cursor:pointer" class="text-primary" onClick="patient_edit('黄晓燕','{:url('Admin/Patient/details',array('id' => $id))}')" title="黄晓燕">黄晓燕</u></td>
-					<td>17388202566</td>
-					<td>女</td>
-					<td>63</td>
-					<td><u style="cursor:pointer" onClick="bangding('{:url('Admin/Device/bangding',array('id'=>126))}')">06b31803040484A:血压计</u></td>
-					<td><u style="cursor:pointer" class="text-primary" onClick="product_list('服务包','{:url('Admin/Product/product_list?id=67')}','67','500px','600px')" title="服务包">16天</u></td>
-					<td class="td-status" onclick="group_set('12')">
-						<a class="label label-success radius">限盐组-王文-王梅仙</a>
+					<td class="text-l"><u style="cursor:pointer" class="text-primary" onClick="patient_edit('{$vo.name}','{:url('admin/Patient/details',array('id' => $vo['id']))}')" title={$vo.name}>{$vo.name}</u></td>
+					<td>{$vo.phoneNum}</td>
+					<td>{$vo.sexy}</td>
+					<td>{$vo.age}</td>
+					<td><u style="cursor:pointer" onClick="bangding('{:url('Admin/Device/bangding',array('id'=>$vo['id']))}')">06b31803040484(A):血压计</u></td>
+					<td><u style="cursor:pointer" class="text-primary" onClick="product_list('服务包','{:url('Admin/Product/product_list',array('id' => $vo['id']))}','500px','600px')" title="服务包">{if condition="$vo['leftDays'] eq ''"}已过期{else/}{$vo.leftDays}{/if}</u></td>
+					<td class="td-status" onClick="group_set('{:url('Admin/patient/group_set',array('id' => $vo['id']))}')">
+						<a class="label label-success radius">{$vo.groupName}{if condition="$vo['doctorName'] neq ''"}-{$vo.doctorName}{/if}{if condition="$vo['assistantName'] neq ''"}-{$vo.assistantName}{/if}</a>
 					</td>
-					{if condition="$star == 1"}
-					<td onclick="star_set('12')">
+					{if condition="$vo['isStar'] == 2"}
+					<td onclick="star_set({$vo.id})">
 						<img src="__PUBLIC__/images/star.png" alt="">
 					</td>
 					{else/}
-					<td onclick="star_cancel('12')">
+					<td onclick="star_cancel({$vo.id})">
 						<img src="__PUBLIC__/images/star1.png" alt="">
 					</td>
 					{/if}
 					<td class="f-14 td-manage">
-						<!-- <a style="text-decoration:none" onClick="article_stop(this,'10001')" href="javascript:;" title="下架">
-							<i class="Hui-iconfont">&#xe6de;</i>
-						</a> 
-						<a style="text-decoration:none" class="ml-5" onClick="article_edit('资讯编辑','article-add.html','10001')" href="javascript:;" title="编辑">
-							<i class="Hui-iconfont">&#xe6df;</i>
-						</a>  -->
-						<a style="text-decoration:none" class="ml-5" onClick="article_del(this,'10001')" href="javascript:;" title="删除">
+						<a style="text-decoration:none" class="ml-5" onClick="article_del(this,{$vo.id})" href="javascript:;" title="删除">
 							<i class="Hui-iconfont">&#xe6e2;</i>
 						</a>
 					</td>
 				</tr>
-				<tr class="text-c">
+				{/volist}
+<!-- 				<tr class="text-c">
 					<td class="text-l"><u style="cursor:pointer" class="text-primary" onClick="patient_edit('黄书碧','{:url('Admin/Patient/details?id=10002')}')" title="黄书碧">黄书碧</u></td>
 					<td>15823447903</td>
 					<td>女</td>
@@ -77,16 +73,10 @@
 					</td>
 					{/if}
 					<td class="f-14 td-manage">
-						<!-- <a style="text-decoration:none" onClick="article_shenhe(this,'10001')" href="javascript:;" title="审核">审核
-						</a> 
-
-						<a style="text-decoration:none" class="ml-5" onClick="article_edit('资讯编辑','article-add.html','10001')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i>
-						</a> 
- -->
 						<a style="text-decoration:none" class="ml-5" onClick="article_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i>
 						</a>
 					</td>
-				</tr>
+				</tr> -->
 			</tbody>
 		</table>
 	</div>
@@ -100,14 +90,14 @@ $('.table-sort').dataTable({
 	"aaSorting": [[ 1, "desc" ]],//默认第几个排序
 	"bStateSave": true,//状态保存
 	"pading":false,
-	"aoColumnDefs": [
-	  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
-	  {"orderable":false,"aTargets":[0,7]}// 不参与排序的列
-	]
+	// "aoColumnDefs": [
+	//   //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+	//   // {"orderable":false,"aTargets":[0,7]}// 不参与排序的列
+	// ]
 });
 
 //设置分组
-function group_set(id) {
+function group_set(url) {
 	layer.open({
         type: 2,
       	title: '设置分组',
@@ -115,7 +105,7 @@ function group_set(id) {
       	shade: false,
       	maxmin: true, //开启最大化最小化按钮
       	area: ['893px', '600px'],
-      	content: '{:url('Admin/patient/group_set?id=67')}'
+      	content: url
     });
 }
 

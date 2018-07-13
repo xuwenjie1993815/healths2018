@@ -4,47 +4,58 @@
 		<tbody>
 			<tr class="text-l">
 				<td><span>其他疾病史与治疗史:</span>
-					曾患湿疹<i class="Hui-iconfont">&#xe609;</i>
-					<input style="width: 20%;" type="text" class="input-text" value="{$goodInfo.goodName}" placeholder="" id="" name="goodName">
-					<!-- <a class="btn btn-primary radius" data-title="添加病史" onClick="patient_case_add('添加病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px')" title="添加病史">
-					<i class="Hui-iconfont">&#xe600;</i></a> -->
+					<span id="data1">
+						{volist name="info" id="vo" key="k"}
+							{$vo}<a style='text-decoration:none' class='ml-5' onClick='case_del({$k})' href='javascript:;' title='删除'><i class='Hui-iconfont'>&#xe609;</i>
+						{/volist}
+					</span>
+					<input style="width: 20%;" type="text" class="input-text" value="{$Info.case_name}" placeholder=""  data='1'>
 				</td>
 				<td><span>吸烟饮酒史:</span>
-					<!-- <a class="btn btn-primary radius" data-title="添加病史" onClick="patient_case_add('添加病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px')" title="添加病史">
-					<i class="Hui-iconfont">&#xe600;</i></a> -->
+					<span id="data2"></span>
+					<input style="width: 20%;" type="text" class="input-text" value="{$Info.case_name}" placeholder=""  data='2'>
 				</td>
 				<td><span>过敏史:</span>
-					<!-- <a class="btn btn-primary radius" data-title="添加病史" onClick="patient_case_add('添加病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px')" title="添加病史">
-					<i class="Hui-iconfont">&#xe600;</i></a> -->
+					<span id="data3"></span>
+					<input style="width: 20%;" type="text" class="input-text" value="{$Info.case_name}" placeholder=""  data='3'>
 				</td>
 				<td><span>家族遗传病史:</span>
-					<!-- <a class="btn btn-primary radius" data-title="添加病史" onClick="patient_case_add('添加病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px')" title="添加病史">
-					<i class="Hui-iconfont">&#xe600;</i></a> -->
+					<span id="data4"></span>
+					<input style="width: 20%;" type="text" class="input-text" value="{$Info.case_name}" placeholder=""  data='4'>
 				</td>
 				<td><span>服用药物:</span>
-					<!-- <a class="btn btn-primary radius" data-title="添加病史" onClick="patient_case_add('添加病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px')" title="添加病史">
-					<i class="Hui-iconfont">&#xe600;</i></a> -->
+					<span id="data5"></span>
+					<input style="width: 20%;" type="text" class="input-text" value="{$Info.case_name}" placeholder=""  data='5'>
 				</td>
 			</tr>
 		</tbody>
 	</table>
-<!-- 	<div class="row cl">
-        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>其他疾病史与治疗史:</label>
-		<span class="l"> 
-			<u>曾患湿疹</u>
-			<a class="btn btn-primary radius" data-title="添加病史" onClick="patient_case_add('添加病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px',)" title="添加病史">
-				<i class="Hui-iconfont">&#xe600;</i>
-			</a>
-		</span> 
-    </div> -->
 </div>
 {include file="../application/admin/view/Public/_footer.html"/}
 <script>
 $(document).keyup(function(event){
   if(event.keyCode ==13){
-  	var aa = $(this).val();
-  	alert(aa);
-    $("#submit").trigger("click");
+  	var case_name = $('input:focus').val();
+  	var case_data = $('input:focus').attr('data');
+  	$.ajax({
+        url:"{:url('Admin/patient/patient_case_add')}",
+        type:'post',
+        dataType:'json',
+        data:{case_name:case_name,case_data:case_data,id:{$id}},
+        success:function(data){
+            if(data.code==1){
+   				$('#data'+case_data).append(case_name+"<a style='text-decoration:none' class='ml-5' onClick='case_del("+data.case_id+")'' href='javascript:;' title='删除'><i class='Hui-iconfont'>&#xe609;</i>");return;
+            }else{
+                layer.msg(data.msg);
+            }
+        }
+    });
   }
 });
+
+//删除病史
+function case_del(case_id) {
+	var id = {$id};
+	console.log(case_id,id);
+}
 </script>

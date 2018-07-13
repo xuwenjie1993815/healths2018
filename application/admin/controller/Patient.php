@@ -2,6 +2,7 @@
 namespace app\admin\controller;
 use think\View;
 use think\Controller;
+use think\Session;
 use app\admin\model\User;
 use think\Db;
 class Patient extends Controller
@@ -9,30 +10,18 @@ class Patient extends Controller
 	//获取患者列表
 	public function index(){
 		//星级标识
-		$this->assign('star',1);
-		$this->assign('id',10001);
-		return $this->fetch('index');die;
-		// $a = Db::table('patient')->where('id',67)->find();
-
-		$where='type = 0';
-		$sql = "SELECT p.* FROM patient p LEFT JOIN (SELECT pid as p_id,MAX(upload_time) AS d_time FROM blood_record GROUP BY p_id ) as b ON p.id = b.p_id WHERE ( $where ) ORDER BY b.d_time desc ";
-		$a = Db::query($sql);
-
-		var_dump($a);die;
-
-		$pagelist = $_POST['pagelist']?:10;
-			$where='type = 0';
-			switch ($_SESSION['userMsg']['type']) {
-				case '1':
-					$where.=' and yid='.$_SESSION['userMsg']['uid'].'';
-					break;	
-				case '2':
-					$where.=' and (pid='.$_SESSION['userMsg']['uid'].' or wid like "%'.$_SESSION['userMsg']['uid'].'%")';
-					break;
-				case '3':
-					$where.=' and gid='.$_SESSION['userMsg']['uid'].'';
-					break;
-			}
+		//获取患者列表
+		$userMsg = Session::get('userMsg');
+		$data['adminId']=$userMsg['id'];
+        $url = "106.14.142.72:8763/patient/all";
+        $res = http_request($url, $data);
+        $res = json_decode($res,true);
+        // if (!$res['0']['id']) {
+        // 	return array('code' => 2,'msg' => $res['message']);
+        // }
+		// $this->assign('star',1);
+		// $this->assign('id',10001);
+		$this->assign('info',$res);
 		return $this->fetch('index');die;
 	}
 
@@ -63,7 +52,26 @@ class Patient extends Controller
 	}
 
 	public function patient_add(){
+		$_POST['groupName'] = $_POST['unit'];
+		$_POST['groupID'] = $_POST['unit_id'];
+		$_POST['doctorID'] = $_POST['ys_id'];
+		$_POST['assistantID'] = $_POST['yz_id'];
+		unset($_POST['unit'],$_POST['unit_id'],$_POST['ys_id'],$_POST['yz_id'],$_POST['passWord2']);
+		// die;
 		//新增患者接口
+		// $obj->AddPatientMapper = $_POST;
+  //       $data =  json_encode($obj);
+  // //       var_dump($data);die;
+  		foreach ($_POST as $key => $value) {
+  			$obj->AddPatientMapper[$key] = $_POST;
+  		}
+  		$data =  json_encode($obj);
+  		// var_dump($data);die;
+		// $data['addPatientMapper']=$_POST;
+        $url = "106.14.142.72:8763/patient/insert";
+        $res = http_request($url, $data);
+        $res = json_decode($res,true);
+        var_dump($res);die;
 		return $this->fetch();
 	}
 
@@ -241,8 +249,48 @@ class Patient extends Controller
 		return array('code' => 1);
 	}
 
-	//添加病史
+	//添加/编辑病史
 	public function patient_case_add(){
+		$case_name = $_POST["case_name"];
+		//case_data为病史类型标识 1:其他疾病史与治疗史 2:吸烟饮酒史 3:过敏史 4:家族遗传病史 5:服用药物
+		$case_data = $_POST["case_data"];
+		$id = $_POST["id"];
+		if ($_POST) {
+			switch ($_POST['case_data']) {
+				case '1':
+					//添加病史记录
+					//添加成功返回case_id
+					return array('code' => 1,'case_id' => '148');
+					break;
+				case '2':
+					# code...
+					break;
+				case '3':
+					# code...
+					break;
+				case '4':
+					# code...
+					break;
+				case '5':
+					# code...
+					break;
+			}
+			die;
+		}
+
+		// $case_re = array('1' => array('0' => '曾患湿疹'));
+		// $this->assign('info',$case_re);
+		$this->assign('id',input('id'));
+		return $this->fetch();
+	}
+
+	//添加/编辑影响因素
+	public function patient_factor_add(){
+		if ($_POST) {
+			$data = $_POST['data'];
+			return array('code' => 1);
+		}
+		$this->assign('id',input('id'));
 		return $this->fetch();
 	}
 
