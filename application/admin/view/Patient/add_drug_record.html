@@ -5,47 +5,49 @@
 <article class="page-container">
 	<form action="" method="post" class="form form-horizontal" id="form-drug-record-add">
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>药名：</label>
+			<label class="form-label col-xs-4 col-sm-3">药名：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="药名" id="drug_name" name="drug_name">
+				<input type="text" class="input-text" value="{$medical_detail.name}" placeholder="药名" id="name" name="name">
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>药品含量：</label>
+			<label class="form-label col-xs-4 col-sm-3">药品含量：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="mg/片" id="drug_name" name="drug_name">
+				<input type="text" class="input-text" value="{$medical_detail.content}" placeholder="mg/片" id="content" name="content">
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>用法用量(片/次)：</label>
+			<label class="form-label col-xs-4 col-sm-3">用法用量(片/次)：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input style="width: 10%" type="text" class="input-text" value="" placeholder="片" id="usage_number" name="usage_number">/次
-				<input style="width: 10%" type="text" class="input-text" value="" placeholder="次" id="usage_day" name="usage_day">/天
+				<input style="width: 10%" type="text" class="input-text" value="{$medical_detail.useWay}" placeholder="片" id="useWay" name="useWay">/次
+				<input style="width: 10%" type="text" class="input-text" value="{$medical_detail.useCount}" placeholder="次" id="useCount" name="useCount">/天
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>用药时间：</label>
+			<label class="form-label col-xs-4 col-sm-3">用药时间：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input  class="input-text" onClick="laydate()" name="data2" id="time" value="{$stab}">
+				<input  class="input-text" onClick="laydate()" name="useTime" id="time" value="{$medical_detail.useTime|date="Y-m-d H:i:s",###}">
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>是否规律用药：</label>
+			<label class="form-label col-xs-4 col-sm-3">是否规律用药：</label>
 			<div class="formControls col-xs-8 col-sm-9 skin-minimal">
 				<div class="radio-box">
-					<input name="regular" type="radio" value="1" id="regular-1" checked>
+					<input name="useFrequency" type="radio" value="1" id="regular-1" {if condition="$medical_detail['useFrequency'] eq '1'"} checked {/if}>
 					<label for="regular-1">规律</label>
 				</div>
 				<div class="radio-box">
-					<input type="radio" id="regular-2" value="2" name="regular">
+					<input type="radio" id="regular-2" value="2" name="useFrequency" {if condition="$medical_detail['useFrequency'] eq '2'"} checked {/if}>
 					<label for="regular-2">间断</label>
 				</div>
 				<div class="radio-box">
-					<input type="radio" id="regular-3" value="3" name="regular">
+					<input type="radio" id="regular-3" value="3" name="useFrequency" {if condition="$medical_detail['useFrequency'] eq '3'"} checked {/if}>
 					<label for="regular-3">不服药</label>
 				</div>
 			</div>
 		</div>
+		<input type="hidden" value="{$medical_detail.id}" name="id">
+		<input type="hidden" value="{$medical_detail.patientId}" name="patientId">
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
 				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
@@ -66,15 +68,35 @@ $("#form-drug-record-add").validate({
     onkeyup:false,
     focusCleanup:true,
     success:"valid",
+	rules:{
+		name:"required",
+		content:{
+			required:true,
+			number:true
+		},
+		useWay:{
+			required:true,
+			number:true
+		},
+		useCount:{
+			required:true,
+			number:true
+		},
+		useTime:{
+			required:true,
+		},
+	},
     submitHandler:function(form){
         $(form).ajaxSubmit({
             dataType:'json',
             type:'post',
             success:function (res) {
-                if (res.status == 1){
-                    var icon_n = '1';
+                if (res.code == 1){
+                    layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
+                        parent.location.reload();
+                    })
                 }else {
-                    var icon_n = '2';
+                    layer.msg('操作失败,请重试...',{icon:2,time:1000})
                 }
             }
         });

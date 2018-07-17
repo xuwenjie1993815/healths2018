@@ -1,7 +1,13 @@
 <?php 
     // HTTP请求（支持HTTP/HTTPS，支持GET/POST）
-    function http_request($url, $data = null){
+    function http_request($url, $data = null,$headers){
         $curl = curl_init();
+        if ($headers) {
+            if ($headers == '1') {
+                $headers = array("Content-type:application/json;charset='utf-8'","Accept:application/json");
+            }
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        }
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
@@ -15,8 +21,15 @@
         return $output;
     }
 
-    function post_curls($url, $post){
+    function post_curls($url, $post,$headers){
         $curl = curl_init(); // 启动一个CURL会话
+        if ($headers) {
+            if ($headers == '1') {
+                $headers = array("Content-type:application/json;charset='utf-8'","Accept:application/json");
+            }
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        }
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_URL, $url); // 要访问的地址
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 1); // 从证书中检查SSL加密算法是否存在

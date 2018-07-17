@@ -212,10 +212,13 @@ $(function(){
                 //在这里ajax提交file信息(file.files[0])到接口保存,并通过获取的返回的图片信息进行保存
                 $.ajax({
                     type: 'POST',
-                    url: "http://up-z2.qiniup.com/",
+                    url: "http://up-z2.qiniup.com/", 
+                    processData:false,
+                    mimeType:"multipart/form-data",
                     dataType: 'json',
-                    data:{key:'123',token:'123',file:file.files[0]},
+                    data:{key:'123',token:'123',accept:'',file:file.files[0]},
                     success: function(data){
+                        console.log(data);return;
                         var hash = data.hash;
                         var key = data.key;
                         var imgurl = "http://pbngsysl7.bkt.clouddn.com/key";//图片展示地址

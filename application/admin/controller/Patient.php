@@ -3,8 +3,6 @@ namespace app\admin\controller;
 use think\View;
 use think\Controller;
 use think\Session;
-use app\admin\model\User;
-use think\Db;
 class Patient extends Controller
 {
 	//获取患者列表
@@ -13,9 +11,11 @@ class Patient extends Controller
 		//获取患者列表
 		$userMsg = Session::get('userMsg');
 		$data['adminId']=$userMsg['id'];
-        $url = "106.14.142.72:8763/patient/all";
-        $res = http_request($url, $data);
-        $res = json_decode($res,true);
+		if ($data['adminId']) {
+	        $url = config('path')."/patient/all";
+	        $res = http_request($url, $data);
+	        $res = json_decode($res,true);
+		}
         // if (!$res['0']['id']) {
         // 	return array('code' => 2,'msg' => $res['message']);
         // }
@@ -30,28 +30,57 @@ class Patient extends Controller
 		$id = input('id');
 		$this->assign('id',$id);
 		//基本信息
+		$url = config('path')."/patient/id/".$id;
+        $res = http_request($url, $data);
+        $res = json_decode($res,true);
+        if ($res) {
+        	$this->assign('info',$res);
+        }
 		//既往病史
 		//体检报告
 		//用药记录
+		$medical_data['patientId'] = $id;
+		$medical_url = config('path')."/patient/medical/getList";
+        $medical_res = http_request($medical_url, $medical_data);
+        $medical_res = json_decode($medical_res,true);
+        if ($medical_res) {
+        	$this->assign('medicalList',$medical_res);
+        }
 		//测量统计
 		//服务记录
+		$service_url = config('path')."/patient/service/getList";
+		$service_data['patientId'] = $id;
+		$service_res = http_request($service_url, $service_data);
+        $service_res = json_decode($service_res,true);
+        if ($service_res) {
+        	$this->assign('serviceList',$service_res);
+        }
 		return $this->fetch();
 	}
 
 	//基本信息修改
 	public function patient_info_submit(){
-		var_dump($_POST);die;
-		$name = $_POST['name'];
-		$age = $_POST['age'];
-		$card = $_POST['card'];
-		$phone = $_POST['phone'];
-		$address = $_POST['address'];
-		$family_phone = $_POST['family_phone'];
-		$sex = $_POST['sex'];
+		foreach ($_POST as $key => $value) {
+			$obj->$key = $value;
+		}
+		$data = json_encode($obj);
 		//基本信息提交修改接口
+		$url = config('path')."/patient/update";
+        $headers = array("Content-type:application/json;charset='utf-8'","Accept:application/json");
+        $res = http_request($url, $data,$headers);
+        $res = json_decode($res,true);
+        if ($res == 1) {
+        	return array('code' => 1);
+        }else{
+        	return array('code' => 2,'msg' => $res['error']);
+        }
 	}
 
 	public function patient_add(){
+		if (!$_POST) {
+			return $this->fetch();die;
+		}
+        ini_set("error_reporting","E_ALL & ~E_NOTICE");
 		$_POST['groupName'] = $_POST['unit'];
 		$_POST['groupID'] = $_POST['unit_id'];
 		$_POST['doctorID'] = $_POST['ys_id'];
@@ -63,28 +92,51 @@ class Patient extends Controller
   //       $data =  json_encode($obj);
   // //       var_dump($data);die;
   		foreach ($_POST as $key => $value) {
-  			$obj->AddPatientMapper[$key] = $_POST;
+  			$obj->$key = $value;
   		}
   		$data =  json_encode($obj);
-  		// var_dump($data);die;
 		// $data['addPatientMapper']=$_POST;
-        $url = "106.14.142.72:8763/patient/insert";
-        $res = http_request($url, $data);
+        $url = config('path')."/patient/insert";
+        $headers = array("Content-type:application/json;charset='utf-8'","Accept:application/json");
+        $res = http_request($url, $data,$headers);
         $res = json_decode($res,true);
+        if ($res) {
+        	return array('code' => 1,'msg'=>'新增成功');
+        }else{
+        	return array('code' => 2,'msg'=>$res['error']);
+        }
         var_dump($res);die;
-		return $this->fetch();
 	}
 
 	//标记星级用户
 	public function star_set(){
 		$id = input('post.id');
-		//(接口)
-		return array('code' => 1);
+		$data['isStar'] = 1;
+		$data['patientId'] = $id;
+        $url = config('path')."/patient/star";
+        $res = http_request($url, $data);
+        $res = json_decode($res,true);
+        if ($res === true) {
+			return array('code' => 1);
+        }else{
+			return array('code' => 2,'msg' => $res['error']);
+        }
+		
 	}
 
 	//取消星级用户
 	public function star_cancel(){
 		$id = input('post.id');
+		$data['isStar'] = 2;
+		$data['patientId'] = $id;
+        $url = config('path')."/patient/star";
+        $res = http_request($url, $data);
+        $res = json_decode($res,true);
+        if ($res === true) {
+			return array('code' => 1);
+        }else{
+			return array('code' => 2,'msg' => $res['error']);
+        }
 		//(接口)
 		return array('code' => 1);
 	}
@@ -152,13 +204,75 @@ class Patient extends Controller
 
 	//添加用药记录
 	public function add_drug_record(){
-		$data['time'] = strtotime($_POST['data2']);
-		$data['drug_name'] = $_POST['drug_name'];
-		$data['consumption'] = $_POST['consumption'];
-		$data['regular'] = $_POST['regular'];
-		$data['id'] = input('id');
-		//添加用药记录(接口)
-		return $this->fetch();
+		if (!$_POST AND !input('type')) {
+			return $this->fetch();die;
+		}
+		//编辑用药记录
+		if (input('type') == 'save') {
+			if (!$_POST) {
+				//获取单条用药记录
+				$detail_data['medicalId'] = input('id');
+				$detail_url = config('path')."/patient/medical/getDetail";
+				$detail_res = http_request($detail_url,$detail_data);
+				$detail_res = json_decode($detail_res,true);
+				if ($detail_res) {
+					$this->assign('medical_detail',$detail_res);
+					return $this->fetch();
+				}
+				die;
+			}
+			if ($_POST['id'] AND $_POST['patientId']) {
+				//提交修改数据
+				$save_data = $_POST;
+				$save_data['id'] = $_POST['id'];
+				$save_data['useTime'] = strtotime($save_data['useTime']);
+				$save_data['patientId'] = $_POST['patientId'];
+				foreach ($save_data as $key => $value) {
+					$obj->$key = $value;
+				}
+				$save_data = json_encode($obj);
+				$save_url = config('path')."/patient/medical/update";
+	       		$headers = array("Content-type:application/json;charset='utf-8'","Accept:application/json");
+				$save_res = http_request($save_url,$save_data,$headers);
+				$save_res = json_decode($save_res,true);
+				if ($save_res) {
+					return array('code' => 1);
+				}else{
+					return array('code' => 2);
+				}
+				die;
+			}
+		}
+		
+		$_POST['useTime'] = strtotime($_POST['useTime']);
+		$_POST['patientId'] = input('id');
+		foreach ($_POST as $key => $value) {
+			$obj->$key = $value;
+		}
+		$data = json_encode($obj);
+		$url = config('path')."/patient/medical/insert";
+        $headers = array("Content-type:application/json;charset='utf-8'","Accept:application/json");
+        $res = http_request($url, $data, $headers);
+        $res = json_decode($res,true);
+		if ($res) {
+			return array('code' => 1);
+		}else{
+			return array('code' => 2);
+		}
+	}
+
+	//删除用药记录
+	public function medical_del(){
+		$id = $_POST['id'];//记录id
+		$data['medicalId'] = $id;
+		$url = config('path')."/patient/medical/delete";
+		$res = http_request($url,$data);
+		$res = json_decode($res,true);
+		if ($res == true) {
+			return array('code' => 1);
+		}else{
+			return array('code' => 2);
+		}
 	}
 
 	//患者病史设置
@@ -227,24 +341,78 @@ class Patient extends Controller
 
 	//添加服务记录
 	public function add_service_record(){
-		if (input('re_id')) {
+		if (input('re_id') AND !$_POST) {
 			//接口,根据服务记录id查询记录详情
-			$arrayName = array('id' => input('re_id'),'title' => '张医生:3/29用药','time' => '2018-03-29','sign' => '朱玉婷','remark' => '这是内容');
-			$this->assign('info',$arrayName);
+			$data['recordId'] = input('re_id');
+			$url = config('path')."/patient/service/getDetail";
+			$res = http_request($url,$data);
+			$res = json_decode($res,true);
+			$res['patientId'] = input('id');
+			$this->assign('info',$res);
+			return $this->fetch();die;
+		}
+		if ($_POST['save_re_id']) {
+			$_POST['patientId'] = $_POST['id'];
+			unset($_POST['id']);
+			$_POST['id'] = $_POST['save_re_id'];
+			unset($_POST['save_re_id']);
+			foreach ($_POST as $key => $value) {
+				$obj->$key = $value;
+			}
+			$data = json_encode($obj);
+			$url = config('path')."/patient/service/update";
+			$res = http_request($url,$data,'1');
+			$res = json_decode($res,true);
+			if ($res==1) {
+				return array('code' => 1);
+			}else{
+				return array('code' => 2);
+			}
+		}
+		if ($_POST AND !$_POST['save_re_id']) {
+			$_POST['patientId'] = input('id');
+			// $_POST['time'] = strtotime($_POST['time']);
+			$url = config('path')."/patient/service/insert";
+			foreach ($_POST as $key => $value) {
+				$obj->$key = $value;
+			}
+			$data = json_encode($obj);
+			$res = http_request($url,$data,'1');
+			$res = json_decode($res,true);
+			if ($res==1) {
+				return array('code' => 1);
+			}else{
+				return array('code' => 2);
+			}
 		}
 		return $this->fetch();
 	}
 
 	//删除服务记录
 	public function del_service_record(){
-		$id = $_POST['id'];
+		$data['serviceId'] = $_POST['id'];
 		//删除服务记录(接口)
-		return array('code' => 1);
+		$url = config('path')."/patient/service/delete";
+		$res = http_request($url,$data);
+		if ($res == true) {
+			return array('code' => 1);
+		}else{
+			return array('code' => 2);
+		}
 	}
 
 	//删除患者
 	public function patient_del(){
 		$id = $_POST['id'];
+		$data['patientId'] = $id;
+        $url = config('path')."/patient/delete";
+        $res = http_request($url, $data);
+        $res = json_decode($res,true);
+        if ($res === true) {
+			return array('code' => 1);
+        }else{
+			return array('code' => 2,'msg' => $res['error']);
+        }
 		//删除用户(接口)
 		return array('code' => 1);
 	}

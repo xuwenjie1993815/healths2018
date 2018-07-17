@@ -23,7 +23,7 @@ class Index extends Controller
             // $data =  json_encode($obj);
             $data['userName']=input('post.name');
             $data['passWord']=input('post.password');
-            $url = "106.14.142.72:8763/login";
+            $url = config('path')."/login";
             $res = http_request($url, $data);
             $res = json_decode($res,true);
             if ($res['token']) {
@@ -100,7 +100,7 @@ class Index extends Controller
     //退出登录
     public function sign_out(){
         $userMsg = Session::get('userMsg');
-        $url = "106.14.142.72:8763/logout/id=".$userMsg['id'];
+        $url = config('path')."/logout/id=".$userMsg['id'];
         $res = http_request($url, $data);
         $res = json_decode($res,true);
         if ($res === true) {

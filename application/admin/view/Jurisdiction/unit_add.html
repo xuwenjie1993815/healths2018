@@ -2,13 +2,13 @@
 </head>
 <body>
 <article class="page-container">
-	<form action="" method="post" class="form form-horizontal" id="form-patient-add">
+	<form action="" method="post" class="form form-horizontal" id="form-unit-add">
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>头像：</label>
 			<div class="formControls col-xs-8 col-sm-9" id="preview">
 				<img id="imghead" title="点击上传图片" style="cursor:pointer" border="0" src="__PUBLIC__/images/1517275559.jpg" width="90" height="90" onClick="$('#previewImg').click();">
 			</div>  
-			<input type="file" onChange="previewImage(this)" style="display: none;" id="previewImg" name="file">
+			<input type="file" style="display: none;" id="previewImg" name="file">
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>账号：</label>
@@ -16,10 +16,24 @@
 				<input type="text" class="input-text" value="{$info.username}" placeholder="" id="username" name="username">
 			</div>
 		</div>
+		{if condition="$jg eq 1"}
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机构名：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$info.name}" placeholder="" id="name" name="name">
+			</div>
+		</div>
+		{/if}
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>昵称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$info.nickName}" placeholder="" id="nickName" name="username">
+			</div>
+		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>密码：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="password" class="input-text" value="" placeholder="" id="pass" name="pass">
+				<input type="password" class="input-text" value="" placeholder="" id="pass" name="passWord">
 			</div>
 		</div>
 		<div class="row cl">
@@ -28,13 +42,19 @@
 				<input type="password" class="input-text" value="" placeholder="" id="passConfirm" name="passConfirm">
 			</div>
 		</div>
-		{if condition="$type neq ''"}
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>联系电话：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="tel" class="input-text" value="{$info.mobile}" placeholder="" id="mobile" name="mobile">
+				<input type="tel" class="input-text" value="{$info.phoneNum}" placeholder="" id="phoneNum" name="phoneNum">
 			</div>
 		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>地址：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$info.address}" placeholder="" id="address" name="address">
+			</div>
+		</div>
+		{if condition="$type neq ''"}
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>姓名：</label>
 			<div class="formControls col-xs-8 col-sm-9">
@@ -88,7 +108,7 @@
 		{/if}
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-				<input class="btn btn-primary radius" id="unit_add_submit" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
 			</div>
 		</div>
 	</form>
@@ -108,121 +128,32 @@ $(function(){
 		radioClass: 'iradio-blue',
 		increaseArea: '20%'
 	});
+	//表单验证
+    $("#form-unit-add").validate({
+        onkeyup:false,
+        focusCleanup:true,
+        success:"valid",
+        submitHandler:function(form){
+            $(form).ajaxSubmit({
+                dataType:'json',
+                type:'post',
+                success:function (res) {
+                    if (res.code == 1){
+                        layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
+                            parent.location.reload();
+                        })
+                    }else {
+                        layer.msg(res.msg,{icon:2,time:1000},function() {
+                            location.reload();
+                        })
+                    }
+                }
+            });
+        }
+    });
 });
 
-$("#unit_add_submit").click(function(){
-	//如果编辑界面
-	var assistant_doctor_id = $("#assistant_doctor_id").val();
-	var type = $("#type").val();
-	var g_id = $("#g_id").val();
-	var imgone = $("#imghead")[0].src;
-	var username = $('#username').val();
-	var pass = $('#pass').val();
-	var passConfirm = $('#passConfirm').val();
-	var mobile = $('#mobile').val();
-	var real_name = $('#real_name').val();
-	var sex = $('#sex').val();
-	if (!username) {
-		layer.msg('账号不能为空');return;
-	}
-	if (!pass || !passConfirm) {
-		layer.msg('密码不能为空');return;
-	}
-	if (pass != passConfirm) {
-		layer.msg('两次输入密码不一致，请重新输入');return;
-	}
-	if (!mobile) {
-		layer.msg('联系电话不能为空');return;
-	}
-	if(!(/^1[34578]\d{9}$/.test(mobile))){ 
-        layer.msg("手机号码有误，请重新填写");  
-        return false; 
-    } 
-	if (!real_name) {
-		layer.msg('真实姓名不能为空');return;
-	}
-	//修改医助
-	if (assistant_doctor_id) {
-		$.ajax({
-			type: 'POST',
-			url: "{:url('Admin/Jurisdiction/assistant_doctor_edit')}",
-			dataType: 'json',
-			data:{assistant_doctor_id:assistant_doctor_id,imgone:imgone,username:username,pass:pass,passConfirm:passConfirm,mobile:mobile,real_name:real_name,sex:sex},
-			success: function(data){
-				if (data.code == 1) {
-					layer.msg('添加成功'); return;
-				}else{
-					layer.msg('添加失败'); return;
-				}
-			}
-		});
-		return;
-	}	
-	//新增
-	$.ajax({
-		type: 'POST',
-		url: "{:url('Admin/Jurisdiction/unit_add')}",
-		dataType: 'json',
-		data:{g_id:g_id,type:type,imgone:imgone,username:username,pass:pass,passConfirm:passConfirm,mobile:mobile,real_name:real_name,sex:sex},
-		success: function(data){
-			if (data.code == 1) {
-				layer.msg('添加成功');
-			}else{
-				layer.msg('添加失败');
-			}
-		}
-	});
-})
 
-function previewImage(file){
-  var MAXWIDTH  = 90; 
-  var MAXHEIGHT = 90;
-  var div = document.getElementById('preview');
-  if (file.files && file.files[0])
-  {
-      div.innerHTML ='<img id=imghead onclick=$("#previewImg").click()>';
-      var img = document.getElementById('imghead');
-      img.onload = function(){
-        var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
-        img.width  =  rect.width;
-        img.height =  rect.height;
-        img.style.marginTop = rect.top+'px';
-      }
-      var reader = new FileReader();
-      reader.onload = function(evt){img.src = evt.target.result;}
-      reader.readAsDataURL(file.files[0]);
-  }
-  else //兼容IE
-  {
-    var sFilter='filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
-    file.select();
-    var src = document.selection.createRange().text;
-    div.innerHTML = '<img id=imghead>';
-    var img = document.getElementById('imghead');
-    img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
-    var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
-    status =('rect:'+rect.top+','+rect.left+','+rect.width+','+rect.height);
-    div.innerHTML = "<div id=divhead style='width:"+rect.width+"px;height:"+rect.height+"px;margin-top:"+rect.top+"px;"+sFilter+src+"\"'></div>";
-  }
-}
-function clacImgZoomParam( maxWidth, maxHeight, width, height ){
-    var param = {top:0, left:0, width:width, height:height};
-    if( width>maxWidth || height>maxHeight ){
-        rateWidth = width / maxWidth;
-        rateHeight = height / maxHeight;
-        
-        if( rateWidth > rateHeight ){
-            param.width =  maxWidth;
-            param.height = Math.round(height / rateWidth);
-        }else{
-            param.width = Math.round(width / rateHeight);
-            param.height = maxHeight;
-        }
-    }
-    param.left = Math.round((maxWidth - param.width) / 2);
-    param.top = Math.round((maxHeight - param.height) / 2);
-    return param;
-}
 </script> 
 <!--/请在上方写此页面业务相关的脚本-->
 </body>

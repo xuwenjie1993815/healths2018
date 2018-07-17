@@ -16,6 +16,15 @@ class Jurisdiction extends Controller{
 
 	//新增机构
 	public function unit_add(){
+		// if ($_FILES["file"]["error"] > 0){
+		// 	echo "Error: " . $_FILES["file"]["error"] . "<br />";
+		// }else{
+		// 	echo "Upload: " . $_FILES["file"]["name"] . "<br />";
+		// 	echo "Type: " . $_FILES["file"]["type"] . "<br />";
+		// 	echo "Size: " . ($_FILES["file"]["size"] / 1024) . " Kb<br />";
+		// 	echo "Stored in: " . $_FILES["file"]["tmp_name"];
+		// }
+		// var_dump($_POST,$_FILES);die;
 		//新增医生
 		if (input('get.g_id') != '' AND input('get.type') == 1) {
 			$g_id = input('get.g_id');
@@ -35,10 +44,12 @@ class Jurisdiction extends Controller{
 			die;
 		}
 		//新增机构
-		if (input('?post.imgone') AND input('?get.g_id') == false) {
+		// input('?post.imgone')
+		if ($_FILES AND input('?get.g_id') == false) {
 			var_dump($_POST);die;
 			//新增机构接口
 		}
+		$this->assign('jg',1);
 		return $this->fetch();
 	}
 
