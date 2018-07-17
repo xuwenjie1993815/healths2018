@@ -215,8 +215,8 @@ $(function(){
                     url: "http://up-z2.qiniup.com/", 
                     processData:false,
                     mimeType:"multipart/form-data",
-                    dataType: 'json',
                     data:{key:'123',token:'123',accept:'',file:file.files[0]},
+                    contentType:undefined,
                     success: function(data){
                         console.log(data);return;
                         var hash = data.hash;
