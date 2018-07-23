@@ -242,10 +242,10 @@ return [
         '__COMMON__'=> SCRIPT_DIR . '/common',   //前后共有css,img,js所在文件
         '__APP__'   => SCRIPT_DIR . '/'                 //定义首页
     ],
-    'session'                => [
-    'prefix'         => 'think',
-    'type'           => '',
-    'auto_start'     => true,
-    'expire'         => 3600,
-    ]
+    // 'session'                => [
+    // 'prefix'         => 'think',
+    // 'type'           => '',
+    // 'auto_start'     => true,
+    // 'expire'         => 3600,
+    // ]
 ];

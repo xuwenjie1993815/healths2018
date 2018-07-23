@@ -2,28 +2,47 @@
 namespace app\admin\controller;
 use think\View;
 use think\Controller;
-use app\admin\model\User;
-use think\Db;
+use think\Session;
 class Device extends Controller{
 	//列表
 	public function index(){
 		//获取设备列表(接口)
-		
+        $userMsg = Session::get('userMsg');
+        // $data['adminId'] = $userMsg['id'];
+        $url = config('path')."/equipment/getAllEquipment?adminId=".$userMsg['id'];
+        $res = http_request($url,$data);
+        $res = json_decode($res,true);
+        if (!$res['error']) {
+        	$url = config('path')."/classification/group/getOne";
+        	foreach ($res as $key => $value) {
+        		$res[$key]['type'] = config('EQUIPMENT')[$value['type']];
+        		//根据groupId查机构信息
+        		$data1['groupId'] = $value['groupId'];
+        		$res1 = http_request($url,$data1);
+        		$res1 = json_decode($res1,true);
+        		$res[$key]['groupName'] = $res1['name'];
+        		//根据用户id获取用户信息
+        		if ($value['patientId']) {
+        			$patient_url = config('path')."/patient/id/".$value['patientId'];
+        			$patient_res = http_request($patient_url);
+        			$patient_res = json_decode($patient_res,true);
+        			$res[$key]['patientId'] = $patient_res['name'];
+        		}
+        		
+        	}
+        	$this->assign('list',$res);
+        }
 		return $this->fetch('index');die;
 	}
 
 	//添加设备
 	public function device_add(){
 		//权限判断
-		if (1==1) {
-			$userMsg['id'] = 1;
-			$userMsg['name'] = '健康源';
+        $userMsg = Session::get('userMsg');
+		if ($userMsg['type']==1) {
 			$this->assign('type',1);
 			$this->assign('userMsg',$userMsg);
 		}else{
-			//查询当前登录者机构信息(名字+id)
-			$userMsg['id'] = 20;
-			$userMsg['name'] = '限盐组';
 			$this->assign('type',2);
 			$this->assign('userMsg',$userMsg);
 		}
@@ -31,14 +50,41 @@ class Device extends Controller{
 			$content = input('get.content');
 			//机构信息(接口)
 			//根据机构名称/id查询机构详情
-	        $data = "<tr onClick='admin_jg(1)' style='cursor:Pointer;' id='jg1'><th>1</th><td>健康源</td></tr>";
+			// $data['name'] = $content;
+			// //接口未开启TODO
+			// $url = config('path')."/classification/group/getByName";
+			// $res = http_request($url,$data);
+			// $res = json_decode($res,true);
+			// foreach ($res as $key => $value) {
+	  		// $data .= "<tr onClick='admin_jg(".$value['id'].")' style='cursor:Pointer;' id='jg".$value['id']."'><th>1</th><td>".$value['name']."</td></tr>";
+			// }
+			$data = "<tr onClick='admin_jg(1)' style='cursor:Pointer;' id='jg1'><th>1</th><td>xuwenjie</td></tr>";
 	        return array('code' => 1,'msg' => $data);
-			// return array('code' => '1','msg' => '健康源,机构编号:1');
 		}
 		if (input('?post.number') != false) {
 			$number = input('post.number');
+			if (!$_POST['unit_id']) {
+				$_POST['unit_id'] = $userMsg['id'];
+			}
+			$_POST['groupId'] = $_POST['unit_id'];
+			$_POST['createTime'] = date('Y-m-d H:i:s',time());
+			$_POST['updateTime'] = date('Y-m-d H:i:s',time());
+			unset($_POST['unit_id']);
+			foreach ($_POST as $key => $value) {
+				$obj->$key=$value;
+			}
+			$data = json_encode($obj);
+			$url = config('path')."/equipment/insert";
+			$res = http_request($url,$data,1);
+			$res =  json_decode($res,true);
+			if ($res == 1) {
+				return array('code' => 1);
+			}else{
+				return array('code' => 2);
+			}
+			die;
 			//添加设备操作(接口)
-			return array('code' => '1','msg' => '健康源,机构编号:1');
+			// return array('code' => '1','msg' => '健康源,机构编号:1');
 		}
 		return $this->fetch();
 	}
@@ -46,47 +92,104 @@ class Device extends Controller{
 	//删除,解绑设备
 	public function device_remove(){
 		//获取设备编号或id,调用接口进行解绑,删除操作
-		// input('post.number');
-		//批量删除
 		$ids = $_POST['ids'];
+		$data = json_encode($ids);
+		$url = config("path")."/equipment/delete";
+		$res = http_request($url,$data,1);
+		$res = json_decode($res,true);
 		$len = count($ids);
-		return array('code' => 1,'len' => $len);
+		if ($res and !$res['error']) {
+			return array('code' => 1,'len' => $len);
+		}else{
+			return array('code' => 2,'msg' => $res['message']);
+		}
 	}
 
 	//用户绑定/解绑设备
 	public function bangding(){
+        $userMsg = Session::get('userMsg');
 		//解绑设备
 		if (input('post.remove') == 1) {
 			$dataid = input('post.id');
 			$p_id = input('post.p_id');
 			//解绑(接口)
-			return array('code' => '1','msg' => '解绑成功');
+			$url = config('path')."/equipment/undoBangdingPatient";
+			$data['id'] = $dataid;
+			$res = http_request($url,$data);
+			if (!$res['error']) {
+				return array('code' => '1','msg' => '解绑成功');
+			}else{
+				return array('code' => '2','msg' => $res['message']);
+			}
+			die;
 		}
 		//绑定设备
 		if (input('post.bangding') == 1) {
-			$dataid = input('post.id');
-			$p_id = input('post.p_id');
+			$data['id'] = input('post.id');
+			$data['patientId'] = input('post.p_id');
 			//绑定(接口)
-			if (1==2) {
+			$url = config('path')."/equipment/bangdingPatient";
+			$res = http_request($url,$data);
+			if (!$res['error']) {
 				return array('code' => '1','msg' => '绑定成功');
 			}else{
-				return array('code' => '2','msg' => '你已经绑定xxxxx,确认更换绑定设备吗？');
+				return array('code' => '2','msg' => $res['message']);
 			}
+			die;
 		}
 		//替换以前的设备
 		if (input('post.change') == 1) {
-			$data['pid']=$_POST['p_id'];
+			$data['patientId']=$_POST['p_id'];
 			$data['id']=$_POST['id'];
-			return array('code' => '1','msg' => '绑定成功');
+			$old_id = $_POST['old_id'];
+			//解绑old_id(接口)
+			$relieve_url = config('path')."/equipment/undoBangdingPatient";
+			$relieve_data['id'] = $old_id;
+			$relieve_res = http_request($relieve_url,$relieve_data);
+			if (!$relieve_res['error']) {
+				//绑定$data['id'](接口)
+				$bangding_url = config('path')."/equipment/bangdingPatient";
+				$bangding_res = http_request($bangding_url,$data);
+				if (!$bangding_res['error']) {
+					return array('code' => '1','msg' => '绑定成功');
+				}else{
+					return array('code' => '2','msg' => $bangding_res['message']);
+				}
+			}else{
+				return array('code' => '1','msg' => $relieve_res['message']);
+			}
+			die;
 		}
-		//搜索
-		if (input('?post.pid') and input('post.info') == 1) {
-			$pid = input('post.pid');
-			$select = input('post.select');
-			//根据搜索内容查询设备列表(接口)
+		// //搜索
+		// if (input('?post.pid') and input('post.info') == 1) {
+		// 	$pid = input('post.pid');
+		// 	$select = input('post.select');
+		// 	//根据搜索内容查询设备列表(接口)
 			
-		}
+		// 	die;
+		// }
+
 		$id = input('id');
+		//获取用户已绑定设备TODO(没有此接口)
+		$user_el = array('0' => array('id' => '100','number' => '123131sadasdx121','type' => '1','port' => 'B'),'1' => array('id' => '200','number' => '5565415641561dasdas','type' => '2','port' => 'A'));
+		foreach ($user_el as $key => $value) {
+			$user_type[$value['type']] = $value['id'];
+			$user_el[$key]['type'] = config('EQUIPMENT')[$value['type']];
+		}
+		if (1==1) {
+			$this->assign('user_el',$user_el);
+			$this->assign('user_type',$user_type);
+		}
+		//获取未绑定的设备
+		$url = config('path')."/equipment/getConditionEquipment?adminId=".$userMsg['id'];
+		$res = http_request($url);
+		$res = json_decode($res,true);
+		if (!$res['error']) {
+			foreach ($res as $key => $value) {
+				$res[$key]['type_name'] = config('EQUIPMENT')[$value['type']];
+			}
+			$this->assign('list',$res);
+		}
 		$this->assign('id',$id);
 		return $this->fetch();
 	}

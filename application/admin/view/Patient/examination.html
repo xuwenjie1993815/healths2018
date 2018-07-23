@@ -42,7 +42,7 @@
   }*/
 </style>
 <div class="page-container">    
-	<form action="" method="post" class="form form-horizontal" id="form-examination-add">
+	<form action="" method="post" class="form form-horizontal" id="form-examination-add" enctype="multipart/form-data">
 
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2">体检报告名称:</label>
@@ -50,12 +50,6 @@
                 <input type="text" class="input-text" value="{$examination.name}" placeholder="" id="" name="name">
             </div>
         </div>
-
-
-
-
-
-
 
 	   	<!-- <div class="row cl">
 	        <label class="form-label col-xs-4 col-sm-2">上传图片：</label>
@@ -92,7 +86,6 @@
                     <div class="license1">
                       <div class="preview prev">
                         <div class="add_pic">
-                            <input type="hidden" name="key" value="">
                             <input type="file" id="picture" name="file1" onchange="preview1(this)"/>
                             <img src="__PUBLIC__/images/jia_pic.png" alt="">
                         </div>
@@ -101,7 +94,7 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" id="imgkey" value="">
+        <input type="hidden" id="imgkey" name="imgkey" value="">
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
                 <button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 提交</button>
@@ -111,9 +104,7 @@
 
 	</form>
 </div>
-
-
-
+<input type="hidden" id="token" value="">
 {include file="../application/admin/view/Public/_footer.html"/}
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript" src="__STATIC__/lib/ueditor/1.4.3/ueditor.config.js"></script>
@@ -131,6 +122,13 @@ $(".textarea").Huitextarealength({
 });
 
 $(function(){
+    //通过ajax获取token
+    $.ajax({
+        url: "{:url('Admin/Patient/uploadToken')}",
+        success: function(RES){
+            $("#token").val(RES);
+        }
+    });
     //表单验证
     $("#form-examination-add").validate({
         rules:{
@@ -209,29 +207,35 @@ $(function(){
                     }
                 };
                 reader.readAsDataURL(file.files[0]);
-                //在这里ajax提交file信息(file.files[0])到接口保存,并通过获取的返回的图片信息进行保存
+                //在这里ajax提交file信息(file.files[0])到接口保存,并通过获取的返回的图片信息进行保存\
+
+                var formData = new FormData();
+                formData.append('file', file.files[0]);
+                formData.append('key','asadaads');
+                formData.append('accept','');
+                formData.append('token',$("#token").val());
                 $.ajax({
+                    url: "http://up-z2.qiniup.com/",
                     type: 'POST',
-                    url: "http://up-z2.qiniup.com/", 
+                    cache: false,
+                    data: formData,
                     processData:false,
-                    mimeType:"multipart/form-data",
-                    data:{key:'123',token:'123',accept:'',file:file.files[0]},
-                    contentType:undefined,
-                    success: function(data){
-                        console.log(data);return;
-                        var hash = data.hash;
-                        var key = data.key;
+                    contentType:false,
+                    success: function(res){
+                        var hash = res.hash;
+                        var key = res.key;
                         var imgurl = "http://pbngsysl7.bkt.clouddn.com/key";//图片展示地址
                         //保存已上传图片key值
-                        var imgkey = $("imgkey").val();
+                        var imgkey = $("#imgkey").val();
                         if (imgkey) {
                             $("#imgkey").val(imgkey+','+key);
                         }else{
                             $("#imgkey").val(key);
                         }
                     },
-                    error: function (data) {  
-                        console.log(data);  
+                    error: function (res) {
+                        dataJson= $.parseJSON(res.responseText);  
+                        layer.msg(dataJson.error,{icon:2});
                     }  
                 });  
                 

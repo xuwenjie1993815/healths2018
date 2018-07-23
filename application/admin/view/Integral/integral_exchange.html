@@ -34,11 +34,11 @@ $("#form-integral-exchange").validate({
             type:'post',
             success:function (data) {
                 if (data.code == 1){
-                    layer.msg('兑换成功,请稍等...',{icon:1,time:1000},function() {
+                    layer.msg('兑换成功,请稍等...',{icon:1,time:500},function() {
 						parent.location.reload();
 					})
                 }else {
-                    layer.msg(data.msg);
+                    layer.msg(data.msg,{icon:2,time:1000});
                 }
                 
                 

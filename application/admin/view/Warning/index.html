@@ -9,11 +9,12 @@
 	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
 </nav>
 <div class="page-container">
-	<!-- <button onclick="removeIframe()" class="btn btn-primary radius">关闭选项卡</button> -->
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-success radius">批量处理</a></span></div>
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover table-responsive table-sort">
 			<thead>
 				<tr class="text-c">
+					<th><input type="checkbox" name="" value=""></th>
 					<th>姓名</th>
 					<th>电话</th>
 					<th>血压</th>
@@ -25,29 +26,31 @@
 			</thead>
 			<tbody>
 				<tr class="text-c">
+					<td><input type="checkbox" value='112' name="id"></td>
 					<td id="number"><u style="cursor:pointer" class="text-primary" onClick="patient_edit('章思赞','{:url('Admin/Patient/details',array('id' => 12))}')" title="章思赞">章思赞</u></td>
-					<td class="text-l">18622225555</td>
+					<td id="phoneNum12">18623525272</td>
 					<td>140</td>
 					<td>2级</td>
 					<td>2018-06-13 08:44:48</td>
 					<td>当日超过临界值:3次,预警平均血压:142</td>
 					<td class="f-14 td-manage">
-						<a style="text-decoration:none" class="ml-5" onClick="send_msm(this,'10001')" href="javascript:;" title="短信通知"><i class="Hui-iconfont">&#xe6c5;</i></a>
+						<a style="text-decoration:none" class="ml-5" onClick="send_sms(this,'10001')" href="javascript:;" title="短信通知"><i class="Hui-iconfont">&#xe6c5;</i></a>
 						<a style="text-decoration:none" class="ml-5" onClick="sign_warning(this,'10001')" href="javascript:;" title="标记处理"><i class="Hui-iconfont">&#xe6e1;</i></a>
-						<a style="text-decoration:none" class="ml-5" onClick="value_log('今日预警数据','value_log')" href="javascript:;" title="今日预警数据"><i class="Hui-iconfont">&#xe618;</i></a>
+						<a style="text-decoration:none" class="ml-5" onClick="value_log('今日预警数据','{:url('Admin/Warning/value_log',array('id' => 13))}')" href="javascript:;" title="今日预警数据"><i class="Hui-iconfont">&#xe618;</i></a>
 					</td>
 				</tr>
 				<tr class="text-c">
+					<td><input type="checkbox" value='121' name="id"></td>
 					<td><u style="cursor:pointer" class="text-primary" onClick="patient_edit('蒋金容','{:url('Admin/Patient/details',array('id' => 13))}')" title="蒋金容">蒋金容</u></td>
-					<td class="text-l">18966665555</td>
+					<td id="phoneNum13">18966665555</td>
 					<td>145</td>
 					<td>1级</td>
 					<td>2018-06-13 08:26:04</td>
 					<td>当日超过临界值:3次,预警平均血压:154</td>
 					<td class="f-14 td-manage">
-						<a style="text-decoration:none" class="ml-5" onClick="send_msm(this,'10001')" href="javascript:;" title="短信通知"><i class="Hui-iconfont">&#xe6c5;</i></a>
+						<a style="text-decoration:none" class="ml-5" onClick="send_sms(this,'10001')" href="javascript:;" title="短信通知"><i class="Hui-iconfont">&#xe6c5;</i></a>
 						<a style="text-decoration:none" class="ml-5" onClick="sign_warning(this,'10001')" href="javascript:;" title="标记处理"><i class="Hui-iconfont">&#xe6e1;</i></a>
-						<a style="text-decoration:none" class="ml-5" onClick="value_log('今日预警数据','value_log')" href="javascript:;" title="今日预警数据"><i class="Hui-iconfont">&#xe618;</i></a>
+						<a style="text-decoration:none" class="ml-5" onClick="value_log('今日预警数据','{:url('Admin/Warning/value_log',array('id' => 13))}')" href="javascript:;" title="今日预警数据"><i class="Hui-iconfont">&#xe618;</i></a>
 					</td>
 				</tr>
 			</tbody>
@@ -65,7 +68,7 @@ $('.table-sort').dataTable({
 	"pading":false,
 	"aoColumnDefs": [
 	  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
-	  {"orderable":false,"aTargets":[0,6]}// 不参与排序的列
+	  {"orderable":false,"aTargets":[0]}// 不参与排序的列
 	]
 });
 
@@ -80,48 +83,48 @@ function patient_edit(title,url){
 	layer.full(index);
 }
 
-/*设备-删除*/
-function article_del(obj,id){
-	var number = $('#number').text();
-	layer.confirm('删除即解除此设备所有关联,确认要删除吗？',function(index){
-		$.ajax({
+// 发送短信
+function send_sms() {
+	var phoneNum = $("#phoneNum"+12).text();
+	layer.prompt({title: '发送短信', formType: 2}, function(text, index){
+	  	$.ajax({
 			type: 'POST',
-			url: "{:url('Admin/Device/device_remove')}",
-			data:{number:number},
+			url: "{:url('Admin/Warning/send_sms')}",
+			data:{message:text,phoneNum:phoneNum},
 			dataType: 'json',
 			success: function(data){
-				$(obj).parents("tr").remove();
-				layer.msg('已删除!',{icon:1,time:1000});
+				if (data.code == 1) {
+					layer.msg('发送成功,请稍等...',{icon:1,time:500},function() {
+						layer.close(index);
+					})
+				}else{
+					layer.msg(data.msg,{icon:2,time:1000})
+				}
 			},
-			error:function(data) {
-				console.log(data.msg);
-			},
-		});		
+		});
 	});
 }
 
-// 发送短信
-function send_msm() {
-	layer.msg('发送成功',{icon:1,time:1000});
-}
-
 //标记处理
-function sign_warning() {
+function sign_warning(obj,id) {
+	var ids=new Array();
+	ids[0]=id;
 	layer.confirm('确认处理吗?', {
 	  btn: ['确认','取消'] //按钮
 	}, function(){
 	  $.ajax({
 			type: 'POST',
 			url: "{:url('Admin/Warning/sign_warning')}",
-			data:{},
+			data:{ids:ids},
 			dataType: 'json',
 			success: function(data){
 				if (data.code == 1) {
-					layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
-						location.reload();
+					layer.msg('操作成功,请稍等...',{icon:1,time:500},function() {
+						$(obj).parents("tr").remove();
+						// location.reload();
 					})
 				}else{
-					layer.msg('操作失败')
+					layer.msg(data.msg,{icon:2,time:1000})
 				}
 			},
 		});	
@@ -137,6 +140,32 @@ function value_log(title,url) {
 	  fixed: false, //不固定
 	  maxmin: true,
 	  content: url
+	});
+}
+
+//批量删除
+function datadel() {
+    var checkedbox = $("input[name^='id']:checked");
+    var ids = new Array();
+    checkedbox.each(function(){
+        ids.push(this.value);
+    });
+    layer.confirm('确认批量处理多条预警吗?',function(index){
+		$.ajax({
+			type: 'POST',
+			url: "{:url('Admin/Warning/sign_warning')}",
+			data:{ids:ids},
+			dataType: 'json',
+			success: function(data){
+				if (data.code == 1) {
+					layer.msg('已处理'+data.len+'条预警',{icon:1,time:500},function() {
+						location.reload();
+					});
+				}else{
+					layer.msg(data.msg,{icon:2,time:1000});
+				}
+			},
+		});		
 	});
 }
 

@@ -1,21 +1,110 @@
 {include file="../application/admin/view/Public/_header.html"/}
+<style type="text/css">
+  .preview{
+    width: 120px;
+    height: 120px;
+    position: relative;
+    margin-right: 20px;
+    float: left;
+  }
+  .add_pic img{
+    width: 120px;
+    height: 120px;
+    position: absolute;
+    left: 0px;
+    top:0px;
+    float: left;
+  }
+  .add_pic input[type="file"]{
+     width: 120px;
+    height: 120px;
+    position: absolute;
+    left: 0px;
+    top:0px;
+    z-index: 999;
+    opacity: 0;
+    float: left;
+  }
+  .pic{
+    position: absolute;
+    top:0px;
+    left: 0px;
+  }
+  .del_pic1{
+    position: absolute;
+    z-index: 999;
+    right: -8px;
+    top:-8px;
+  }
+/*  .btn-primary{
+    position: absolute;
+    margin-top: 120px;
+  }*/
+</style>
 </head>
 <body>
 <article class="page-container">
 	<form action="" method="post" class="form form-horizontal" id="form-unit-add">
 		<div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>头像：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <div class="form-group" style="position:relative">
+                    <div class="license1">
+                      <div class="preview prev">
+                        {if condition="$info.imgUrl neq ''"}
+                        <div>
+                            <img  style="width:120px;height:120px" class="pic" src={$info.imgUrl} />
+                            <img class="del_pic1" src="__PUBLIC__/images/delete.png" onclick="del_pic1(this)" alt="">
+                        </div>
+                        {/if}
+                        {if condition="$info.imgUrl eq ''"}
+                        <div class="add_pic">
+                            <input type="file" id="picture" name="file1" onchange="preview1(this)"/>
+                            <img src="__PUBLIC__/images/jia_pic.png" alt="">
+                        </div>
+                        {/if}
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="imgkey" name="imgkey" value="">
+	<!--<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>头像：</label>
 			<div class="formControls col-xs-8 col-sm-9" id="preview">
 				<img id="imghead" title="点击上传图片" style="cursor:pointer" border="0" src="__PUBLIC__/images/1517275559.jpg" width="90" height="90" onClick="$('#previewImg').click();">
 			</div>  
 			<input type="file" style="display: none;" id="previewImg" name="file">
-		</div>
+		</div> -->
+		{if condition="$type neq ''"}
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>账号：</label>
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>姓名：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="{$info.username}" placeholder="" id="username" name="username">
+				<input type="text" class="input-text" value="{$info.name}" placeholder="" id="name" name="name">
 			</div>
 		</div>
+		{/if}
+		{if condition="$type eq 2"}
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>性别：</label>
+			<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+				<div class="radio-box">
+					<input name="sex" type="radio" value="1" id="sex-1" {if condition="$info.sex eq 1"} checked {/if}>
+					<label for="sex-1">男</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" id="sex-2" value="2" name="sex" {if condition="$info.sex eq 2"} checked {/if}>
+					<label for="sex-2">女</label>
+				</div>
+			</div>
+		</div>
+		{/if}
+		<!-- <div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>账号：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$info.username}" placeholder="" id="username" name="userName">
+			</div>
+		</div> -->
 		{if condition="$jg eq 1"}
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机构名：</label>
@@ -23,13 +112,20 @@
 				<input type="text" class="input-text" value="{$info.name}" placeholder="" id="name" name="name">
 			</div>
 		</div>
-		{/if}
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>昵称：</label>
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>地址：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="{$info.nickName}" placeholder="" id="nickName" name="username">
+				<input type="text" class="input-text" value="{$info.address}" placeholder="" id="address" name="address">
 			</div>
 		</div>
+		{/if}
+		<!-- <div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>昵称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$info.nickName}" placeholder="" id="nickName" name="nickName">
+			</div>
+		</div> -->
+        {if condition="$info eq ''"}
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>密码：</label>
 			<div class="formControls col-xs-8 col-sm-9">
@@ -42,26 +138,21 @@
 				<input type="password" class="input-text" value="" placeholder="" id="passConfirm" name="passConfirm">
 			</div>
 		</div>
+        {/if}
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>联系电话：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input type="tel" class="input-text" value="{$info.phoneNum}" placeholder="" id="phoneNum" name="phoneNum">
 			</div>
 		</div>
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>地址：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="{$info.address}" placeholder="" id="address" name="address">
-			</div>
-		</div>
 		{if condition="$type neq ''"}
-		<div class="row cl">
+		<!-- <div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>姓名：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="{$info.real_name}" placeholder="" id="real_name" name="real_name">
+				<input type="text" class="input-text" value="{$info.name}" placeholder="" id="name" name="name">
 			</div>
-		</div>
-		<div class="row cl">
+		</div> -->
+		<!-- <div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>性别：</label>
 			<div class="formControls col-xs-8 col-sm-9 skin-minimal">
 				<div class="radio-box">
@@ -73,7 +164,7 @@
 					<label for="sex-2">女</label>
 				</div>
 			</div>
-		</div>
+		</div> -->
 		{if condition="$type eq 1"}
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3">专科：</label>
@@ -96,15 +187,10 @@
             </div>
         </div>
 
-		<!-- <div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3">简介：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="{$info.introduction}" placeholder="" id="introduction" name="introduction">
-			</div>
-		</div> -->
 		<input type="hidden" id="type" value={$type}>
 		<input type="hidden" id="g_id" value={$g_id}>
-		<input type="hidden" id="assistant_doctor_id" value={$assistant_doctor_id}>			
+		<input type="hidden" id="doctor_id" value={$doctor_id}>
+		<input type="hidden" id="assistant_doctor_id" value={$assistant_doctor_id}>		
 		{/if}
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
@@ -113,6 +199,7 @@
 		</div>
 	</form>
 </article>
+<input type="hidden" id="token" value="">
 
 
 {include file="../application/admin/view/Public/_footer.html"/}
@@ -123,6 +210,13 @@ $(".textarea").Huitextarealength({
 });
 
 $(function(){
+    //通过ajax获取token
+    $.ajax({
+        url: "{:url('Admin/Patient/uploadToken')}",
+        success: function(RES){
+            $("#token").val(RES);
+        }
+    });
 	$('.skin-minimal input').iCheck({
 		checkboxClass: 'icheckbox-blue',
 		radioClass: 'iradio-blue',
@@ -139,13 +233,11 @@ $(function(){
                 type:'post',
                 success:function (res) {
                     if (res.code == 1){
-                        layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
+                        layer.msg('操作成功,请稍等...',{icon:1,time:500},function() {
                             parent.location.reload();
                         })
                     }else {
-                        layer.msg(res.msg,{icon:2,time:1000},function() {
-                            location.reload();
-                        })
+                        layer.msg('操作失败',{icon:2})
                     }
                 }
             });
@@ -153,6 +245,114 @@ $(function(){
     });
 });
 
+
+// 图片上传
+function preview1(file){
+    var fileText=$(file).val();
+     if(fileText==""){
+        return false;
+    }
+    if(!/.(gif|jpg|jpeg|png|GIF|JPG|JPEG|PNG)$/.test(fileText)){
+        layer.open({
+            closeBtn:0,
+            type:0,
+            content:"图片类型必须是gif,jpeg,jpg,png中的一种",
+        })
+        $(file).val('');
+        return false;
+    }
+        p2 = 1;
+        if (file.files && file.files[0]){
+            var reader = new FileReader();
+            reader.onload = function(evt){
+                var prevDiv =
+                    '<div>'+
+                    '<img  style="width:120px;height:120px" class="pic" src="' + evt.target.result + '" />'+
+                    '<img class="del_pic1" src="__PUBLIC__/images/delete.png" onclick="del_pic1(this)" alt="">'+
+                    '</div>';
+                $(file).parent().parent().append(prevDiv);
+                // var timestamp = Date.parse(new Date());
+                //  if($(".prev").length<4){
+                //     var str =
+                //         '<div class="preview prev">'+
+                //         '<div class="add_pic">'+
+                //         '<input type="file" name="file'+timestamp+'" onchange="preview1(this)"/>'+
+                //         '<img src="__PUBLIC__/images/jia_pic.png" alt="">'+
+                //         '</div>'+
+                //         '</div>';
+                //     $(".license1").append(str);
+                // }
+            };
+            reader.readAsDataURL(file.files[0]);
+            //在这里ajax提交file信息(file.files[0])到接口保存,并通过获取的返回的图片信息进行保存\
+
+            var formData = new FormData();
+            formData.append('file', file.files[0]);
+            formData.append('key','asadaads');
+            formData.append('accept','');
+            formData.append('token',$("#token").val());
+            $.ajax({
+                url: "http://up-z2.qiniup.com/",
+                type: 'POST',
+                cache: false,
+                data: formData,
+                processData:false,
+                contentType:false,
+                success: function(res){
+                    var hash = res.hash;
+                    var key = res.key;
+                    var imgurl = "http://pbngsysl7.bkt.clouddn.com/key";//图片展示地址
+                    //保存已上传图片key值
+                    var imgkey = $("#imgkey").val();
+                    if (imgkey) {
+                        $("#imgkey").val(imgkey+','+key);
+                    }else{
+                        $("#imgkey").val(key);
+                    }
+                },
+                error: function (res) {
+                    dataJson= $.parseJSON(res.responseText);  
+                    layer.msg(dataJson.error,{icon:2});
+                }  
+            });  
+            
+        }else{
+            prevDiv.innerHTML = '<div class="img" src=file.value></div>';
+        }
+}
+
+function del_pic1(obj){
+        //删除此张已上传的图片,并删除页面上保存的key值
+        $(obj).parent().parent().remove()
+        if($(".prev").length == 1){
+            p2 = 0;
+        }
+         var piclen=$(".pic").length;
+         if(piclen==0){
+            $(".prev").remove();
+                 var str =
+                '<div class="preview prev">'+
+                '<div class="add_pic">'+
+                '<input  type="file" name="file1" onchange="preview1(this)"/>'+
+                '<img src="__PUBLIC__/images/jia_pic.png" alt="">'+
+                '</div>'+
+                '</div>';
+            $(".license1").append(str)
+            console.log($(".prev").length)
+        }
+        //如果只存在一个图片时，添加一个加号
+        if(piclen==3){
+                 var str =
+                '<div class="preview prev">'+
+                '<div class="add_pic">'+
+                '<input  type="file" name="file1" onchange="preview1(this)"/>'+
+                '<img src="__PUBLIC__/images/jia_pic.png" alt="">'+
+                '</div>'+
+                '</div>';
+            $(".license1").append(str)
+            console.log($(".prev").length)
+        }
+    }
 
 </script> 
 <!--/请在上方写此页面业务相关的脚本-->

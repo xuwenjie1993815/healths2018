@@ -1,7 +1,15 @@
 {include file="../application/admin/view/Public/_header.html"/}
 <div class="page-container">
 		<ul class="cl portfolio-area">
+			{volist name="groupList" id="vo" key="k"}
 			<li class="item">
+				<div class="portfoliobox" onclick="jg({$vo.id})" id="jg{$vo.id}">
+					<div class="picbox"><img src={$vo.imgUrl}></div>
+					<div class="textbox">{$vo.name}</div>
+				</div>
+			</li>
+			{/volist}
+<!-- 			<li class="item">
 				<div class="portfoliobox" onclick="jg('12')" id="jg12">
 					<div class="picbox"><img src="__PUBLIC__/images/1517275559.jpg"></div>
 					<div class="textbox">机构1 </div>
@@ -12,70 +20,60 @@
 					<div class="picbox "><img src="__PUBLIC__/images/1521601030.jpg"></div>
 					<div class="textbox">机构2 </div>
 				</div>
-			</li>
+			</li> -->
 		</ul>
 </div>
 
 <form action="" method="post" class="form form-horizontal" id="form-group-set">
+<span style="width: 50%;float: left;">
 <div class="page-container" id="aa" >
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
 			<thead>
-				<tr class="text-c">
+				<tr class="text-l">
 					<th>选择</th>
 					<th>姓名</th>
+					<th>头像</th>
 					<th>联系电话</th>
+					<th>专科</th>
+					<th>毕业学校</th>
+					<th>简介</th>
 				</tr>
 			</thead>
 			<tbody id="list">
-				<tr class="text-c">
-					<td>
-						<input name="doctor" type="radio" value="1" id="doctor">
-					</td>
-					<td>默认医生</td>
-					<td>1123</td>
-				</tr>
-				<tr class="text-c">
-					<td>
-						<input name="doctor" type="radio" value="1" id="doctor">
-					</td>
-					<td>默认医生2</td>
-					<td>1123</td>
-				</tr>
 			</tbody>
 		</table>
 	</div>
 </div>
+</span>
 
+<span style="width: 50%;float: left;">
 <div class="page-container" id="yz" >
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
 			<thead>
-				<tr class="text-c">
+				<tr class="text-l">
 					<th>选择</th>
 					<th>姓名</th>
+					<th>头像</th>
 					<th>联系电话</th>
+					<th>性别</th>
+					<th>个人简介</th>
 				</tr>
 			</thead>
 			<tbody id="list_yz">
-				<tr class="text-c">
-					<td>
-						<input name="yz" type="radio" value="1" id="yz">
-					</td>
-					<td>默认医助</td>
-					<td>1123</td>
-				</tr>
 			</tbody>
 		</table>
 	</div>
 </div>
+</span>
 <input type="hidden" value={$id} name="id">
-<input type="hidden" value={$jg_id} id="jg_id" name="jg_id">
-<input type="hidden" value={$doctor_id} id="doctor_id" name="doctor_id">
-<input type="hidden" value={$assistant_doctor_id} id="assistant_doctor_id" name="assistant_doctor_id">
+<input type="hidden" id="jg_id" name="jg_id" value={$jg_id}>
+<!-- <input type="hidden" value={$doctor_id} id="doctor_id" name="doctor_id">
+<input type="hidden" value={$assistant_doctor_id} id="assistant_doctor_id" name="assistant_doctor_id"> -->
 
 <input type="hidden" value="1" name="submit_set">
-<div class="row cl">
+<div class="row cl" style="margin-left:20%">
 	<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
 		<input id="tj" class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
 	</div>
@@ -87,41 +85,18 @@
 
 <script type="text/javascript">
 $(function(){
-	var jg_id=$("#jg_id").val();
-	var doctor_id=$("#doctor_id").val();
-	var assistant_doctor_id=$("#assistant_doctor_id").val();
-	if (jg_id) {
-		jg(jg_id,doctor_id,assistant_doctor_id);
-	}
-
-	$(".portfolio-area li").Huihover();
-});
-$(function(){
+	$('.table-sort').dataTable({
+		"aaSorting": [[ 1, "desc" ]],//默认第几个排序
+		"bStateSave": true,//状态保存
+		"pading":false,
+	});
 	$('.skin-minimal input').iCheck({
 		checkboxClass: 'icheckbox-blue',
 		radioClass: 'iradio-blue',
 		increaseArea: '20%'
 	});
 	
-	//表单验证
-    $("#form-patient-add").validate({
-        onkeyup:false,
-        focusCleanup:true,
-        success:"valid",
-        submitHandler:function(form){
-            $(form).ajaxSubmit({
-                dataType:'json',
-                type:'post',
-                success:function (res) {
-                    if (res.status == 1){
-                        var icon_n = '1';
-                    }else {
-                        var icon_n = '2';
-                    }
-                }
-            });
-        }
-    });
+	$(".portfolio-area li").Huihover();
 });
 
 //表单验证
@@ -150,7 +125,7 @@ $("#form-group-set").validate({
 
 
 
-function jg(id,doctor_id,assistant_doctor_id) {
+function jg(id) {
 	$('div').css({'background-color':''});
 	$('#jg'+id).css({'background-color':'#C0C0C0'});
 	$('#jg_id').val(id);
@@ -158,7 +133,7 @@ function jg(id,doctor_id,assistant_doctor_id) {
 		type: 'POST',
 		url: "{:url('Admin/patient/jg')}",
 		dataType: 'json',
-		data:{p_id:id,type:'1',doctor_id:doctor_id,assistant_doctor_id:assistant_doctor_id},
+		data:{p_id:id,type:'1',group_set:'1'},
 		success: function(data){
 			if (data.code == 1) {
 				$("#list").replaceWith(function(){

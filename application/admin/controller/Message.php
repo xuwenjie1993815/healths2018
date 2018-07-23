@@ -3,11 +3,16 @@ namespace app\admin\controller;
 use think\View;
 use think\Controller;
 use think\Session;
-use app\admin\model\User;
 class Message extends Controller
 {	
 	//留言板列表
 	public function index(){
+		$url = config('path')."/board/question/all";
+		$res = http_request($url);
+		$res = json_decode($res,true);
+		if ($res AND !$res['error']) {
+			$this->assign('list',$res);
+		}
 		$MessageList = array('1' => array('id' => '12','content' => '隔壁张大妈养的猪被偷了','sign'=>'','username' => '黄淑碧', 'type' => '1','ctime' => '1530586313','status' => '1'),'2' => array('id' => '12','content' => '隔壁张大妈养的猪被偷了第二遍','sign' => '你是不是傻','username' => '黄淑碧', 'type' => '1','ctime' => '1530586313','status' => '2'));
 		$this->assign('MessageList',$MessageList);
 		return $this->fetch();
@@ -16,10 +21,23 @@ class Message extends Controller
 	//回复
 	public function reply(){
 		if ($_POST) {
-			$message_id = $_POST['id'];
-			$content = $_POST['content'];
-			//提交回复
-			return array('code' => 1);
+			$data['questionId'] = $_POST['id'];
+			$data['content'] = $_POST['content'];
+			//回答的类型：1服务团队；2医学团队；3技术团队；4客服
+			$data['answerType'] = $_POST['answerType'];
+			foreach ($data as $key => $value) {
+				$obj->$key=$value;
+			}
+			$data = json_encode($obj);
+			$url = config('path')."/board/answer";
+			$res = http_request($url,$data,1);
+			$res = json_decode($res,true);
+			if ($res AND !$res['error']) {
+				return array('code' => 1);
+			}else{
+				return array('code' => 2,'msg' => $res['message']);
+			}
+			die;
 		}
 		$this->assign('id',input('id'));
 		return $this->fetch();

@@ -17,20 +17,14 @@
 	</tr>
   </thead>
   <tbody class='text-c'>
+  	{volist name="user_el" id="vo" key="k"}
 	<tr>
-		<th>
-			血压计
-		</th>
-		<th>
-			06b31803040484A
-		</th>
-		<th>
-			A
-		</th>
-		<th>
-			<u onClick="cancel_bangding('bangding','63',{$id})">解除绑定</u>
-		</th>
+		<th>{$vo.type}</th>
+		<th>{$vo.number}</th>
+		<th>{$vo.port}</th>
+		<th><a onClick="cancel_bangding('bangding',{$vo.id},{$id})"><i class="Hui-iconfont">&#xe609;</i></a></th>
 	</tr>
+	{/volist}
   </tbody>
 </table>
 <br/><br/>
@@ -50,23 +44,21 @@
 					</tr>
 				</thead>
 				<tbody>
+					{volist name="list" id="vo" key="k"}
 					<tr>
-						<td>06b31706100640</td>
-						<td>血压计</td>
-						<td>A</td>
-						<td><u>选择</u></td>
+						<td>{$vo.number}</td>
+						<td>{$vo.type_name}</td>
+						<td>{$vo.port}</td>
+						<td><u style="cursor:pointer" onClick="bangding('bangding',{$vo.id},{$id},{$vo.type})">选择</u></td>
 					</tr>
-					<tr>
-						<td>06b31706100640</td>
-						<td>血压计</td>
-						<td>B</td>
-						<td><u onClick="bangding('bangding','163',{$id})">选择</u></td>
-					</tr>
+					{/volist}
 				</tbody>
 			</table>
 		</div>
 	</div>
 </div>
+<input type="hidden" id="type1_id" value={$user_type.1}>
+<input type="hidden" id="type2_id" value={$user_type.2}>
 {include file="../application/admin/view/Public/_footer.html"/}
 <script>
 $('.table-sort').dataTable({
@@ -101,7 +93,61 @@ function cancel_bangding(url,data_id,p_id){
 		});
 }
 
-function bangding(url,data_id,p_id){
+function bangding(url,data_id,p_id,type){
+		// 已绑定设备
+		var type1_id = $("#type1_id").val();
+		var type1_id = $("#type2_id").val();
+		if (type == 1 && type1_id) {
+			layer.confirm('确认要更换绑定吗？', {
+		  	btn: ['确认','取消'] //按钮
+			}, function(){
+			  $.ajax({
+			        url:"bangding",
+			        type:'post',
+			        dataType:'json',
+			        data:{id:data_id,p_id:p_id,change:1,old_id:type1_id},
+			        success:function(data){
+			            if(data.code==1){
+			            	layer.msg(data.msg,{icon:1,time:500},function() {
+								location.reload();
+							});
+			            }else{
+							layer.msg(data.msg,{icon:2,time:500},function() {
+								location.reload();
+							});
+			            }
+			        }
+			    });
+			});
+			return;
+		}
+
+		if (type == 2 && type2_id) {
+			layer.confirm('确认要更换绑定吗？', {
+		  	btn: ['确认','取消'] //按钮
+			}, function(){
+			  $.ajax({
+			        url:"bangding",
+			        type:'post',
+			        dataType:'json',
+			        data:{id:data_id,p_id:p_id,change:1,old_id:type2_id},
+			        success:function(data){
+			            if(data.code==1){ 
+			            	layer.msg(data.msg,{icon:1,time:500},function() {
+								location.reload();
+							});
+			            }else{
+							layer.msg(data.msg,{icon:2,time:500},function() {
+								location.reload();
+							});
+			            }
+			        }
+			    });
+			});
+			return;
+		}
+
+
 		layer.confirm('确认绑定吗？', {
 		  btn: ['确认','取消'] //按钮
 		}, function(){
@@ -112,53 +158,16 @@ function bangding(url,data_id,p_id){
 		        data:{id:data_id,p_id:p_id,bangding:'1'},
 		        success:function(data){
 		            if(data.code==1){
-		            	layer.msg(data.msg,{icon:1,time:1000},function() {
-						location.reload();
-					});
-		            }
-		            if (data.code==2) {
-		            	layer.confirm(data.msg, {
-						  btn: ['确定','取消'] //按钮
-						}, function(){
-						  	$.ajax({
-						        url:"bangding",
-						        type:'post',
-						        dataType:'json',
-						        data:{id:data_id,p_id:p_id,change:1},
-						        success:function(data){
-						            if(data.code==1){
-						            	layer.msg(data.msg,{icon:1,time:1000},function() {
-										location.reload();
-									});
-						            }else{
-						            	layer.msg(data.msg,{icon:2,time:1000});
-						            }
-						        }
-					    	});
+		            	layer.msg(data.msg,{icon:1,time:500},function() {
+							location.reload();
+						});
+		            }else{
+		            	layer.msg(data.msg,{icon:2,time:500},function() {
+							location.reload();
 						});
 		            }
 		        }
 		    });
 		});
 }
-// $("#search_device").click(function(){
-// 	var id = {$id};
-// 	var search_text = $("#search_text").val();
-//     $.ajax({
-//         url:"bangding",
-//         type:'GET',
-//         dataType:'json',
-//         data:{select:search_text,info:'1',pid:id},
-//         success:function(data){
-//             if(data.code==1){
-//                 $("#equipment_list_info").replaceWith(function(){
-//                     return data.info;
-//                 });
-//                 $("#pages").remove();
-//             }else{
-//                 layer.msg(data.msg);
-//             }
-//         }
-//     });
-// })
 </script>

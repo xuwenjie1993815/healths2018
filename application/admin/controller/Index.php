@@ -61,12 +61,6 @@ class Index extends Controller
     public function login()
     {
         return $this->fetch('login');die;
-        // var_dump('1',$_GET['a']);die;
-        //
-        // $view = new view();
-        return $this->fetch('index');die;
-        return view('Index/index');
-        die;
     }
 
     public function welcome()
@@ -100,8 +94,8 @@ class Index extends Controller
     //退出登录
     public function sign_out(){
         $userMsg = Session::get('userMsg');
-        $url = config('path')."/logout/id=".$userMsg['id'];
-        $res = http_request($url, $data);
+        $url = config('path')."/logout/".$userMsg['id'];
+        $res = http_request($url);
         $res = json_decode($res,true);
         if ($res === true) {
             Session::delete('userMsg');

@@ -4,7 +4,7 @@
         $curl = curl_init();
         if ($headers) {
             if ($headers == '1') {
-                $headers = array("Content-type:application/json;charset='utf-8'","Accept:application/json");
+                $headers = array("Content-Type:application/json;charset='utf-8'","Accept:application/json");
             }
             curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         }
@@ -47,5 +47,19 @@
         }
         curl_close($curl); // 关闭CURL会话
         return $res; // 返回数据，json格式
+    }
+
+    //发送短信
+    function send_sms($phoneNum,$message){
+        $data['phoneNum'] = $phoneNum;
+        $data['message'] = $message;
+        $url = config('path')."/blood/sendMessage";
+        $res = http_request($url,$data);
+        $res = json_decode($res,true);
+        if ($res and !$res['error']) {
+            return array('code' => 1);
+        }else{
+            return array('code' => 2,'msg' => $res['error']);
+        }
     }
 ?>

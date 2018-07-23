@@ -11,6 +11,7 @@ class Patient extends Controller
 		//获取患者列表
 		$userMsg = Session::get('userMsg');
 		$data['adminId']=$userMsg['id'];
+		// $data['adminId']='3';
 		if ($data['adminId']) {
 	        $url = config('path')."/patient/all";
 	        $res = http_request($url, $data);
@@ -21,7 +22,9 @@ class Patient extends Controller
         // }
 		// $this->assign('star',1);
 		// $this->assign('id',10001);
-		$this->assign('info',$res);
+		if (!$res['error']) {
+			$this->assign('info',$res);
+		}
 		return $this->fetch('index');die;
 	}
 
@@ -145,23 +148,53 @@ class Patient extends Controller
 	public function group_set(){
 		//提交表单
 		if (input("?post.submit_set")) {
+
+			$data['id'] = (Integer)$_POST['id'];
+			$data['groupID'] = (Integer)$_POST['jg_id'];
+			$data['doctorID'] = (Integer)$_POST['doctor']?:'';
+			$data['assistantID'] = (Integer)$_POST['yz']?:'';
 			//id:患者id
 			//jg_id:机构id
 			//doctor:医生id
 			//yz:医助id
-			$id = input("post.id");
-			$jg_id = input("post.jg_id");
-			$doctor = input("post.doctor");
-			$yz = input("post.yz");
 			//修改组别(接口)
-			return array('code' => 1);
+			foreach ($data as $key => $value) {
+				$obj->$key=$value;
+			}
+			$data = json_encode($obj);
+			$url = config("path")."/patient/bangding";
+			$res = http_request($url,$data,1);
+			if ($res) {
+				return array('code' => 1);
+			}else{
+				return array('code' => 2);
+			}
 		}
-
 		$id = input('id');
 		//通过用户id查询当前组别
-		$this->assign('jg_id','12');
-		$this->assign('doctor_id','122');
-		$this->assign('assistant_doctor_id','619');
+		//分组需要权限,健康源(type==1)可以看到所有机构,此外(type==2)只能看到并选择自己的机构
+		$userMsg = Session::get('userMsg');
+		$data['adminId'] = $userMsg['id'];
+		switch ($userMsg['type']) {
+			case '1':
+				//获取所有机构
+				$url = config('path')."/classification/group/getAll";
+				$res = http_request($url,$data);
+				$res = json_decode($res,true);
+				if ($res) {
+					$this->assign('groupList',$res);
+				}
+				break;
+			case '2':
+				# code...
+				break;
+			default:
+				return array('code' => 2,'msg'=>'权限不足');die;
+				break;
+		}
+		// $this->assign('jg_id','12');
+		// $this->assign('doctor_id','122');
+		// $this->assign('assistant_doctor_id','619');
 
 		$this->assign('id',$id);
 		return $this->fetch();
@@ -171,30 +204,38 @@ class Patient extends Controller
 	public function jg(){
 		$id = input('post.p_id');
 		//根据机构id获取数据(接口)
-		
-		if (input('post.p_id') == 11) {
-			$data = array('ys' => array('121' => array('name' => '朱玉婷','tel' => '1322131513'),'131' => array('name' => '徐医生','tel' => '56445112313')),'yz' => array('255' => array('name' => '肖莉','tel' => '22251111'),'620' => array('name' => '杨涛','tel' => '669955442')));
-		}
-		if (input('post.p_id') == 12) {
-			$data = array('ys' => array('122' => array('name' => '徐医生','tel' => '1322131513'),'132' => array('name' => '杨医生','tel' => '56445112313')),'yz' => array('254' => array('name' => '谢晓燕','tel' => '22251111'),'619' => array('name' => '嘻嘻嘻','tel' => '669955442')));
-		}
+		$data['groupId'] = $id;
+		$url = config('path')."/classification/doctor/getAll";
+		$res = http_request($url,$data);
+		$res = json_decode($res,true);
+		$data['ys'] = $res;
+		$url = config('path')."/classification/assistant/getAll";
+		$res = http_request($url,$data);
+		$res = json_decode($res,true);
+		$data['yz'] = $res;
+		// if (input('post.p_id') == 1) {
+		// 	$data = array('ys' => array('121' => array('name' => '朱玉婷','tel' => '1322131513'),'131' => array('name' => '徐医生','tel' => '56445112313')),'yz' => array('255' => array('name' => '肖莉','tel' => '22251111'),'620' => array('name' => '杨涛','tel' => '669955442')));
+		// }
+		// if (input('post.p_id') == 12) {
+		// 	$data = array('ys' => array('122' => array('name' => '徐医生','tel' => '1322131513'),'132' => array('name' => '杨医生','tel' => '56445112313')),'yz' => array('254' => array('name' => '谢晓燕','tel' => '22251111'),'619' => array('name' => '嘻嘻嘻','tel' => '669955442')));
+		// }
 
 		$html.="<tbody id='list'>";
 		$html_yz.="<tbody id='list_yz'>";
 		foreach ($data['ys'] as $key => $value) {
-			if (input('post.doctor_id') == $key) {
-				$html.="<tr class='text-c'><td><input name='doctor' type='radio' value=".$key." id='doctor' checked></td><td>".$value['name']."</td><td>".$value['tel']."</td>";
-			}else{
-				$html.="<tr class='text-c'><td><input name='doctor' type='radio' value=".$key." id='doctor'></td><td>".$value['name']."</td><td>".$value['tel']."</td>";
-			}
+			$html.="<tr class='text-c'><td><input name='doctor' type='checkbox' value=".$value['id']." id='doctor'></td><td>".$value['name']."</td><td>"."<img style='width:50px;height:50px' src=".$value['imgUrl'].">"."</td><td>".$value['phoneNum']."</td><td>".$value['profession']."</td><td>".$value['school']."</td><td>".$value['introduction']."</td>";
 			
 		}
 		foreach ($data['yz'] as $key => $value) {
-			if (input('post.assistant_doctor_id') == $key) {
-				$html_yz.="<tr class='text-c'><td><input name='yz' type='radio' value=".$key." id='yz' checked></td><td>".$value['name']."</td><td>".$value['tel']."</td>";
-			}else{
-				$html_yz.="<tr class='text-c'><td><input name='yz' type='radio' value=".$key." id='yz'></td><td>".$value['name']."</td><td>".$value['tel']."</td>";
+			switch ($value['sex']) {
+				case '1':
+					$value['sex'] = '男';
+					break;
+				case '2':
+					$value['sex'] = '女';
+					break;
 			}
+			$html_yz.="<tr class='text-c'><td><input name='yz' type='checkbox' value=".$value['id']." id='yz'></td><td>".$value['name']."</td><td>"."<img style='width:50px;height:50px' src=".$value['imgUrl'].">"."</td><td>".$value['phoneNum']."</td><td>".$value['sex']."</td><td>".$value['introduction']."</td>";
 		}
 
 		$html.="</tbody>";
@@ -290,19 +331,27 @@ class Patient extends Controller
 	public function jg_fj(){
 		$id = input('post.p_id');
 		//根据机构id获取数据(接口)
-		
-		if (input('post.p_id') == 11) {
-			$data = array('ys' => array('12' => array('name' => '朱玉婷','tel' => '1322131513','img' => '头像'),'13' => array('name' => '徐医生','tel' => '56445112313','img' => '头像')),'yz' => array('255' => array('name' => '肖莉','tel' => '22251111','img' => '/public/images/1517275559.jpg','sex' => '1','introduce' => '一位合格的医助','patient_num' => '10'),'620' => array('name' => '杨涛','tel' => '669955442','img' => '/public/images/1521601030.jpg','sex' => '1','introduce' => '第二位合格的医助','patient_num' => '15')));
+		$data['groupId'] = $id;
+		//获取医生list
+		$url = config('path')."/classification/doctor/getAll";
+		$res = http_request($url,$data);
+		$res = json_decode($res,true);
+		if (!$res['error']) {
+			$data['ys'] = $res;
 		}
-		if (input('post.p_id') == 12) {
-			$data = array('ys' => array('12' => array('name' => '徐医生','tel' => '1322131513'),'13' => array('name' => '杨医生','tel' => '56445112313')),'yz' => array('255' => array('name' => '谢晓燕','tel' => '22251111'),'620' => array('name' => '嘻嘻嘻','tel' => '669955442')));
-		}
-
 		$html.="<tbody id='list'>";
-		$html_yz.="<tbody id='list_yz'>";
 		foreach ($data['ys'] as $key => $value) {
-			$html.="<tr class='text-c'><td>".$value['name']."</td><td>".'头像'."</td><td>".$value['tel']."</td><td>".'操作'."</td>";
+			$html.="<tr class='text-c'><td>".$value['name']."</td><td>"."<img style='width:50px;height:50px' src=".$value['imgUrl'].">"."</td><td>".$value['phoneNum']."</td><td>".$value['profession']."</td><td>".$value['school']."</td><td>".$value['introduction']."</td><td><a style='text-decoration:none' class='ml-5' onclick='doctor_edit(".$value['id'].")'><i class='Hui-iconfont'>&#xe6df;</i></a><a style='text-decoration:none' class='ml-5' onClick='doctor_del(".$value['id'].")' href='javascript:;'' title='删除''><i class='Hui-iconfont'>&#xe6e2;</i></a></td>";
 		}
+		$html.="</tbody>";
+		//获取医助list
+		$url = config('path')."/classification/assistant/getAll";
+		$res = http_request($url,$data);
+		$res = json_decode($res,true);
+		if (!$res['error']) {
+			$data['yz'] = $res;
+		}
+		$html_yz.="<tbody id='list_yz'>";
 		foreach ($data['yz'] as $key => $value) {
 			switch ($value['sex']) {
 				case '1':
@@ -312,12 +361,39 @@ class Patient extends Controller
 					$sex = '女';
 					break;
 			}
-			$html_yz.="<tr class='text-c'><td>".$value['name']."</td><td><img style='width:50px;height:50px' src=".$value['img']."></td><td>".$value['tel']."</td><td>".$sex."</td><td>".$value['introduce']."</td><td>".$value['patient_num']."</td><td><a style='text-decoration:none' class='ml-5' onclick='assistant_doctor_edit(".$key.")'><i class='Hui-iconfont'>&#xe6df;</i></a><a style='text-decoration:none' class='ml-5' onClick='assistant_doctor_del(".$key.")' href='javascript:;'' title='删除''><i class='Hui-iconfont'>&#xe6e2;</i></a></td>";
+			$html_yz.="<tr class='text-c'><td>".$value['name']."</td><td><img style='width:50px;height:50px' src=".$value['imgUrl']."></td><td>".$value['phoneNum']."</td><td>".$sex."</td><td>".$value['introduction']."</td><td><a style='text-decoration:none' class='ml-5' onclick='assistant_doctor_edit(".$value['id'].")'><i class='Hui-iconfont'>&#xe6df;</i></a><a style='text-decoration:none' class='ml-5' onClick='assistant_doctor_del(".$value['id'].")' href='javascript:;'' title='删除''><i class='Hui-iconfont'>&#xe6e2;</i></a></td>";
 		}
-
-		$html.="</tbody>";
 		$html_yz.="</tbody>";
+
 		return array('code' => 1,'data' => $data,'html' => $html,'html_yz' => $html_yz);
+		// var_dump($res);die;
+		// if (input('post.p_id') == 11) {
+		// 	$data = array('ys' => array('12' => array('name' => '朱玉婷','tel' => '1322131513','img' => '头像'),'13' => array('name' => '徐医生','tel' => '56445112313','img' => '头像')),'yz' => array('255' => array('name' => '肖莉','tel' => '22251111','img' => '/public/images/1517275559.jpg','sex' => '1','introduce' => '一位合格的医助','patient_num' => '10'),'620' => array('name' => '杨涛','tel' => '669955442','img' => '/public/images/1521601030.jpg','sex' => '1','introduce' => '第二位合格的医助','patient_num' => '15')));
+		// }
+		// if (input('post.p_id') == 12) {
+		// 	$data = array('ys' => array('12' => array('name' => '徐医生','tel' => '1322131513'),'13' => array('name' => '杨医生','tel' => '56445112313')),'yz' => array('255' => array('name' => '谢晓燕','tel' => '22251111'),'620' => array('name' => '嘻嘻嘻','tel' => '669955442')));
+		// }
+
+		// $html.="<tbody id='list'>";
+		// $html_yz.="<tbody id='list_yz'>";
+		// foreach ($data['ys'] as $key => $value) {
+		// 	$html.="<tr class='text-c'><td>".$value['name']."</td><td>".'头像'."</td><td>".$value['tel']."</td><td>".'操作'."</td>";
+		// }
+		// foreach ($data['yz'] as $key => $value) {
+		// 	switch ($value['sex']) {
+		// 		case '1':
+		// 			$sex = '男';
+		// 			break;
+		// 		case '2':
+		// 			$sex = '女';
+		// 			break;
+		// 	}
+		// 	$html_yz.="<tr class='text-c'><td>".$value['name']."</td><td><img style='width:50px;height:50px' src=".$value['img']."></td><td>".$value['tel']."</td><td>".$sex."</td><td>".$value['introduce']."</td><td>".$value['patient_num']."</td><td><a style='text-decoration:none' class='ml-5' onclick='assistant_doctor_edit(".$key.")'><i class='Hui-iconfont'>&#xe6df;</i></a><a style='text-decoration:none' class='ml-5' onClick='assistant_doctor_del(".$key.")' href='javascript:;'' title='删除''><i class='Hui-iconfont'>&#xe6e2;</i></a></td>";
+		// }
+
+		// $html.="</tbody>";
+		// $html_yz.="</tbody>";
+		// return array('code' => 1,'data' => $data,'html' => $html,'html_yz' => $html_yz);
 	}
 
 	//患者管理->预警设置(血压)
@@ -494,5 +570,12 @@ class Patient extends Controller
 	public function examination_del(){
 		
 		return array('code' => 1);
+	}
+
+	//上传图片获取token
+	public function uploadToken(){
+		$url = config('path')."/patient/image/uploadToken";
+		$res = http_request($url);
+		return $res;
 	}
 }
