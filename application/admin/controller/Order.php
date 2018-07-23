@@ -13,7 +13,14 @@ class Order extends Controller
 	//删除订单
 	public function order_del(){
 		$id = $_POST['id'];
-		//删除订单
-		return array('code' => 1);
+		$data['oderNum'] = $_POST['oderNum'];
+		$url = config('path')."/goods/oder/delete";
+		$res = http_request($url,$data);
+		$res = json_decode($res,true);
+		if ($res AND !$res['error']) {
+			return array('code' => 1);
+		}else{
+			return array('code' => 2,'msg' => $res['message'] );
+		}
 	}
 }

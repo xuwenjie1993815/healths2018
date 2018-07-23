@@ -26,11 +26,11 @@ $('#submit').click(function(){
 		},
 		success:function(data){
 			if(data.code==1){
-				layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
+				layer.msg('操作成功,请稍等...',{icon:1,time:500},function() {
                     parent.location.reload();
                 })
 			}else{
-				layer.msg('操作失败');
+				layer.msg(data.msg,{icon:2,time:1000});
 			}
 		}
 	});

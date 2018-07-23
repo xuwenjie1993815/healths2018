@@ -75,7 +75,7 @@ class Patient extends Controller
         if ($res == 1) {
         	return array('code' => 1);
         }else{
-        	return array('code' => 2,'msg' => $res['error']);
+        	return array('code' => 2,'msg' => $res['message']);
         }
 	}
 
@@ -106,7 +106,7 @@ class Patient extends Controller
         if ($res) {
         	return array('code' => 1,'msg'=>'新增成功');
         }else{
-        	return array('code' => 2,'msg'=>$res['error']);
+        	return array('code' => 2,'msg'=>$res['message']);
         }
         var_dump($res);die;
 	}
@@ -122,7 +122,7 @@ class Patient extends Controller
         if ($res === true) {
 			return array('code' => 1);
         }else{
-			return array('code' => 2,'msg' => $res['error']);
+			return array('code' => 2,'msg' => $res['message']);
         }
 		
 	}
@@ -138,7 +138,7 @@ class Patient extends Controller
         if ($res === true) {
 			return array('code' => 1);
         }else{
-			return array('code' => 2,'msg' => $res['error']);
+			return array('code' => 2,'msg' => $res['message']);
         }
 		//(接口)
 		return array('code' => 1);
@@ -487,7 +487,7 @@ class Patient extends Controller
         if ($res === true) {
 			return array('code' => 1);
         }else{
-			return array('code' => 2,'msg' => $res['error']);
+			return array('code' => 2,'msg' => $res['message']);
         }
 		//删除用户(接口)
 		return array('code' => 1);
