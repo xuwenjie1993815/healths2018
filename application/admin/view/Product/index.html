@@ -15,8 +15,6 @@
 						<th>商品价格</th>
 						<th>折扣</th>
 						<th>商品备注</th>
-						<th>创建时间</th>
-						<th>更新时间</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -30,13 +28,19 @@
 							{$vo.goodSubName}
 						</td>
 						<td>
-							{$vo.goodType}
+							{switch name=$vo.goodType }
+							    {case value="1"}服务包{/case}
+							    {case value="2"}实物{/case}
+							{/switch}
 						</td>
 						<td>
 							{$vo.goodDescription}
 						</td>
-						<td class="td-status">
-							{$vo.status}
+						<td>
+							{switch name=$vo.status }
+							    {case value="1"}上架{/case}
+							    {case value="2"}下架{/case}
+							{/switch}
 						</td>
 						<td>
 							<img style='width:50px;height:50px;' src={$vo.goodUrl}>
@@ -49,12 +53,6 @@
 						</td>
 						<td>
 							{$vo.remark}
-						</td>
-						<td>
-							{$vo.createTime}
-						</td>
-						<td>
-							{$vo.updateTime}
 						</td>
 						<td class="td-manage">
 							<a style="text-decoration:none" class="ml-5" onclick="product_edit('商品编辑','{:url("Admin/Product/product_add",array("id"=>$vo["id"]))}')" href="javascript:;" title="编辑">
@@ -180,11 +178,11 @@ function product_del(id){
 			data:{id:id},
 			success: function(data){
 				if (data.code == 1) {
-					layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
+					layer.msg('操作成功,请稍等...',{icon:1,time:500},function() {
                         location.reload();
                     })
 				}else{
-					layer.msg('操作失败');
+					layer.msg(data.msg,{icon:2,time:1000});
 				}
 			}
 		});		

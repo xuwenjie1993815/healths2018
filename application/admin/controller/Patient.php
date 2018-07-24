@@ -55,7 +55,7 @@ class Patient extends Controller
 		$service_data['patientId'] = $id;
 		$service_res = http_request($service_url, $service_data);
         $service_res = json_decode($service_res,true);
-        if ($service_res) {
+        if ($service_res AND !$service_res['error']) {
         	$this->assign('serviceList',$service_res);
         }
 		return $this->fetch();
