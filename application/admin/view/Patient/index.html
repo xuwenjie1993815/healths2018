@@ -29,7 +29,7 @@
 					<td>{$vo.sexy}</td>
 					<td>{$vo.age}</td>
 					<td><u style="cursor:pointer" onClick="bangding('{:url('Admin/Device/bangding',array('id'=>$vo['id']))}')">06b31803040484(A):血压计</u></td>
-					<td><u style="cursor:pointer" class="text-primary" onClick="product_list('服务包','{:url('Admin/Product/product_list',array('id' => $vo['id']))}','500px','600px')" title="服务包">{if condition="$vo['leftDays'] eq ''"}已过期{else/}{$vo.leftDays}{/if}</u></td>
+					<td><u style="cursor:pointer" class="text-primary" onClick="product_list('服务包','{:url('Admin/Product/product_list',array('id' => $vo['id']))}','500px','600px')" title="服务包">{if condition="$vo['leftDays'] eq ''"}已过期{else/}{$vo.leftDays}天{/if}</u></td>
 					<td class="td-status" onClick="group_set('{:url('Admin/patient/group_set',array('id' => $vo['id']))}')">
 						<a class="label label-success radius">{$vo.groupName}{if condition="$vo['doctorName'] neq ''"}-{$vo.doctorName}{/if}{if condition="$vo['assistantName'] neq ''"}-{$vo.assistantName}{/if}</a>
 					</td>

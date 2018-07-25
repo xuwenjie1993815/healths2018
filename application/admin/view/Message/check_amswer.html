@@ -1,0 +1,41 @@
+{include file="../application/admin/view/Public/_header.html"/}
+<div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+		<thead>
+			<tr class="text-c">
+				<th>回复内容</th>
+				<th>回复人员</th>
+				<th>回复时间</th>
+			</tr>
+		</thead>
+		<tbody>
+			{volist name="list" id="vo" key="k"}
+			<tr class="text-c">
+				<td>{$vo.content}</td>
+				<td>
+					{switch name=$vo.answerType}
+					    {case value="1"}服务团队{/case}
+					    {case value="2"}医学团队{/case}
+					    {case value="3"}技术团队{/case}
+					    {case value="4"}客服{/case}
+					    {default/}
+					{/switch}
+				</td>
+				<td>{$vo.createTime}</td>
+			</tr>
+			{/volist}
+		</tbody>
+	</table>
+	<input type="hidden" value={$id} id="id">
+</div>
+{include file="../application/admin/view/Public/_footer.html"/}
+
+<script type="text/javascript">
+$(function(){
+	$('.table-sort').dataTable({
+		"aaSorting": [[ 1, "desc" ]],//默认第几个排序
+		"bStateSave": true,//状态保存
+		"pading":false,
+	});
+});
+</script> 

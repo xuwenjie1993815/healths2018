@@ -12,7 +12,7 @@
 						<th>留言用户</th>
 						<th>类型</th>
 						<th>时间</th>
-						<th>状态</th>
+						<!-- <th>状态</th> -->
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -23,28 +23,32 @@
 							{$vo.content}
 						</td>
 						<td>
-							{if	condition="$vo.status eq 1"}
+							{if	condition="$vo.amswer eq ''"}
 								暂未处理
 								{else/}
-								{$vo.sign}
+								<u style="cursor:pointer;" onclick="check_amswer('查看回复','{:url("Admin/Message/check_amswer",array("id"=>$vo["id"]))}')">查看回复</u>
 							{/if}
 						</td>
 						<td>
-							{$vo.username}
+							{$vo.patientName}
 						</td>
 						<td>
-							{$vo.type}
+							{switch name=  $vo.questionType}
+							{case value="1"}服务{/case}
+							{case value="2"}医学{/case}
+							{case value="3"}程序{/case}
+							{/switch}
 						</td>
 						<td>
-							{$vo.ctime|date="Y-m-d H:i:s",###}
+							{$vo.createTime}
 						</td>
-						<td>
+						<!--<td>
 							{switch name= $vo.status}
 							    {case value="1"}<span onclick="reply('回复留言','{:url("Admin/Message/reply",array("id"=>$vo["id"]))}')" style="cursor:pointer" class="label label-warning radius">未处理</span>{/case}
 							    {case value="2"}<span class="label label-success radius">已处理</span>{/case}
 							    {default /}<span onclick="reply('回复留言','{:url("Admin/Message/reply",array("id"=>$vo["id"]))}')" style="cursor:pointer" class="label label-warning radius">未处理</span>
 							{/switch}
-						</td>
+						</td>-->
 						<td class="td-manage">
 							<a style="text-decoration:none" class="ml-5" onclick="reply('回复留言','{:url("Admin/Message/reply",array("id"=>$vo["id"]))}')" href="javascript:;" title="回复留言">
 								<i class="Hui-iconfont">&#xe603;</i>
@@ -109,6 +113,7 @@ function sign(id) {
 function reply(title,url){
 	layer.open({
 		type: 2,
+		area: ['20%', '32%'],
 		title: title,
 		content:[url,'no']
 	});
@@ -134,6 +139,21 @@ function message_del(id){
 		});		
 	});
 }
+
+
+//查看回复
+function check_amswer(title,url) {
+	layer.open({
+		type: 2,
+      	area: ['893px', '600px'],
+		title: title,
+		content:[url,'no'],
+      	maxmin: true, //开启最大化最小化按钮
+      	shadeClose: true,
+      	shade: false
+	});
+}
+
 </script>
 </body>
 </html>

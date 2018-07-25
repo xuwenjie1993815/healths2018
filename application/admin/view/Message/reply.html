@@ -1,6 +1,19 @@
 {include file="../application/admin/view/Public/_header.html"/}
 <textarea class="textarea valid" placeholder="说点什么...最少输入5个字符" name="content" id="content" aria-required="true" aria-invalid="false"></textarea>
-<button style="margin-left:1%" class="btn btn-primary radius" id="submit" type="button"><i class="Hui-iconfont">&#xe632;</i> 提交</button>
+<div class="row cl">
+	<label class="form-label col-xs-4 col-sm-3">回答团队：</label>
+	<div class="formControls col-xs-8 col-sm-9"> 
+		<span class="select-box">
+		<select class="select" size="1" name="answerType" id="answerType">
+			<option value="1" selected="">服务团队</option>
+			<option value="2">医学团队</option>
+			<option value="3">技术团队	</option>
+			<option value="4">客服</option>
+		</select>
+		</span> 
+	</div>
+</div>
+<button style="margin-left:1%" class="btn btn-primary radius" id="submit" type="button"> 提交</button>
 <input type="hidden" id="id" value={$id}>
 <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
 {include file="../application/admin/view/Public/_footer.html"/}
@@ -13,6 +26,7 @@ $(".textarea").Huitextarealength({
 $('#submit').click(function(){
 	var	content=$('#content').val();
 	var	id=$('#id').val();
+	var	answerType=$('#answerType').val();
 	if(content==''){
 		layer.msg('请填写内容');
 		return;
@@ -22,7 +36,7 @@ $('#submit').click(function(){
 		type:'post',
 		dataType:'json',
 		data:{
-			content:content,id:id
+			content:content,id:id,answerType:answerType
 		},
 		success:function(data){
 			if(data.code==1){

@@ -39,28 +39,29 @@
 				</tr>
 			</thead>
 			<tbody>
+				{volist name="list" id="vo" key="k"}
 				<tr class="text-c">
-					<td>张三</td>
-					<td id="oderNum1">XXXXX001</td>
-					<td><u>"智能动态监测+营养行为干预"高血压管理服务包</u></td>
+					<td>{$vo.patientName}</td>
+					<td id="oderNum{$vo.id}">{$vo.oderNum}</td>
+					<td>{$vo.goodName}</td>
 					<td>360</td>
-					<td>1</td>
+					<td>{$vo.goodCount}</td>
 					<td>360</td>
-					<td>2018-06-25 15:24:00</td>
-					<td>未付款</td>
-					<td><input class="btn btn-primary radius" type="button" onClick="order_del('删除订单','{:url('Admin/Order/order_del')}','1')" value="删除"></td>
+					<td>{$vo.completedTime}</td>
+					<td>
+					<!-- 交易状态：1待付款2已支付3已完成4申请退款5已退款6赠送 -->
+					{switch name="$vo.oderState"}
+					    {case value="1"}待付款{/case}
+					    {case value="2"}已支付{/case}
+					    {case value="3"}已完成{/case}
+					    {case value="4"}申请退款{/case}
+					    {case value="5"}已退款{/case}
+					    {case value="6"}赠送{/case}
+					{/switch}
+					</td>
+					<td><input class="btn btn-primary radius" type="button" onClick="order_del('删除订单','{:url('Admin/Order/order_del')}',{$vo.id})" value="删除"></td>
 				</tr>
-				<tr class="text-c">
-					<td>李四</td>
-					<td id="oderNum2">XXXXX002</td>
-					<td><u>"智能动态监测+营养行为干预"高血压管理服务包</u></td>
-					<td>360</td>
-					<td>12</td>
-					<td>0</td>
-					<td>2018-06-25 07:18:20</td>
-					<td>已完成</td>
-					<td><input class="btn btn-primary radius" type="button" onClick="order_del('删除订单','{:url('Admin/Order/order_del')}','2')" value="删除"></td>
-				</tr>
+				{/volist}
 			</tbody>
 		</table>
 	</div>

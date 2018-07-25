@@ -223,19 +223,19 @@ class Patient extends Controller
 		$html.="<tbody id='list'>";
 		$html_yz.="<tbody id='list_yz'>";
 		foreach ($data['ys'] as $key => $value) {
-			$html.="<tr class='text-c'><td><input name='doctor' type='checkbox' value=".$value['id']." id='doctor'></td><td>".$value['name']."</td><td>"."<img style='width:50px;height:50px' src=".$value['imgUrl'].">"."</td><td>".$value['phoneNum']."</td><td>".$value['profession']."</td><td>".$value['school']."</td><td>".$value['introduction']."</td>";
+			$html.="<tr class='text-c'><td><input name='doctor' type='radio' value=".$value['id']." id='doctor'></td><td>".$value['name']."</td><td>"."<img style='width:50px;height:50px' src=".$value['imgUrl'].">"."</td><td>".$value['phoneNum']."</td>";
 			
 		}
 		foreach ($data['yz'] as $key => $value) {
-			switch ($value['sex']) {
-				case '1':
-					$value['sex'] = '男';
-					break;
-				case '2':
-					$value['sex'] = '女';
-					break;
-			}
-			$html_yz.="<tr class='text-c'><td><input name='yz' type='checkbox' value=".$value['id']." id='yz'></td><td>".$value['name']."</td><td>"."<img style='width:50px;height:50px' src=".$value['imgUrl'].">"."</td><td>".$value['phoneNum']."</td><td>".$value['sex']."</td><td>".$value['introduction']."</td>";
+			// switch ($value['sex']) {
+			// 	case '1':
+			// 		$value['sex'] = '男';
+			// 		break;
+			// 	case '2':
+			// 		$value['sex'] = '女';
+			// 		break;
+			// }
+			$html_yz.="<tr class='text-c'><td><input name='yz' type='radio' value=".$value['id']." id='yz'></td><td>".$value['name']."</td><td>"."<img style='width:50px;height:50px' src=".$value['imgUrl'].">"."</td><td>".$value['phoneNum']."</td>";
 		}
 
 		$html.="</tbody>";
@@ -540,9 +540,6 @@ class Patient extends Controller
 
 	//上传体检报告
 	public function examination(){
-		var_dump($_POST);
-
-		
 		if ($_FILES['file1']['size']) {
             foreach ($_FILES as $key => $value) {
             	var_dump($value);

@@ -122,7 +122,7 @@ $(".textarea").Huitextarealength({
 });
 
 $(function(){
-    //通过ajax获取token
+    //通过ajax获取图片上传所属的token
     $.ajax({
         url: "{:url('Admin/Patient/uploadToken')}",
         success: function(RES){
@@ -207,11 +207,10 @@ $(function(){
                     }
                 };
                 reader.readAsDataURL(file.files[0]);
-                //在这里ajax提交file信息(file.files[0])到接口保存,并通过获取的返回的图片信息进行保存\
-
+                //在这里ajax提交file信息(file.files[0])到接口保存,并通过获取的返回的图片信息进行保存
                 var formData = new FormData();
                 formData.append('file', file.files[0]);
-                formData.append('key','asadaads');
+                formData.append('key',file.files[0]['name']);
                 formData.append('accept','');
                 formData.append('token',$("#token").val());
                 $.ajax({
