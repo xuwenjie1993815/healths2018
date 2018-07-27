@@ -43,9 +43,7 @@ class Jurisdiction extends Controller{
 		//新增医生
 		if (input('get.g_id') != '' AND input('get.type') == 1 AND !input('get.doctor_id')) {
 			if ($_POST) {
-				if (!$_POST['imgkey']) {
-				$_POST['imgkey'] = "mainTest";
-				}
+				
 				$_POST['imgUrl'] = "http://pbngsysl7.bkt.clouddn.com/".$_POST['imgkey'];
 				unset($_POST['imgkey'],$_POST['passConfirm']);
 				// var_dump($_POST);die;
@@ -76,9 +74,6 @@ class Jurisdiction extends Controller{
 		//新增医助
 		if (input('get.g_id') != '' AND input('get.type') == 2 AND !input('get.assistant_doctor_id')) {
 			if ($_POST) {
-				if (!$_POST['imgkey']) {
-				$_POST['imgkey'] = "mainTest";
-				}
 				$_POST['imgUrl'] = "http://pbngsysl7.bkt.clouddn.com/".$_POST['imgkey'];
 				$_POST['groupID'] = input('get.g_id');
 				$_POST['userName'] = '';
@@ -108,13 +103,12 @@ class Jurisdiction extends Controller{
 		//新增机构
 		// input('?post.imgone')
 		if (input('?get.g_id') == false AND $_POST) {
-			if (!$_POST['imgkey']) {
-				$_POST['imgkey'] = "mainTest";
-			}
 			$_POST['imgUrl'] = "http://pbngsysl7.bkt.clouddn.com/".$_POST['imgkey'];
 			$userMsg = Session::get('userMsg');
 			$_POST['id']=$userMsg['id'];
-			unset($_POST['imgkey'],$_POST['passConfirm'],$_POST['real_name']);
+			$_POST['nickName']='';
+			$_POST['userName']='';
+			unset($_POST['imgkey'],$_POST['passConfirm']);
 			//新增机构接口
 			foreach ($_POST as $key => $value) {
 				$obj->$key = $value;
@@ -123,7 +117,7 @@ class Jurisdiction extends Controller{
 			$url = config('path')."/classification/group/insert";
 			$res = http_request($url,$data,1);
 			$res = json_decode($res,true);
-			if ($res) {
+			if ($res and !$res['error']) {
 				return array('code' => 1);
 			}else{
 				return array('code' => 2);
@@ -134,9 +128,8 @@ class Jurisdiction extends Controller{
 		if (input('get.g_id') !== '' AND input('get.type') == 1 AND input('get.doctor_id')) {
 			if ($_POST) {
 				$_POST['id'] = input('get.doctor_id');
-				if (!$_POST['imgkey']) {
-					$_POST['imgkey'] = "mainTest";
-				}
+				$_POST['nickName']='';
+				$_POST['userName']='';
 				$_POST['imgUrl'] = "http://pbngsysl7.bkt.clouddn.com/".$_POST['imgkey'];
 				unset($_POST['imgkey']);
 				foreach ($_POST as $key => $value) {

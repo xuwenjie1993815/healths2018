@@ -56,9 +56,10 @@ class Product extends Controller
             $data['price'] = $_POST['price'];
             $data['discount'] = $_POST['discount'];
             $data['remark'] = $_POST['remark'];
-            if (!$_POST['imgkey']) {
-            $_POST['imgkey'] = "mainTest";
-            }
+
+            // if (!$_POST['imgkey']) {
+            // $_POST['imgkey'] = "mainTest";
+            // }
             $data['goodUrl'] = "http://pbngsysl7.bkt.clouddn.com/".$_POST['imgkey'];
             foreach ($data as $key => $value) {
                 $obj->$key=$value;
@@ -80,6 +81,9 @@ class Product extends Controller
                 $res = http_request($url);
                 $res = json_decode($res,true);
                 if ($res and !$res['error']) {
+                    $str = strrev($res['goodUrl']);
+                    $imgkey = explode('/',$str)[0];
+                    $res['imgkey'] = strrev($imgkey);
                     $this->assign('goodInfo',$res);
                 }
             }

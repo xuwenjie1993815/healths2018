@@ -1,0 +1,76 @@
+{include file="../application/admin/view/Public/_header.html"/}
+<article class="page-container">
+	<form method="post" class="form form-horizontal" id="form-patient_history_extension-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>病史内容：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="content" name="content">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>类型：</label>
+			<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+				<div class="radio-box">
+					<input name="type" type="radio" id="appa1" value="1" checked>
+					<label for="appa1">其他病史</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" id="appa2" value="2" name="type">
+					<label for="appa2">烟酒史</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" id="appa3" value="3" name="type">
+					<label for="appa3">过敏史</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" id="appa4" value="4" name="type">
+					<label for="appa4">家族病史</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" id="appa5" value="5" name="type">
+					<label for="appa5">服用药物</label>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="patientId" value={$id}>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+</article>
+{include file="../application/admin/view/Public/_footer.html"/}
+<script>
+$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	
+});
+//既往病史表单验证
+$("#form-patient_history_extension-add").validate({
+    onkeyup:false,
+    focusCleanup:true,
+    success:"valid",
+    submitHandler:function(form){
+        $(form).ajaxSubmit({
+            dataType:'json',
+            type:'post',
+            success:function (data) {
+                if (data.code == 1){
+                    layer.msg('操作成功,请稍等...',{icon:1,time:500},function() {
+						location.reload();
+					})
+                }else {
+                    layer.msg(data.msg,{icon:2,time:1000});
+                }
+                
+                
+            }
+        });
+    }
+});
+</script>

@@ -23,29 +23,13 @@
 		margin-top:10px;
 	}
 </style>
-<!-- <div class="page-container"> -->
-<!-- 	<ul class="cl portfolio-area">
-		<li class="item">
-			<div class="portfoliobox">
-				<div class="picbox"><a href="__PUBLIC__/images/tijian.jpg" data-lightbox="gallery1" data-title="体检报告"><img src="__PUBLIC__/images/tijian.jpg"></a></div>
-				<div class="textbox">体检报告 </div>
-			</div>
-		</li>
-		<li class="item">
-			<div class="portfoliobox">
-				<div class="picbox "><a href="__PUBLIC__/images/1521601030.jpg" data-lightbox="gallery2" data-title="体检报告"><img src="__PUBLIC__/images/1521601030.jpg"></a></div>
-				<div class="textbox">体检报告 </div>
-			</div>
-		</li>
-	</ul> -->	
 	<div id="demo">
 		<ul class="imgList">
-	    <li><a href="__PUBLIC__/images/tijian.jpg"><img style="width: 200px; height: 200px;" class="artZoom" src="__PUBLIC__/images/tijian.jpg"/></a></li>
-	    <li><a href="__PUBLIC__/images/1521601030.jpg"><img style="width: 200px; height: 200px;" class="artZoom" src="__PUBLIC__/images/1521601030.jpg"/></a></li>
-	    <li><a href="__PUBLIC__/images/timg.jpg"><img style="width: 200px; height: 200px;" class="artZoom" src="__PUBLIC__/images/min.jpg"/></a></li>
+		{volist name="list" id="vo" key="k"}
+	    <li><a href={$vo.imgUrl}><img style="width: 200px; height: 200px;" class="artZoom" src="{$vo.imgUrl}"/></a></li>
+	    {/volist}
 		</ul>
 	</div>
-<!-- </div> -->
 {include file="../application/admin/view/Public/_footer.html"/}
 <!-- <script type="text/javascript" src="__STATIC__/lib/lightbox2/2.8.1/js/lightbox.min.js"></script> -->
 <script src="__PUBLIC__/js/artZoom/jquery.artZoom.js"></script>

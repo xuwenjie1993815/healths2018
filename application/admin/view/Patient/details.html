@@ -91,7 +91,7 @@
 	<div class="tabCon">
 		<!-- 头部 -->
 		<div class="cl pd-5 bg-1 bk-gray mt-20">
-			<a class="btn btn-primary radius" data-title="编辑病史" onClick="patient_case_add('编辑病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','700px','600px',)" title="编辑病史">
+			<a class="btn btn-primary radius" data-title="编辑病史" onClick="patient_case_add('编辑病史','{:url('Admin/Patient/patient_case_add',array('id' => $id))}','900px','600px',)" title="编辑病史">
 				<i class="Hui-iconfont">&#xe600;</i> 编辑病史
 			</a>
 			<a class="btn btn-primary radius" data-title="编辑影响因素" onClick="patient_case_add('编辑影响因素','{:url('Admin/Patient/patient_factor_add',array('id' => $id))}','700px','600px',)" title="编辑影响因素">
@@ -100,21 +100,19 @@
 		</div>
 		<!-- 基本信息 -->
 		<div style="width:50%; margin: 0 20% 0 20%;">
-			<sapn style="font-size:15px;">姓名:徐闻洁</span>
-			<sapn style="font-size:15px;padding-left: 10%;">年龄:25</span>
-			<sapn style="font-size:15px;padding-left: 10%;">性别:男</span>
-			<sapn style="font-size:15px;padding-left: 10%;">血压等级:1</span>
-			<sapn style="font-size:15px;padding-left: 10%;">危险等级:2</span>
+			<sapn style="font-size:15px;">姓名:{$medical_history_info.name}</span>
+			<sapn style="font-size:15px;padding-left: 10%;">年龄:{$medical_history_info.age}</span>
+			<sapn style="font-size:15px;padding-left: 10%;">性别:{$medical_history_info.sexy}</span>
+			<sapn style="font-size:15px;padding-left: 10%;">危险等级:{$medical_history_info.dangerousLevel}</span>
 			<div style="border-top:1px solid #000;border-bottom:1px solid #000;">
 				<label>
 					其他疾病史与治疗史:
 				</label>
 				<table class="table table-border table-bordered">
 					<tr>
-						<td>胸椎手术史</td>
-						<td>慢性肾病</td>
-						<td>慢性肾病</td>
-						<td>慢性肾病</td>
+						{volist name="medical_history_info.otherDisease" id="vo" key="k"}
+						<td>{$vo.content}</td>
+						{/volist}
 					</tr>
 				</table>
 				<label>
@@ -122,7 +120,9 @@
 				</label>
 				<table class="table table-border table-bordered">
 					<tr>
-						<td>已戒烟4+年，偶有饮酒</td>
+						{volist name="medical_history_info.smokeHistory" id="vo" key="k"}
+						<td>{$vo.content}</td>
+						{/volist}
 					</tr>
 				</table>
 				<label>
@@ -130,7 +130,9 @@
 				</label>
 				<table class="table table-border table-bordered">
 					<tr>
-						<td>xxx药物过敏</td>
+						{volist name="medical_history_info.allergy" id="vo" key="k"}
+						<td>{$vo.content}</td>
+						{/volist}
 					</tr>
 				</table>
 				<label>
@@ -138,7 +140,9 @@
 				</label>
 				<table class="table table-border table-bordered">
 					<tr>
-						<td>父亲高血压病</td>
+						{volist name="medical_history_info.famillyDisease" id="vo" key="k"}
+						<td>{$vo.content}</td>
+						{/volist}
 					</tr>
 				</table>
 				<label>
@@ -146,8 +150,9 @@
 				</label>
 				<table class="table table-border table-bordered">
 					<tr>
-						<td>科素亚(氯沙坦钾)100mg/片   1片/次/天</td>
-						<td>美托洛尔  45mg/片   1片/次/天</td>
+						{volist name="medical_history_info.medicalRecord" id="vo" key="k"}
+						<td>{$vo.content}</td>
+						{/volist}
 					</tr>
 				</table>
 			</div>
@@ -159,15 +164,12 @@
 							伴随临床疾患
 						</label>
 					</dt>
-					<!-- <table class="table table-border table-bordered">
-						<tr>
-							<td>糖尿病</td>
-							<td>心脏疾病</td>
-						</tr>
-					</table> -->
 					<dd>
 						<label class="">
-							<u>糖尿病</u>&nbsp;&nbsp;&nbsp;<u>心脏疾病</u>&nbsp;&nbsp;&nbsp;</label>
+							{volist name="patient_medical.1" id="vo" key="k"}
+							<u>{$vo}</u>&nbsp;&nbsp;&nbsp;
+							{/volist}
+						</label>
 					</dd>
 				</dl>
 				<dl class="permission-list">
@@ -178,7 +180,10 @@
 					</dt>
 					<dd>
 						<label class="">
-							<u>吸烟</u>&nbsp;&nbsp;&nbsp;</label>
+							{volist name="patient_medical.2" id="vo" key="k"}
+							<u>{$vo}</u>&nbsp;&nbsp;&nbsp;
+							{/volist}
+						</label>
 					</dd>
 				</dl>
 				<dl class="permission-list">
@@ -189,7 +194,10 @@
 					</dt>
 					<dd>
 						<label class="">
-							<u>PWV>=12m/s</u>&nbsp;&nbsp;&nbsp;<u>ABI<'0.9'</u>&nbsp;&nbsp;&nbsp;<u>eGFR异常</u>&nbsp;&nbsp;&nbsp;</label>
+							{volist name="patient_medical.3" id="vo" key="k"}
+							<u>{$vo}</u>&nbsp;&nbsp;&nbsp;
+							{/volist}
+						</label>
 					</dd>
 				</dl>
 			</div>
@@ -207,23 +215,25 @@
 			<thead>
 				<tr class="text-c">
 					<th>报告名称</th>
-					<th>封面图</th>
+					<th>预览图</th>
 					<th>报告说明</th>
 					<th>体检日期</th>
 					<th>操作</th>
 				</tr>
 			</thead>
 			<tbody>
+				{volist name="report_list" id="vo" key="k"}
 				<tr class="text-c">
-					<td>XXX体检报告</td>
-					<td><a href="javascript:;" onClick="service_record_edit('查看体检报告','{:url('Admin/Patient/picture_show',array('id' => $id))}','700px','600px')"><img style='width:50px;height:50px;' class="picture-thumb" src="__PUBLIC__/images/1517275559.jpg"></a></td>
-					<td>这是XXX在第二人民医院的体检报告</td>
-					<td>2018-03-14</td>
+					<td>{$vo.name}</td>
+					<td><a href="javascript:;" onClick="service_record_edit('查看体检报告','{:url('Admin/Patient/picture_show',array('id' => $vo['imageMappers'][0]['id']))}','700px','600px')"><img style='width:50px;height:50px;' class="picture-thumb" src="{$vo.imageMappers.0.imgUrl}"></a></td>
+					<td>{$vo.reportDescription}</td>
+					<td>{$vo.time}</td>
 					<td class="td-manage">
-						<a style="text-decoration:none" class="ml-5" onClick="service_record_edit('编辑报告','{:url('Admin/Patient/examination',array('id' => $id,'ex_id' => '24'))}','700px','600px')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a>
-						<a style="text-decoration:none" class="ml-5" onclick="examination_del('10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+						<a style="text-decoration:none" class="ml-5" onClick="service_record_edit('编辑报告','{:url('Admin/Patient/examination',array('id' => $id,'ex_id' => $vo['imageMappers'][0]['id']))}','700px','600px')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a>
+						<a style="text-decoration:none" class="ml-5" onclick="examination_del({$vo.imageMappers.0.id})" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
 					</td>
 				</tr>
+				{/volist}
 			</tbody>
 		</table>
 	</div>
@@ -231,13 +241,9 @@
 	<div class="tabCon">
 		<div class="page-container">
 			<!-- 头部 -->
-			<table class="table table-border table-bordered" style="width: 50%;">
+			<table class="table table-border table-bordered" style="width: 10%;">
 				<thead>
 					<tr class="text-l">
-						<th>汪维江</th>
-						<th>66</th>
-						<th>男</th>
-						<th>654001195203251111</th>
 						<th>
 							<span class="select-box">
 							<select class="select" size="1" id="warning_type" name="select" onchange="return jumpPage()">
@@ -254,31 +260,31 @@
 			<form action="/Public/Admin/Patient/detail_warning" method="post" class="form form-horizontal" id="form-detail-warning">
 				<p style="color:#f00;font-size:12px;margin:1%;">注：设置数值提醒预警</p>
 					<tr>
-						<td>舒张压</td>
-						<td>
-							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="blood_sz_min" value="" id="blood_sz_min" placeholder="最小值">
-							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="blood_sz_max" id="blood_sz_max" value="{$early['blood_sz_max']}" id="blood_sz_max" placeholder="最大值">
-						</td>
-						<td>预警差</td>
-						<td><input type="number" min="0" class="input-text" name="blood_sz_diff" value="{$early['blood_sz_diff']}" id="blood_sz_diff" placeholder="预警差"></td>
-					</tr>
-					<tr>
 						<td>收缩压</td>
 						<td>
-							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="blood_ss_min" value="" id="blood_ss_min" placeholder="最小值">
-							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="blood_ss_max" value="{$early['blood_ss_max']}" id="blood_ss_max" placeholder="最大值">
+							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="systolicHigh" value="{$early['systolicHigh']}" id="systolicHigh" placeholder="最大值">
+							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="systolicLow" value="{$early['systolicLow']}" id="systolicLow" placeholder="最小值">
 						</td>
 						<td>预警差</td>
-						<td><input type="number" min="0" class="input-text" name="blood_ss_diff" value="{$early['blood_ss_diff']}" id="blood_ss_diff" placeholder="预警差"></td>
+						<td><input type="number" min="0" class="input-text" name="systolicSpace" value="{$early['systolicSpace']}" id="systolicSpace" placeholder="预警差"></td>
+					</tr>
+					<tr>
+						<td>舒张压</td>
+						<td>
+							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="diastolicHigh" id="diastolicHigh" value="{$early['diastolicHigh']}" placeholder="最大值">
+							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="diastolicLow" value="{$early['diastolicLow']}" id="diastolicLow" placeholder="最小值">
+						</td>
+						<td>预警差</td>
+						<td><input type="number" min="0" class="input-text" name="diastolicSpace" value="{$early['diastolicSpace']}" id="diastolicSpace" placeholder="预警差"></td>
 					</tr>
 					<tr>
 						<td>心率</td>
 						<td>
-							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="heart_min" value="" id="heart_min" placeholder="最小值">
-							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="heart_max" value="{$early['heart_max']}" id="heart_max" placeholder="最大值">
+							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="heartHigh" value="{$early['heartHigh']}" id="heartHigh" placeholder="最大值">
+							<input style="width: 50%;float: left;" type="number" min="0" class="input-text" name="heartLow" value="{$early['heartLow']}" id="heartLow" placeholder="最小值">
 						</td>
 						<td>预警差</td>
-						<td><input type="number" min="0" class="input-text" name="heart_diff" value="{$early['heart_diff']}" id="heart_diff" placeholder="预警差"></td>
+						<td><input type="number" min="0" class="input-text" name="heartSpace" value="{$early['heartSpace']}" id="heartSpace" placeholder="预警差"></td>
 					</tr>
 				</table>
 				<div class="row cl"  id="blood_button">
@@ -286,6 +292,7 @@
 						<button class="btn btn-primary radius" type="submit" style="margin-top:1% "><i class="Hui-iconfont">&#xe632;</i> 提交</button>
 					</div>
 				</div>
+				<input type="hidden" name="patientId" value={$id}>
 			</form>
 
 			<!-- 血糖 -->
@@ -391,17 +398,19 @@
 							<th>收缩压</th>
 							<th>舒张压</th>
 							<th>心率</th>
-							<th>操作</th>
+							<!-- <th>操作</th> -->
 						</tr>
 					</thead>
 					<tbody>
+						{volist name="bloodData" id="vo" key="k"}
 						<tr class="text-c">
-							<td>2014-6-11 11:11:42</td>
-							<td>140</td>
-							<td>84</td>
-							<td>102</td>
-							<td class="f-14 td-manage"> <a style="text-decoration:none" class="ml-5" onClick="article_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+							<td>{$vo.uploadTime}</td>
+							<td>{$vo.systolicBloodPressure}</td>
+							<td>{$vo.diastolicBloodPressure}</td>
+							<td>{$vo.heartRate}</td>
+							<!-- <td class="f-14 td-manage"> <a style="text-decoration:none" class="ml-5" onClick="article_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td> -->
 						</tr>
+						{/volist}
 					</tbody>
 				</table>
 				<!-- 血压趋势图 -->
@@ -659,6 +668,7 @@
 		});
 	}
 
+
 	//既往病史表单验证
 	$("#form-patient-record-set").validate({
 	    onkeyup:false,
@@ -718,11 +728,11 @@
 	            type:'post',
 	            success:function (res) {
 	                if (res.code == 1){
-	                    layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
-							parent.location.reload();
+	                    layer.msg('操作成功,请稍等...',{icon:1,time:500},function() {
+							location.reload();
 						})
 	                }else {
-	                    layer.msg('设置失败');
+	                    layer.msg(data.msg,{icon:1,time:1000});
 	                }
 	            }
 	        });
@@ -861,7 +871,7 @@
 							location.reload();
 						})
 					}else{
-						layer.msg('操作失败')
+						layer.msg(data.msg,{icon:2})
 					}
 				},
 			});	
@@ -872,7 +882,7 @@
 	//删除体检报告
 	function examination_del(id) {
 		layer.confirm('确认删除吗?', {
-		  btn: ['确认','取消'] //按钮
+		  	btn: ['确认','取消'] //按钮
 		}, function(){
 		  $.ajax({
 				type: 'POST',
@@ -885,7 +895,7 @@
 							location.reload();
 						})
 					}else{
-						layer.msg('操作失败')
+						layer.msg(data.msg,{icon:2})
 					}
 				},
 			});	
@@ -922,7 +932,7 @@
 							location.reload();
 						})
 					}else{
-						layer.msg('操作失败')
+						layer.msg(data.msg,{icon:2})
 					}
 				},
 			});	

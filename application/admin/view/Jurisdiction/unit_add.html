@@ -59,7 +59,7 @@
                         {/if}
                         {if condition="$info.imgUrl eq ''"}
                         <div class="add_pic">
-                            <input type="file" id="picture" name="file1" onchange="preview1(this)"/>
+                            <input type="file" name="file1" onchange="preview1(this)"/>
                             <img src="__PUBLIC__/images/jia_pic.png" alt="">
                         </div>
                         {/if}
@@ -246,83 +246,109 @@ $(function(){
 });
 
 
-// 图片上传
-function preview1(file){
-    var fileText=$(file).val();
-     if(fileText==""){
-        return false;
-    }
-    if(!/.(gif|jpg|jpeg|png|GIF|JPG|JPEG|PNG)$/.test(fileText)){
-        layer.open({
-            closeBtn:0,
-            type:0,
-            content:"图片类型必须是gif,jpeg,jpg,png中的一种",
-        })
-        $(file).val('');
-        return false;
-    }
-        p2 = 1;
-        if (file.files && file.files[0]){
-            var reader = new FileReader();
-            reader.onload = function(evt){
-                var prevDiv =
-                    '<div>'+
-                    '<img  style="width:120px;height:120px" class="pic" src="' + evt.target.result + '" />'+
-                    '<img class="del_pic1" src="__PUBLIC__/images/delete.png" onclick="del_pic1(this)" alt="">'+
-                    '</div>';
-                $(file).parent().parent().append(prevDiv);
-                // var timestamp = Date.parse(new Date());
-                //  if($(".prev").length<4){
-                //     var str =
-                //         '<div class="preview prev">'+
-                //         '<div class="add_pic">'+
-                //         '<input type="file" name="file'+timestamp+'" onchange="preview1(this)"/>'+
-                //         '<img src="__PUBLIC__/images/jia_pic.png" alt="">'+
-                //         '</div>'+
-                //         '</div>';
-                //     $(".license1").append(str);
-                // }
-            };
-            reader.readAsDataURL(file.files[0]);
-            //在这里ajax提交file信息(file.files[0])到接口保存,并通过获取的返回的图片信息进行保存\
-
-            var formData = new FormData();
-            formData.append('file', file.files[0]);
-            formData.append('key','asadaads');
-            formData.append('accept','');
-            formData.append('token',$("#token").val());
-            $.ajax({
-                url: "http://up-z2.qiniup.com/",
-                type: 'POST',
-                cache: false,
-                data: formData,
-                processData:false,
-                contentType:false,
-                success: function(res){
-                    var hash = res.hash;
-                    var key = res.key;
-                    var imgurl = "http://pbngsysl7.bkt.clouddn.com/key";//图片展示地址
-                    //保存已上传图片key值
-                    var imgkey = $("#imgkey").val();
-                    if (imgkey) {
-                        $("#imgkey").val(imgkey+','+key);
-                    }else{
-                        $("#imgkey").val(key);
-                    }
-                },
-                error: function (res) {
-                    dataJson= $.parseJSON(res.responseText);  
-                    layer.msg(dataJson.error,{icon:2});
-                }  
-            });  
-            
-        }else{
-            prevDiv.innerHTML = '<div class="img" src=file.value></div>';
+    // 图片上传
+    function preview1(file){
+        var fileText=$(file).val();
+         if(fileText==""){
+            return false;
         }
-}
+        if(!/.(gif|jpg|jpeg|png|GIF|JPG|JPEG|PNG)$/.test(fileText)){
+            layer.open({
+                closeBtn:0,
+                type:0,
+                content:"图片类型必须是gif,jpeg,jpg,png中的一种",
+            })
+            $(file).val('');
+            return false;
+        }
+            p2 = 1;
+            if (file.files && file.files[0]){
+                var prev = $(".prev").length;
+                var reader = new FileReader();
+                reader.onload = function(evt){
+                    var prevDiv =
+                        '<div>'+
+                        '<img  style="width:120px;height:120px" id="key'+prev+'" data="" class="pic" src="' + evt.target.result + '" />'+
+                        '<img class="del_pic1" src="__PUBLIC__/images/delete.png" data="'+prev+'" onclick="del_pic1(this,'+prev+')" alt="">'+
+                        '</div>';
+                    $(file).parent().parent().append(prevDiv);
+                    var timestamp = Date.parse(new Date());
+                    if($(".prev").length<4){
+                        // var str =
+                        //     '<div class="preview prev">'+
+                        //     '<div class="add_pic">'+
+                        //     '<input type="file" name="file'+timestamp+'" onchange="preview1(this)"/>'+
+                        //     '<img src="__PUBLIC__/images/jia_pic.png" alt="">'+
+                        //     '</div>'+
+                        //     '</div>';
+                        // $(".license1").append(str);
+                    }
+                };
 
-function del_pic1(obj){
+                //在这里ajax提交file信息(file.files[0])到接口保存,并通过获取的返回的图片信息进行保存
+                var formData = new FormData();
+                formData.append('file', file.files[0]);
+                formData.append('key',file.files[0]['name']);
+                formData.append('accept','');
+                formData.append('token',$("#token").val());
+                $.ajax({
+                    url: "http://up-z2.qiniup.com/",
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    processData:false,
+                    contentType:false,
+                    success: function(res){
+                        var hash = res.hash;
+                        var key = res.key;
+                        if (key) {
+                            $("#key"+prev).attr('data',key);
+                        }
+                        // var imgurl = "http://pbngsysl7.bkt.clouddn.com/"+key;//图片展示地址
+                        //保存已上传图片key值
+                        var imgkey = $("#imgkey").val();
+                        if (imgkey) {
+                            $("#imgkey").val(imgkey+','+key);
+                        }else{
+                            $("#imgkey").val(key);
+                        }
+                    },
+                    error: function (res) {
+                        dataJson= $.parseJSON(res.responseText);
+                        layer.msg(dataJson.error,{icon:2});
+                    }  
+                });
+
+                reader.readAsDataURL(file.files[0]);
+            }else{
+                prevDiv.innerHTML = '<div class="img" src=file.value></div>';
+            }
+    }
+
+    function del_pic1(obj,data){
         //删除此张已上传的图片,并删除页面上保存的key值
+        // var prev = $(".prev").length-1;
+        //要删除的图片key值
+        if (data) {
+            var key = $("#key"+data).attr("data");
+            // var key = $(obj).parent().attr("data");
+            // tobo (删除token里匹配的key值)
+            var imgkey = $("#imgkey").val();
+
+            var strs= new Array(); //定义一数组 
+            var new_imgkey=new Array();
+            strs=imgkey.split(","); //字符分割 
+            for (i=0;i<strs.length ;i++ ) {
+                if (strs[i]!=key) {
+                    new_imgkey[i] = strs[i];
+                }
+            } 
+            var new_imgkey_c = new_imgkey.join(",");
+            var imgkey = $("#imgkey").val(new_imgkey_c);
+        }else{
+            $("#imgkey").val('');
+        }
+        
         $(obj).parent().parent().remove()
         if($(".prev").length == 1){
             p2 = 0;

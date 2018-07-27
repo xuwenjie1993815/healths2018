@@ -11,18 +11,14 @@
 					</tr>
 				</thead>
 				<tbody>
+					{volist name="list" id="vo" key="k"}
 					<tr>
-						<td>10</td>
-						<td>90</td>
-						<td>兑换鸡蛋</td>
-						<td>2018-06-22 15:25:23</td>
+						<td>{$vo.changeNum}</td>
+						<td>{$vo.leftNum}</td>
+						<td>{$vo.mark}</td>
+						<td>{$vo.createTime}</td>
 					</tr>
-					<tr>
-						<td>20</td>
-						<td>10</td>
-						<td>兑换电脑</td>
-						<td>2018-06-25 18:00:22</td>
-					</tr>
+					{/volist}
 				</tbody>
 			</table>
 		</div>

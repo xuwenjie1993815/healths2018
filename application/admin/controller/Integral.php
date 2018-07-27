@@ -12,7 +12,10 @@ class Integral extends Controller
 		$url = config('path')."/integral/all";
 		$res = http_request($url,$data);
 		$res = json_decode($res,true);
-		if ($res) {
+		if ($res AND !$res['error']) {
+			foreach ($res as $key => $value) {
+				$res[$key]['nowtotal'] = $value['total']-$value['used'];
+			}
 			$this->assign('list',$res);
 		}
 		return $this->fetch();
@@ -30,7 +33,7 @@ class Integral extends Controller
 			$url = config('path')."/integral/use";
 			$res = http_request($url,$data);
 			$res = json_decode($res,true);
-			if (!$res['error']) {
+			if ($res AND !$res['error']) {
 				return array('code' => 1);
 			}else{
 				return array('code' => 2,'msg' => $res['message']);

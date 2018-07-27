@@ -68,16 +68,17 @@
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2">报告说明：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <textarea class="textarea valid" placeholder="最少输入10个字符" name="remark" aria-required="true" aria-invalid="false">{$examination.remark}</textarea>
+                <textarea class="textarea valid" placeholder="最少输入10个字符" name="reportDescription" aria-required="true" aria-invalid="false">{$examination.reportDescription}</textarea>
             </div>
         </div>
 
         <div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3">体检日期：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input  class="input-text" onClick="laydate()" name="date" id="time" value="{$examination.date}">
+				<input  class="input-text" onClick="laydate()" name="time" id="time" value="{$examination.time}">
 			</div>
 		</div>
+        {if condition="$examination eq ''"}
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3">上传体检报告：</label>
             <div class="formControls col-xs-8 col-sm-9">
@@ -86,7 +87,7 @@
                     <div class="license1">
                       <div class="preview prev">
                         <div class="add_pic">
-                            <input type="file" id="picture" name="file1" onchange="preview1(this)"/>
+                            <input type="file" name="file1" onchange="preview1(this)"/>
                             <img src="__PUBLIC__/images/jia_pic.png" alt="">
                         </div>
                       </div>
@@ -94,6 +95,8 @@
                 </div>
             </div>
         </div>
+        {/if}
+        <input type="hidden" id="id" name="id" value="{$examination.imageMappers.0.id}">
         <input type="hidden" id="imgkey" name="imgkey" value="">
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
@@ -151,11 +154,11 @@ $(function(){
                 type:'post',
                 success:function (res) {
                     if (res.code == 1){
-                        layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
+                        layer.msg('操作成功,请稍等...',{icon:1,time:500},function() {
                             parent.location.reload();
                         })
                     }else {
-                        layer.msg('设置失败',{icon:2});
+                        layer.msg(data.msg,{icon:2});
                     }
                 }
             });
@@ -186,16 +189,17 @@ $(function(){
         }
             p2 = 1;
             if (file.files && file.files[0]){
+                var prev = $(".prev").length;
                 var reader = new FileReader();
                 reader.onload = function(evt){
                     var prevDiv =
                         '<div>'+
-                        '<img  style="width:120px;height:120px" class="pic" src="' + evt.target.result + '" />'+
-                        '<img class="del_pic1" src="__PUBLIC__/images/delete.png" onclick="del_pic1(this)" alt="">'+
+                        '<img  style="width:120px;height:120px" id="key'+prev+'" data="" class="pic" src="' + evt.target.result + '" />'+
+                        '<img class="del_pic1" src="__PUBLIC__/images/delete.png" data="'+prev+'" onclick="del_pic1(this,'+prev+')" alt="">'+
                         '</div>';
                     $(file).parent().parent().append(prevDiv);
                     var timestamp = Date.parse(new Date());
-                     if($(".prev").length<4){
+                    if($(".prev").length<4){
                         var str =
                             '<div class="preview prev">'+
                             '<div class="add_pic">'+
@@ -206,7 +210,7 @@ $(function(){
                         $(".license1").append(str);
                     }
                 };
-                reader.readAsDataURL(file.files[0]);
+
                 //在这里ajax提交file信息(file.files[0])到接口保存,并通过获取的返回的图片信息进行保存
                 var formData = new FormData();
                 formData.append('file', file.files[0]);
@@ -223,7 +227,10 @@ $(function(){
                     success: function(res){
                         var hash = res.hash;
                         var key = res.key;
-                        var imgurl = "http://pbngsysl7.bkt.clouddn.com/key";//图片展示地址
+                        if (key) {
+                            $("#key"+prev).attr('data',key);
+                        }
+                        // var imgurl = "http://pbngsysl7.bkt.clouddn.com/"+key;//图片展示地址
                         //保存已上传图片key值
                         var imgkey = $("#imgkey").val();
                         if (imgkey) {
@@ -233,45 +240,64 @@ $(function(){
                         }
                     },
                     error: function (res) {
-                        dataJson= $.parseJSON(res.responseText);  
+                        dataJson= $.parseJSON(res.responseText);
                         layer.msg(dataJson.error,{icon:2});
                     }  
-                });  
-                
+                });
+
+                reader.readAsDataURL(file.files[0]);
             }else{
                 prevDiv.innerHTML = '<div class="img" src=file.value></div>';
             }
     }
-    function del_pic1(obj){
-            //删除此张已上传的图片,并删除页面上保存的key值
-            $(obj).parent().parent().remove()
-            if($(".prev").length == 1){
-                p2 = 0;
+    function del_pic1(obj,data){
+        //删除此张已上传的图片,并删除页面上保存的key值
+        //要删除的图片key值
+        var key = $("#key"+data).attr("data");
+        // var key = $(obj).parent().attr("data");
+        // tobo (删除token里匹配的key值)
+        var imgkey = $("#imgkey").val();
+
+        var strs= new Array(); //定义一数组 
+        var new_imgkey=new Array();
+        strs=imgkey.split(","); //字符分割 
+        for (i=0;i<strs.length ;i++ ) {
+            if (strs[i]!=key) {
+                new_imgkey[i] = strs[i];
             }
-             var piclen=$(".pic").length;
-             if(piclen==0){
-                $(".prev").remove();
-                     var str =
-                    '<div class="preview prev">'+
-                    '<div class="add_pic">'+
-                    '<input  type="file" name="file1" onchange="preview1(this)"/>'+
-                    '<img src="__PUBLIC__/images/jia_pic.png" alt="">'+
-                    '</div>'+
-                    '</div>';
-                $(".license1").append(str)
-                console.log($(".prev").length)
-            }
-            //如果只存在一个图片时，添加一个加号
-            if(piclen==3){
-                     var str =
-                    '<div class="preview prev">'+
-                    '<div class="add_pic">'+
-                    '<input  type="file" name="file1" onchange="preview1(this)"/>'+
-                    '<img src="__PUBLIC__/images/jia_pic.png" alt="">'+
-                    '</div>'+
-                    '</div>';
-                $(".license1").append(str)
-                console.log($(".prev").length)
-            }
+        } 
+        var new_imgkey_c = new_imgkey.join(",");
+        var imgkey = $("#imgkey").val(new_imgkey_c);
+        
+        $(obj).parent().parent().remove()
+        if($(".prev").length == 1){
+            p2 = 0;
         }
+         var piclen=$(".pic").length;
+         if(piclen==0){
+            $(".prev").remove();
+                 var str =
+                '<div class="preview prev">'+
+                '<div class="add_pic">'+
+                '<input  type="file" name="file1" onchange="preview1(this)"/>'+
+                '<img src="__PUBLIC__/images/jia_pic.png" alt="">'+
+                '</div>'+
+                '</div>';
+            $(".license1").append(str)
+            console.log($(".prev").length)
+        }
+        //如果只存在一个图片时，添加一个加号
+        if(piclen==3){
+                 var str =
+                '<div class="preview prev">'+
+                '<div class="add_pic">'+
+                '<input  type="file" name="file1" onchange="preview1(this)"/>'+
+                '<img src="__PUBLIC__/images/jia_pic.png" alt="">'+
+                '</div>'+
+                '</div>';
+            $(".license1").append(str)
+            console.log($(".prev").length)
+        }
+    }
+
 </script>

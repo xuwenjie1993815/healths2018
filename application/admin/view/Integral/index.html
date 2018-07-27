@@ -22,17 +22,19 @@
 				</tr>
 			</thead>
 			<tbody>
+				{volist name="list" id="vo" key="k"}
 				<tr class="text-c">
-					<td>黄强</td>
-					<td>0</td>
-					<td>18</td>
-					<td>18</td>
+					<td>{$vo.name}</td>
+					<td>{$vo.nowtotal}</td>
+					<td>{$vo.total}</td>
+					<td>{$vo.used}</td>
 					<td class="f-14 td-manage">
-						<input class="btn btn-primary radius" type="button" onClick="integral_exchange('积分兑换','{:url('Admin/Integral/integral_exchange',array('id' => 125))}')" value="兑换">
-						<input class="btn btn-primary radius" type="button" onClick="integral_record('历史记录','{:url('Admin/Integral/integral_record',array('id' => 125))}')" value="历史记录">
-						<input class="btn btn-primary radius" type="button" onClick="reset('积分清零','{:url('Admin/Integral/reset')}','12')" value="积分清零">
+						<input class="btn btn-primary radius" type="button" onClick="integral_exchange('积分兑换','{:url('Admin/Integral/integral_exchange',array('id' => $vo['id']))}')" value="兑换">
+						<input class="btn btn-primary radius" type="button" onClick="integral_record('历史记录','{:url('Admin/Integral/integral_record',array('id' => $vo['id']))}')" value="历史记录">
+						<input class="btn btn-primary radius" type="button" onClick="reset('积分清零','{:url('Admin/Integral/reset')}',{$vo.id})" value="积分清零">
 					</td>
-				</tr>	
+				</tr>
+				{/volist}	
 			</tbody>
 		</table>
 	</div>

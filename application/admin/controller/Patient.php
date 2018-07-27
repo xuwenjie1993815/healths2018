@@ -22,7 +22,7 @@ class Patient extends Controller
         // }
 		// $this->assign('star',1);
 		// $this->assign('id',10001);
-		if (!$res['error']) {
+		if ($res AND !$res['error']) {
 			$this->assign('info',$res);
 		}
 		return $this->fetch('index');die;
@@ -40,16 +40,88 @@ class Patient extends Controller
         	$this->assign('info',$res);
         }
 		//既往病史
+		$medical_history_data['patientId'] = $id;
+		$medical_history_url = config('path')."/patient/disease/detail";
+		$medical_history_res = http_request($medical_history_url,$medical_history_data);
+		$medical_history_res = json_decode($medical_history_res,true);
+		if ($medical_history_res AND !$medical_history_res['error']) {
+			foreach ($medical_history_res['diseaseMapper'] as $key => $value) {
+				if ($value == '1' AND $key !== 'id' AND $key !== 'bloodYear' AND $key !== 'patientId') {
+					if (config("patient_medical")[1][$key]) {
+						$type[1][] = config("patient_medical")[1][$key];
+					}
+					if (config("patient_medical")[2][$key]) {
+						$type[2][] = config("patient_medical")[2][$key];
+					}
+					if (config("patient_medical")[3][$key]) {
+						$type[3][] = config("patient_medical")[3][$key];
+					}
+				}
+			}
+			$this->assign('patient_medical',$type);
+        	$this->assign('medical_history_info',$medical_history_res);
+        }
 		//体检报告
+		$report_url = config('path')."/patient/report/getList?patientId=".$id;
+		$report_res = http_request($report_url);
+		$report_res = json_decode($report_res,true);
+		if ($report_res AND !$report_res['error']) {
+			$this->assign('report_list',$report_res);
+		}
+		//预警设置
+		$detail_warning_url = config('path')."/bloodEntity/id/".input('id');
+		$detail_warning_res = http_request($detail_warning_url);
+		$detail_warning_res = json_decode($detail_warning_res,true);
+		// var_dump($detail_warning_res);die;
+		if ($detail_warning_res AND !$detail_warning_res['error']) {
+			$this->assign('early',$detail_warning_res);
+		}
 		//用药记录
 		$medical_data['patientId'] = $id;
 		$medical_url = config('path')."/patient/medical/getList";
         $medical_res = http_request($medical_url, $medical_data);
         $medical_res = json_decode($medical_res,true);
-        if ($medical_res) {
+        if ($medical_res AND !$medical_res['error']) {
         	$this->assign('medicalList',$medical_res);
         }
 		//测量统计
+			//获取患者血压数据
+			if (!$_POST) {
+			//获取全部数据
+				$bloodData_data['patientId'] = $id;
+				$bloodData_url = config('path')."/bloodEntity/patientData";
+				$bloodData_res = http_request($bloodData_url,$bloodData_data);
+				$bloodData_res = json_decode($bloodData_res,true);
+				if ($bloodData_res AND !$bloodData_res['error']) {
+					$this->assign('bloodData',$bloodData_res);
+				}
+
+			//获取本周数据
+				$bloodData_data_week['patientId'] = $id;
+				$bloodData_data_week['startTime'] = date('Y-m-d H:i:s', strtotime("this week Monday", time()));
+				$bloodData_data_week['endTime'] = date('Y-m-d H:i:s');
+				$bloodData_url_week = config('path')."/bloodEntity/patientTimeData";
+				$bloodData_res_week = http_request($bloodData_url_week,$bloodData_data_week);
+				$bloodData_res_week = json_decode($bloodData_res_week,true);
+				if ($bloodData_res_week AND !$bloodData_res_week['error']) {
+					foreach ($bloodData_res_week as $key => $value) {
+						$bloodData_res_week[$key]['blood_data'] = explode(' ',$value["uploadTime"])[0];
+					}
+					foreach ($bloodData_res_week as $key => $value) {
+						$blood_data2[$value['blood_data']][] = $value;
+					}
+					ksort($blood_data2);
+					// foreach ($blood_data2 as $key => $value) {
+					// 	var_dump($value);
+					// }
+					// var_dump(array_keys($blood_data2));
+					// var_dump($blood_data2);die;
+					$this->assign('bloodData_week',$bloodData_res_week);
+				}
+
+				
+			}
+
 		//服务记录
 		$service_url = config('path')."/patient/service/getList";
 		$service_data['patientId'] = $id;
@@ -398,7 +470,15 @@ class Patient extends Controller
 
 	//患者管理->预警设置(血压)
 	public function detail_warning(){
-		var_dump($_POST);
+		$data = json_encode($_POST);
+		$url = config('path')."/bloodEntity/set";
+		$res = http_request($url,$data,1);
+		$res = json_decode($res,true);
+		if ($res AND !$res['error']) {
+			return array('code' => 1);
+		}else{
+			return array('code' => 2,'msg' => $res['message']);
+		}
 	}
 
 	//患者管理->预警设置(血糖)
@@ -493,80 +573,169 @@ class Patient extends Controller
 		return array('code' => 1);
 	}
 
-	//添加/编辑病史
+	//添加/编辑病史页面
 	public function patient_case_add(){
-		$case_name = $_POST["case_name"];
-		//case_data为病史类型标识 1:其他疾病史与治疗史 2:吸烟饮酒史 3:过敏史 4:家族遗传病史 5:服用药物
-		$case_data = $_POST["case_data"];
-		$id = $_POST["id"];
+		$this->assign('id',input('id'));
+		$medical_history_data['patientId'] = input('id');
+		$medical_history_url = config('path')."/patient/disease/detail";
+		$medical_history_res = http_request($medical_history_url,$medical_history_data);
+		$medical_history_res = json_decode($medical_history_res,true);
+		if ($medical_history_res AND !$medical_history_res['error']) {
+        	$this->assign('medical_history_info',$medical_history_res);
+        }
+		return $this->fetch();
+	}
+	//添加病史
+	public function patient_history_extension_add(){
 		if ($_POST) {
-			switch ($_POST['case_data']) {
-				case '1':
-					//添加病史记录
-					//添加成功返回case_id
-					return array('code' => 1,'case_id' => '148');
-					break;
-				case '2':
-					# code...
-					break;
-				case '3':
-					# code...
-					break;
-				case '4':
-					# code...
-					break;
-				case '5':
-					# code...
-					break;
+			$data = [$_POST];
+			$data = json_encode($data);
+			$url = config('path')."/patient/diseaseExtend/insert";
+			$res = http_request($url,$data,1);
+			$res = json_decode($res,true);
+			if ($res AND !$res['error']) {
+				return array('code' => 1);
+			}else{
+				return array('code' => 2,'msg' => $res['message']);
 			}
 			die;
 		}
-
-		// $case_re = array('1' => array('0' => '曾患湿疹'));
-		// $this->assign('info',$case_re);
 		$this->assign('id',input('id'));
 		return $this->fetch();
+	}
+
+	//删除病史
+	public function patient_history_extension_del(){
+		$url = config('path')."/patient/diseaseExtend/delete";
+		$res = http_request($url,$_POST);
+		$res = json_decode($res);
+		if ($res AND !$res['error']) {
+			return array('code' => 1);
+		}else{
+			return array('code' => 2,'msg' => $res['message']);
+		}
 	}
 
 	//添加/编辑影响因素
 	public function patient_factor_add(){
 		if ($_POST) {
-			$data = $_POST['data'];
-			return array('code' => 1);
+			$patient_history = explode(',',config('patient_history'));
+			$obj->patientId = $_POST['id'];
+			$obj->bloodYear = $_POST['bloodYear'];
+			$obj->systolicBloodPressure = $_POST['systolicBloodPressure'];
+			$obj->diastolicBloodPressure = $_POST['diastolicBloodPressure'];
+			foreach (array_diff($patient_history,explode(',',$_POST['data'])) as $key => $value) {
+				$obj->$value = "0";
+			}
+			foreach (explode(',',$_POST['data']) as $key => $value) {
+				$obj->$value = "1";
+			}
+			$data = json_encode($obj);
+			$url = config('path')."/patient/disease/insert";
+			$res = http_request($url,$data,1);
+			$res = json_decode($res,true);
+			if ($res AND !$res['eror']) {
+				return array('code' => 1);
+			}else{
+				return array('code' => 2,'msg' => $res['message']);
+			}
 		}
+
+		$medical_history_data['patientId'] = input('id');
+		$medical_history_url = config('path')."/patient/disease/detail";
+		$medical_history_res = http_request($medical_history_url,$medical_history_data);
+		$medical_history_res = json_decode($medical_history_res,true);
+		if ($medical_history_res AND !$medical_history_res['error']) {
+			foreach ($medical_history_res['diseaseMapper'] as $key => $value) {
+				if ($value == '1' AND $key !== 'id') {
+					$history_data .=",".$key;
+				}
+			}
+			$history_data = substr($history_data,1);
+        	$this->assign('history_data',$history_data);
+        	$this->assign('medical_history_info',$medical_history_res);
+        }
 		$this->assign('id',input('id'));
 		return $this->fetch();
 	}
 
 	//上传体检报告
 	public function examination(){
-		if ($_FILES['file1']['size']) {
-            foreach ($_FILES as $key => $value) {
-            	var_dump($value);
-            }die;
-        }
-
+		if ($_POST) {
+			$data['patientId'] = input('id');
+			$data['name'] = $_POST['name'];
+			$data['reportDescription'] = $_POST['reportDescription'];
+			$data['time'] = $_POST['time'];
+			if (!$_POST['imgkey']) {
+    			$_POST['imgkey'] = "mainTest";
+	    		$data['imageMappers'][0]['imgUrl'] = "http://pbngsysl7.bkt.clouddn.com/".$_POST['imgkey'];
+		        $data['imageMappers'][0]['height'] = 300;
+		        $data['imageMappers'][0]['width'] = 400;
+	    	}else{
+	    		foreach (explode(",",$_POST['imgkey']) as $key => $value) {
+	    			$data['imageMappers'][$key]['imgUrl'] = "http://pbngsysl7.bkt.clouddn.com/".$value;
+			        $data['imageMappers'][$key]['height'] = 300;
+			        $data['imageMappers'][$key]['width'] = 400;
+	    		}
+	    	}
+	    	if ($_POST['id']) {
+				$url = config('path')."/patient/report/update";
+				$data['id'] = $_POST['id'];
+				unset($data['patientId']);
+				unset($data['imageMappers']);
+			}else{
+				$url = config('path')."/patient/report/insert";
+			}
+			$data = json_encode($data);
+			$res = http_request($url,$data,1);
+			$res = json_decode($res,true);
+			if ($res AND !$res['error']) {
+				return array('code' => 1);
+			}else{
+				return array('code' => 2,'msg' => $res['message']);
+			}
+			die;
+		}
+		
 		$id = input('id');
 		$ex_id = input('ex_id');
 		//编辑标识
 		if ($ex_id) {
 			//根据id查出信息
-			$examination = array('name' => 'XXX体检报告','imgUrl' => '__PUBLIC__/images/1517275559.jpg','remark' => '这是XXX在第二人民医院的体检报告','date' => '2018-03-14');
-			$this->assign('examination',$examination);
+			$url = config('path')."/patient/report/getDetail";
+			$data['recordId'] = $ex_id;
+			$res = http_request($url,$data);
+			$res = json_decode($res,true);
+			if ($res AND !$res['error']) {
+				$this->assign('examination',$res);
+			}
 		}
 		return $this->fetch();
 	}
 
 	//查看体检报告
 	public function picture_show(){
-		$id = input('id');
+		$data['reportId'] = input('id');
+		$url = config('path')."/patient/image/getList";
+		$res = http_request($url,$data);
+		$res = json_decode($res,true);
+		if ($res AND !$res['error']) {
+			$this->assign('list',$res);
+		}
 		return $this->fetch();
 	}
 
 	//删除体检报告
 	public function examination_del(){
-		
-		return array('code' => 1);
+		$data['reportId'] = $_POST['id'];
+		$url = config('path')."/patient/report/delete";
+		$res = http_request($url,$data);
+		$res = json_decode($res,true);
+		if ($res AND !$res['error']) {
+			return array('code' => 1);
+		}else{
+			return array('code' => 2,'msg' => $res['message']);
+		}
 	}
 
 	//上传图片获取token

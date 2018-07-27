@@ -116,7 +116,8 @@ class Device extends Controller{
 			$url = config('path')."/equipment/undoBangdingPatient";
 			$data['id'] = $dataid;
 			$res = http_request($url,$data);
-			if (!$res['error']) {
+			$res = json_decode($res,true);
+			if ($res AND !$res['error']) {
 				return array('code' => '1','msg' => '解绑成功');
 			}else{
 				return array('code' => '2','msg' => $res['message']);
@@ -130,7 +131,8 @@ class Device extends Controller{
 			//绑定(接口)
 			$url = config('path')."/equipment/bangdingPatient";
 			$res = http_request($url,$data);
-			if (!$res['error']) {
+			$res = json_decode($res,true);
+			if ($res AND !$res['error']) {
 				return array('code' => '1','msg' => '绑定成功');
 			}else{
 				return array('code' => '2','msg' => $res['message']);
@@ -150,7 +152,8 @@ class Device extends Controller{
 				//绑定$data['id'](接口)
 				$bangding_url = config('path')."/equipment/bangdingPatient";
 				$bangding_res = http_request($bangding_url,$data);
-				if (!$bangding_res['error']) {
+				$bangding_res = json_decode($bangding_res,true);
+				if ($bangding_res AND !$bangding_res['error']) {
 					return array('code' => '1','msg' => '绑定成功');
 				}else{
 					return array('code' => '2','msg' => $bangding_res['message']);
@@ -171,12 +174,14 @@ class Device extends Controller{
 
 		$id = input('id');
 		//获取用户已绑定设备TODO(没有此接口)
-		$user_el = array('0' => array('id' => '100','number' => '123131sadasdx121','type' => '1','port' => 'B'),'1' => array('id' => '200','number' => '5565415641561dasdas','type' => '2','port' => 'A'));
-		foreach ($user_el as $key => $value) {
-			$user_type[$value['type']] = $value['id'];
-			$user_el[$key]['type'] = config('EQUIPMENT')[$value['type']];
-		}
-		if (1==1) {
+		$url = config("path")."/equipment/patientEquipment?patientId=".$id;
+		$res = http_request($url);
+		$user_el = json_decode($res,1);
+		if ($user_el and !$user_el['error']) {
+			foreach ($user_el as $key => $value) {
+				$user_type[$value['type']] = $value['id'];
+				$user_el[$key]['type'] = config('EQUIPMENT')[$value['type']];
+			}
 			$this->assign('user_el',$user_el);
 			$this->assign('user_type',$user_type);
 		}

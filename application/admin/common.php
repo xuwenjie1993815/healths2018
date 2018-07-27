@@ -53,7 +53,7 @@
     function send_sms($phoneNum,$message){
         $data['phoneNum'] = $phoneNum;
         $data['message'] = $message;
-        $url = config('path')."/blood/sendMessage";
+        $url = config('path')."/bloodEntity/sendMessage";
         $res = http_request($url,$data);
         $res = json_decode($res,true);
         if ($res and !$res['error']) {

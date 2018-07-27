@@ -25,34 +25,22 @@
 				</tr>
 			</thead>
 			<tbody>
+				{volist name="list" id="vo" key="k"}
 				<tr class="text-c">
-					<td><input type="checkbox" value='112' name="id"></td>
-					<td id="number"><u style="cursor:pointer" class="text-primary" onClick="patient_edit('章思赞','{:url('Admin/Patient/details',array('id' => 12))}')" title="章思赞">章思赞</u></td>
-					<td id="phoneNum12">18623525272</td>
-					<td>140</td>
-					<td>2级</td>
-					<td>2018-06-13 08:44:48</td>
-					<td>当日超过临界值:3次,预警平均血压:142</td>
+					<td><input type="checkbox" value={$vo.id} name="id"></td>
+					<td><u style="cursor:pointer" class="text-primary" onClick="patient_edit({$vo.name},'{:url('Admin/Patient/details',array('id' => $vo['patientId']))}')">{$vo.name}</u></td>
+					<td id="phoneNum{$vo.id}">{$vo.phoneNum}</td>
+					<td>{$vo.systolicBloodPressure}/{$vo.diastolicBloodPressure}</td>
+					<td>{$vo.warnLevel}</td>
+					<td>{$vo.createTime}</td>
+					<td>{$vo.warnInfo}</td>
 					<td class="f-14 td-manage">
-						<a style="text-decoration:none" class="ml-5" onClick="send_sms(this,'10001')" href="javascript:;" title="短信通知"><i class="Hui-iconfont">&#xe6c5;</i></a>
-						<a style="text-decoration:none" class="ml-5" onClick="sign_warning(this,'10001')" href="javascript:;" title="标记处理"><i class="Hui-iconfont">&#xe6e1;</i></a>
-						<a style="text-decoration:none" class="ml-5" onClick="value_log('今日预警数据','{:url('Admin/Warning/value_log',array('id' => 13))}')" href="javascript:;" title="今日预警数据"><i class="Hui-iconfont">&#xe618;</i></a>
+						<a style="text-decoration:none" class="ml-5" onClick="send_sms({$vo.id})" href="javascript:;" title="短信通知"><i class="Hui-iconfont">&#xe6c5;</i></a>
+						<a style="text-decoration:none" class="ml-5" onClick="sign_warning(this,{$vo.id})" href="javascript:;" title="标记处理"><i class="Hui-iconfont">&#xe6e1;</i></a>
+						<a style="text-decoration:none" class="ml-5" onClick="value_log('今日预警数据','{:url('Admin/Warning/value_log',array('id' => {$vo.id}))}')" href="javascript:;" title="今日预警数据"><i class="Hui-iconfont">&#xe618;</i></a>
 					</td>
 				</tr>
-				<tr class="text-c">
-					<td><input type="checkbox" value='121' name="id"></td>
-					<td><u style="cursor:pointer" class="text-primary" onClick="patient_edit('蒋金容','{:url('Admin/Patient/details',array('id' => 13))}')" title="蒋金容">蒋金容</u></td>
-					<td id="phoneNum13">18966665555</td>
-					<td>145</td>
-					<td>1级</td>
-					<td>2018-06-13 08:26:04</td>
-					<td>当日超过临界值:3次,预警平均血压:154</td>
-					<td class="f-14 td-manage">
-						<a style="text-decoration:none" class="ml-5" onClick="send_sms(this,'10001')" href="javascript:;" title="短信通知"><i class="Hui-iconfont">&#xe6c5;</i></a>
-						<a style="text-decoration:none" class="ml-5" onClick="sign_warning(this,'10001')" href="javascript:;" title="标记处理"><i class="Hui-iconfont">&#xe6e1;</i></a>
-						<a style="text-decoration:none" class="ml-5" onClick="value_log('今日预警数据','{:url('Admin/Warning/value_log',array('id' => 13))}')" href="javascript:;" title="今日预警数据"><i class="Hui-iconfont">&#xe618;</i></a>
-					</td>
-				</tr>
+				{/volist}
 			</tbody>
 		</table>
 	</div>
@@ -84,7 +72,7 @@ function patient_edit(title,url){
 }
 
 // 发送短信
-function send_sms() {
+function send_sms(id) {
 	var phoneNum = $("#phoneNum"+12).text();
 	layer.prompt({title: '发送短信', formType: 2}, function(text, index){
 	  	$.ajax({
