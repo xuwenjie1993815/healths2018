@@ -419,32 +419,32 @@
 			</div>
 
 			<!-- 血糖表格 -->
-			<div class="mt-20" id="statistics_sugar_data" style="display: none;">
-				<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive" >
-					<thead>
-						<tr class="text-c">
-							<th>日期</th>
-							<th>餐前</th>
-							<th>餐后</th>
-							<th>其他时间</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr class="text-c">
-							<td>2018-04-02</td>
-							<td id="sugar_info">5.9mmol/L(测量时间:00:00:00)
-								<img src="__PUBLIC__/images/change.png" alt="编辑" onclick="sugar_edit('{:url("Admin/patient/sugar_edit",array('id'=>12))}','12')">
-		            			<img src="__PUBLIC__/images/del.png" alt="删除" onclick="sugar_del('{:url("Admin/patient/sugar_del",array('id'=>$v['id']))}')"><br/></td>
-							<td>6.9mmol/L(测量时间:15:30:22)
-								<img src="__PUBLIC__/images/change.png" alt="编辑" onclick="sugar_edit('{:url("Admin/patient/sugar_edit",array('id'=>$v['id']))}','700px','500px')">
-		            			<img src="__PUBLIC__/images/del.png" alt="删除" onclick="sugar_del('{:url("Admin/patient/sugar_del",array('id'=>$v['id']))}')"></td>
-							<td>8.6mmol/L(测量时间:23:59:59)
-								<img src="__PUBLIC__/images/change.png" alt="编辑" onclick="sugar_edit('{:url("Admin/patient/sugar_edit",array('id'=>$v['id']))}','700px','500px')">
-		            			<img src="__PUBLIC__/images/del.png" alt="删除" onclick="sugar_del('{:url("Admin/patient/sugar_del",array('id'=>$v['id']))}')"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+				<div class="mt-20" id="statistics_sugar_data" style="display: none;">
+					<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive" >
+						<thead>
+							<tr class="text-c">
+								<th>日期</th>
+								<th>餐前</th>
+								<th>餐后</th>
+								<th>其他时间</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="text-c">
+								<td>2018-04-02</td>
+								<td id="sugar_info">5.9mmol/L(测量时间:00:00:00)
+									<img src="__PUBLIC__/images/change.png" alt="编辑" onclick="sugar_edit('{:url("Admin/patient/sugar_edit",array('id'=>12))}','12')">
+			            			<img src="__PUBLIC__/images/del.png" alt="删除" onclick="sugar_del('{:url("Admin/patient/sugar_del",array('id'=>$v['id']))}')"><br/></td>
+								<td>6.9mmol/L(测量时间:15:30:22)
+									<img src="__PUBLIC__/images/change.png" alt="编辑" onclick="sugar_edit('{:url("Admin/patient/sugar_edit",array('id'=>$v['id']))}','700px','500px')">
+			            			<img src="__PUBLIC__/images/del.png" alt="删除" onclick="sugar_del('{:url("Admin/patient/sugar_del",array('id'=>$v['id']))}')"></td>
+								<td>8.6mmol/L(测量时间:23:59:59)
+									<img src="__PUBLIC__/images/change.png" alt="编辑" onclick="sugar_edit('{:url("Admin/patient/sugar_edit",array('id'=>$v['id']))}','700px','500px')">
+			            			<img src="__PUBLIC__/images/del.png" alt="删除" onclick="sugar_del('{:url("Admin/patient/sugar_del",array('id'=>$v['id']))}')"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 		</div>
 	</div>
 <!-- 服务记录 -->

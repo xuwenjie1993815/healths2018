@@ -109,8 +109,22 @@ class Patient extends Controller
 					}
 					foreach ($bloodData_res_week as $key => $value) {
 						$blood_data2[$value['blood_data']][] = $value;
+						$blood_q[$value['blood_data']][] = $value['systolicBloodPressure'];//收缩压
+						// $blood_q[$value['blood_data']][] = $value['heartRate'];//收缩压
+						// $blood_q[$value['blood_data']][] = $value['systolicBloodPressure'];//收缩压
 					}
 					ksort($blood_data2);
+					$star_week = strtotime("this week Monday", time());
+					for ($i=0; $i < 7; $i++) {
+						$star_week_q[$i] = date('Y-m-d',$star_week+$i*86400);
+						$week_count = count($blood_data2[$star_week_q[$i]]);
+						if ($week_count != 0) {
+							for ($e=0; $e < $week_count; $e++) {
+								$blood_data2[$star_week_q[$i]][$e]['systolicBloodPressure'];
+							}
+							
+						}
+					}
 					// foreach ($blood_data2 as $key => $value) {
 					// 	var_dump($value);
 					// }
