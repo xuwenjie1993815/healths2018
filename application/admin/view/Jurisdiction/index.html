@@ -29,6 +29,10 @@ border-top:1px solid #f00;
 				<div class="portfoliobox" onclick="jg({$vo.id})" id={$vo.id}>
 					<div class="picbox"><img src={$vo.imgUrl}></div>
 					<div class="textbox">{$vo.name}</div>
+					<div class="textbox">
+						<u style="cursor:pointer" onclick="gorup_edit({$vo.id})">编辑</u>
+						<u style="cursor:pointer" onclick="gorup_del({$vo.id})">删除</u>
+					</div>
 				</div>
 			</li>
 			{/volist}
@@ -225,10 +229,43 @@ function jg(id) {
 		layer.open({
 			title:title,
 			type: 2,
-			area: ['600px', '600px'],
+			area: ['500px', '500px'],
 			fixed: false, //不固定
 			maxmin: true,
 			content: url
+		});
+	}
+
+// 删除机构
+	function gorup_del(id) {
+		layer.confirm('确认要删除此机构吗？',function(index){
+			$.ajax({
+				type: 'POST',
+				url: 'group_del',
+				dataType: 'json',
+				data:{id:id},
+				success: function(data){
+					if (data.code == 1) {
+						layer.msg('操作成功,请稍等...',{icon:1,time:500},function() {
+							location.reload();
+						})
+					}else{
+						layer.msg(data.msg,{icon:2});
+					}
+				}
+			});		
+		});
+	}
+
+//编辑机构
+	function gorup_edit(id) {
+		layer.open({
+			title:'编辑机构',
+			type: 2,
+			area: ['500px', '500px'],
+			fixed: false, //不固定
+			maxmin: true,
+			content: '/public/Admin/jurisdiction/unit_add?id='+id
 		});
 	}
 
@@ -332,6 +369,7 @@ function jg(id) {
 			});		
 		});
 	}
+
 
 
 </script> 

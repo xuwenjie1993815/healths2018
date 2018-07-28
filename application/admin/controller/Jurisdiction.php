@@ -17,7 +17,7 @@ class Jurisdiction extends Controller{
 			$url = config('path')."/classification/group/getAll";
 			$res = http_request($url,$data);
 			$res = json_decode($res,true);
-			if ($res) {
+			if ($res AND !$res['error']) {
 				$this->assign('groupList',$res);
 			}
 		}
@@ -31,6 +31,34 @@ class Jurisdiction extends Controller{
 
 	//新增/编辑机构
 	public function unit_add(){
+		if (input('id')) {
+			if ($_POST) {
+				$_POST['imgUrl'] = "http://pbngsysl7.bkt.clouddn.com/".$_POST['imgkey'];
+				$_POST['id'] = input('id');
+				unset($_POST['imgkey']);
+				$_POST = json_encode($_POST);
+				$url = config('path')."/classification/group/update";
+				$res = http_request($url,$_POST,1);
+				$res = json_decode($res,true);
+				if ($res AND !$res['error']) {
+					return array('code' => 1);
+				}else{
+					return array('code' => 2,'msg' => $res['message']);
+				}
+				die;
+			}
+			//通过机构id查找机构详情
+			$url = config('path')."/classification/group/getOne";
+			$data['groupId'] = input('id');
+			$res = http_request($url,$data);
+			$res = json_decode($res,true);
+			if ($res AND !$res['error']) {
+                $str = strrev($res['imgUrl']);
+                $imgkey = explode('/',$str)[0];
+                $res['imgkey'] = strrev($imgkey);
+				$this->assign('info',$res);
+			}
+		}
 		// if ($_FILES["file"]["error"] > 0){
 		// 	echo "Error: " . $_FILES["file"]["error"] . "<br />";
 		// }else{
@@ -229,6 +257,19 @@ class Jurisdiction extends Controller{
 			default:
 				#删除机构
 				break;
+		}
+	}
+
+	//删除机构
+	public function group_del(){
+		$data['groupId'] = $_POST['id'];
+		$url = config('path')."/classification/group/delete";
+		$res = http_request($url,$data);
+		$res = json_decode($res,true);
+		if ($res AND !$res['error']) {
+			return array('code' => 1);
+		}else{
+			return array('code' => 1,'msg' => $res['message']);
 		}
 	}
 
