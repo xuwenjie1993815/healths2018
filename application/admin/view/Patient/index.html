@@ -28,24 +28,25 @@
 					<td>{$vo.phoneNum}</td>
 					<td>{$vo.sexy}</td>
 					<td>{$vo.age}</td>
-					<td><u style="cursor:pointer" onClick="bangding('{:url('Admin/Device/bangding',array('id'=>$vo['id']))}')">
+					<td>
 					{if condition="$vo.equipments.0.number neq ''"}
+
+					<u style="cursor:pointer" onClick="bangding('{:url('Admin/Device/bangding',array('id'=>$vo['id']))}')">
 						{$vo.equipments.0.number}({$vo.equipments.0.port}):
 						{switch name="$vo.equipments.0.type" }
 						    {case value="1"}血压计{/case}
 						    {case value="2"}血糖仪{/case}
 						{/switch}
+					</u>
 						<br>
 						<u style="cursor:pointer" onClick="bangding('{:url('Admin/Device/bangding',array('id'=>$vo['id']))}')">
 						{if condition="$vo.equipments.1.number neq ''"}
 							{$vo.equipments.1.number}({$vo.equipments.1.port}):{$vo.equipments.1.type}
 						{/if}
 						</u>
-						{else/}
+						{else /}
 						<u style="cursor:pointer" onClick="bangding('{:url('Admin/Device/bangding',array('id'=>$vo['id']))}')">尚未绑定设备</u>
 					{/if}
-					</u>
-
 					</td>
 					<td><u style="cursor:pointer" class="text-primary" onClick="product_list('服务包','{:url('Admin/Product/product_list',array('id' => $vo['id']))}','500px','600px')" title="服务包">{if condition="$vo['leftDays'] eq ''"}已过期{else/}{$vo.leftDays}天{/if}</u></td>
 					<td class="td-status" onClick="group_set('{:url('Admin/patient/group_set',array('id' => $vo['id']))}')">
@@ -90,7 +91,7 @@ function group_set(url) {
       	shadeClose: true,
       	shade: false,
       	maxmin: true, //开启最大化最小化按钮
-      	area: ['893px', '600px'],
+      	area: ['893px', '500px'],
       	content: url
     });
 }
@@ -143,7 +144,7 @@ function patient_edit(title,url){
 		type: 2,
 		title: title,
 		content:url,
-		area: ['893px', '600px'],
+		area: ['893px', '500px'],
 	});
 	layer.full(index);
 }
@@ -167,7 +168,7 @@ function product_list(title,url,id,w,h){
       	shadeClose: true,
       	shade: false,
       	maxmin: true, //开启最大化最小化按钮
-      	area: ['893px', '600px'],
+      	area: ['893px', '500px'],
       	content: [url,'no']
     });
 }
@@ -198,7 +199,7 @@ function patient_add() {
 		type: 2,
 		title: '新增患者',
 		content: "{:url('Admin/Patient/patient_add')}",
-		area: ['750px', '600px'],
+		area: ['750px', '500px'],
 	});
 }
 
