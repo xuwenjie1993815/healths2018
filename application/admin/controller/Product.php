@@ -3,7 +3,8 @@ namespace app\admin\controller;
 use think\View;
 use think\Controller;
 use think\Session;
-class Product extends Controller
+use app\admin\controller\Base;
+class Product extends Base
 {
     public function index(){
         $url = config('path')."/goods/type/1";

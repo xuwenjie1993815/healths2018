@@ -13,7 +13,7 @@ table{width: 60%;margin-left:20%}
 	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
 </nav>
 
-<h3>今日测量血压患者:</h3>
+<!-- <h3>今日测量血压患者:</h3>
 	<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
 		<thead>
 			<tr class="text-c">
@@ -80,7 +80,7 @@ table{width: 60%;margin-left:20%}
 				<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td><u>更多</u></td>
 			</tr>
 		</tbody>
-	</table>
+	</table> -->
 
 <h3>今日预警:</h3>
 	<table class="table table-border table-bordered table-hover">
@@ -236,116 +236,116 @@ table{width: 60%;margin-left:20%}
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript">
 //患者列表
-	//设置分组
-	function group_set(id) {
-		layer.open({
-	        type: 2,
-	      	title: '设置分组',
-	      	shadeClose: true,
-	      	shade: false,
-	      	maxmin: true, //开启最大化最小化按钮
-	      	area: ['893px', '500px'],
-	      	content: '{:url('Admin/patient/group_set?id=67')}'
-	    });
-	}
+	// //设置分组
+	// function group_set(id) {
+	// 	layer.open({
+	//         type: 2,
+	//       	title: '设置分组',
+	//       	shadeClose: true,
+	//       	shade: false,
+	//       	maxmin: true, //开启最大化最小化按钮
+	//       	area: ['893px', '500px'],
+	//       	content: '{:url('Admin/patient/group_set?id=67')}'
+	//     });
+	// }
 
-	// 标识星级
-	function star_set(id){
-		layer.confirm('确认要设置为星级用户吗？',function(index){
-			$.ajax({
-				type: 'POST',
-				url: "{:url('Admin/patient/star_set')}",
-				dataType: 'json',
-				data:{id:id},
-				success: function(data){
-					if (data.code == 1) {
-						layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
-							location.reload();
-						})
-					}else{
-						layer.msg('设置失败');
-					}
-				}
-			});		
-		});
-	}
+	// // 标识星级
+	// function star_set(id){
+	// 	layer.confirm('确认要设置为星级用户吗？',function(index){
+	// 		$.ajax({
+	// 			type: 'POST',
+	// 			url: "{:url('Admin/patient/star_set')}",
+	// 			dataType: 'json',
+	// 			data:{id:id},
+	// 			success: function(data){
+	// 				if (data.code == 1) {
+	// 					layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
+	// 						location.reload();
+	// 					})
+	// 				}else{
+	// 					layer.msg('设置失败');
+	// 				}
+	// 			}
+	// 		});		
+	// 	});
+	// }
 
-	// 标识星级
-	function star_cancel(id){
-		layer.confirm('确认要取消此星级用户吗？',function(index){
-			$.ajax({
-				type: 'POST',
-				url: "{:url('Admin/patient/star_cancel')}",
-				dataType: 'json',
-				data:{id:id},
-				success: function(data){
-					if (data.code == 1) {
-						layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
-							location.reload();
-						})
-					}else{
-						layer.msg('取消失败');
-					}
-				}
-			});		
-		});
-	}
+	// // 标识星级
+	// function star_cancel(id){
+	// 	layer.confirm('确认要取消此星级用户吗？',function(index){
+	// 		$.ajax({
+	// 			type: 'POST',
+	// 			url: "{:url('Admin/patient/star_cancel')}",
+	// 			dataType: 'json',
+	// 			data:{id:id},
+	// 			success: function(data){
+	// 				if (data.code == 1) {
+	// 					layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
+	// 						location.reload();
+	// 					})
+	// 				}else{
+	// 					layer.msg('取消失败');
+	// 				}
+	// 			}
+	// 		});		
+	// 	});
+	// }
 
-	/*患者-编辑*/
-	function patient_edit(title,url){
-		var index = layer.open({
-			type: 2,
-			title: title,
-			content:url,
-			area: ['893px', '500px'],
-		});
-		layer.full(index);
-	}
+	// /*患者-编辑*/
+	// function patient_edit(title,url){
+	// 	var index = layer.open({
+	// 		type: 2,
+	// 		title: title,
+	// 		content:url,
+	// 		area: ['893px', '500px'],
+	// 	});
+	// 	layer.full(index);
+	// }
 
-	/*设备操作*/
-	function bangding(url){
-		layer.open({
-		  type: 2,
-		  area: ['800px', '450px'],
-		  fixed: false, //不固定
-		  maxmin: true,
-		  content: url
-		});
-	}
+	// /*设备操作*/
+	// function bangding(url){
+	// 	layer.open({
+	// 	  type: 2,
+	// 	  area: ['800px', '450px'],
+	// 	  fixed: false, //不固定
+	// 	  maxmin: true,
+	// 	  content: url
+	// 	});
+	// }
 
-	/*服务包列表*/
-	function product_list(title,url,id,w,h){
-		layer.open({
-	        type: 2,
-	      	title: title,
-	      	shadeClose: true,
-	      	shade: false,
-	      	maxmin: true, //开启最大化最小化按钮
-	      	area: ['893px', '500px'],
-	      	content: [url,'no']
-	    });
-	}
+	// /*服务包列表*/
+	// function product_list(title,url,id,w,h){
+	// 	layer.open({
+	//         type: 2,
+	//       	title: title,
+	//       	shadeClose: true,
+	//       	shade: false,
+	//       	maxmin: true, //开启最大化最小化按钮
+	//       	area: ['893px', '500px'],
+	//       	content: [url,'no']
+	//     });
+	// }
 
-	//删除用户
-	function patient_del(id) {
-		layer.confirm('确认要删除此用户吗？',function(index){
-			$.ajax({
-				type: 'POST',
-				url: "{:url('Admin/patient/patient_del')}",
-				dataType: 'json',
-				data:{id:id},
-				success: function(data){
-					if (data.code == 1) {
-						layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
-							location.reload();
-						})
-					}else{
-						layer.msg('取消失败');
-					}
-				}
-			});		
-		});
-	}
+	// //删除用户
+	// function patient_del(id) {
+	// 	layer.confirm('确认要删除此用户吗？',function(index){
+	// 		$.ajax({
+	// 			type: 'POST',
+	// 			url: "{:url('Admin/patient/patient_del')}",
+	// 			dataType: 'json',
+	// 			data:{id:id},
+	// 			success: function(data){
+	// 				if (data.code == 1) {
+	// 					layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
+	// 						location.reload();
+	// 					})
+	// 				}else{
+	// 					layer.msg('取消失败');
+	// 				}
+	// 			}
+	// 		});		
+	// 	});
+	// }
 
 // 预警列表
 	/*设备-删除*/
@@ -403,7 +403,6 @@ table{width: 60%;margin-left:20%}
 		  type: 2,
 		  area: ['800px', '450px'],
 		  fixed: false, //不固定
-		  maxmin: true,
 		  content: url
 		});
 	}

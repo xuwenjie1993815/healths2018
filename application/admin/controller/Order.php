@@ -3,7 +3,8 @@ namespace app\admin\controller;
 use think\View;
 use think\Controller;
 use think\Session;
-class Order extends Controller
+use app\admin\controller\Base;
+class Order extends Base
 {
 	public function index(){
 		//获取数据(接口)

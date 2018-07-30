@@ -3,7 +3,8 @@ namespace app\admin\controller;
 use think\View;
 use think\Controller;
 use think\Session;
-class Message extends Controller
+use app\admin\controller\Base;
+class Message extends Base
 {	
 	//留言板列表
 	public function index(){

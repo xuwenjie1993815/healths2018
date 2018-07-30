@@ -3,16 +3,10 @@ namespace app\admin\controller;
 use think\View;
 use think\Controller;
 use think\Session;
-use app\admin\model\User;
-class Index extends Controller
+use app\admin\controller\Base;
+class Index extends Base
 {
-	public function _initialize()
-    {
-        // $User = new User;
-        // var_dump($User->model1());
-        // echo 'init<br/>';
-    }
-    
+	
     public function index()
     {
         if (input('post.password') and input('post.name')) {
@@ -47,13 +41,7 @@ class Index extends Controller
             $this->assign('userMsg',$userMsg);
             return $this->fetch('index');die;
         }
-
             
-        
-    	// var_dump('1',$_GET['a']);die;
-    	//
-    	// $view = new view();
-    	
     	return view('Index/index');
     	die;
     }

@@ -370,8 +370,8 @@
 	<div class="tabCon">
 		<div class="page-container">
 			<div class="text-c">
-				<form action="/Public/Admin/Patient/details" method="post">
-					<input type="hidden" name="id" value="{$id}">
+				<!-- <form action="/Public/Admin/Patient/details" method="get"> -->
+					<input type="hidden" name="id" id="patientId" value="{$id}">
 				 	<span class="select-box inline">
 						<select name="statistics_type" id="statistics_type" class="select" onchange="return jumpPage_statistics()">
 							<option value="1" checked>血压数据</option>
@@ -379,15 +379,15 @@
 						</select>
 					</span> 
 					日期范围：
-					<input type="text" onfocus="WdatePicker()" id="logmin" value="" class="input-text Wdate" style="width:120px;">
+					<input type="text" onfocus="WdatePicker()" id="data_min" value="" class="input-text Wdate" style="width:120px;">
 					-
-					<input type="text" onfocus="WdatePicker()" id="logmax" value="" class="input-text Wdate" style="width:120px;">
+					<input type="text" onfocus="WdatePicker()" id="data_max" value="" class="input-text Wdate" style="width:120px;">
 					时间范围：
 					<input type="text" onfocus="WdatePicker({dateFmt: 'H:mm:ss'})" value="" id="data_blood" class="input-text Wdate" style="width:120px;">
 					-
 					<input type="text" onfocus="WdatePicker({dateFmt: 'H:mm:ss'})" value="" id="data_blood2" class="input-text Wdate" style="width:120px;">
-					<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
-				</form>
+					<button name="" id="screen" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+				<!-- </form> -->
 			</div>
 			<!-- 血压表格 -->
 			<div class="mt-20" id="statistics_blood_data">
@@ -401,7 +401,7 @@
 							<!-- <th>操作</th> -->
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="statistics_blood_data_table">
 						{volist name="bloodData" id="vo" key="k"}
 						<tr class="text-c">
 							<td>{$vo.uploadTime}</td>
@@ -651,7 +651,6 @@
 		  type: 2,
 		  area: [w, h],
 		  fixed: false, //不固定
-		  maxmin: false,
 		  content: url
 		});
 	}
@@ -663,7 +662,6 @@
 		  type: 2,
 		  area: [w, h],
 		  fixed: false, //不固定
-		  maxmin: false,
 		  content: url
 		});
 	}
@@ -939,6 +937,29 @@
 		}, function(){
 		});
 	}
+
+	$("#screen").click(function() {
+		var statistics_type = $("#statistics_type").val();
+		var startTime = $("#data_min").val();
+		var endTime = $("#data_max").val();
+		var patientId = $("#patientId").val();
+		$.ajax({
+			type:'post',
+			url:"{:url('Admin/patient/screen_details_blood')}",
+			data:{patientId:patientId,startTime:startTime,endTime:endTime,statistics_type:statistics_type},
+			dataType:'json',
+			success:function(res) {
+				if (res.code == 1) {
+					//获取数据替换内容
+					$("#statistics_blood_data_table").replaceWith(function(){
+                    	return res.html;
+                	});
+				}else{
+
+				}
+			}
+		});
+	})
 </script>
 <!--/请在上方写此页面业务相关的脚本-->
 </body>	

@@ -3,7 +3,8 @@ namespace app\admin\controller;
 use think\View;
 use think\Controller;
 use think\Session;
-class Device extends Controller{
+use app\admin\controller\Base;
+class Device extends Base{
 	//列表
 	public function index(){
 		//获取设备列表(接口)

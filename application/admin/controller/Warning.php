@@ -3,7 +3,8 @@ namespace app\admin\controller;
 use think\View;
 use think\Controller;
 use think\Session;
-class Warning extends Controller{
+use app\admin\controller\Base;
+class Warning extends Base{
 	//获取预警列表
 	public function index(){
 		//接口获取列表

@@ -4,7 +4,8 @@ use think\View;
 use think\Controller;
 use think\Session;
 use app\admin\model\User;
-class Integral extends Controller
+use app\admin\controller\Base;
+class Integral extends Base
 {
 	public function index(){
 		$userMsg = Session::get('userMsg');

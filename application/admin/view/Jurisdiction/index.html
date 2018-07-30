@@ -4,9 +4,6 @@
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
 <style>
-#head{
-margin-left:0;
-}
 #foot{
 width:100%;
 background:#0099CC;
@@ -19,10 +16,8 @@ border-top:1px solid #f00;
 	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
 </nav>
 {if condition="$usertype eq 1"}
-<div id="head">
-	<button onClick="unit_add('新增机构','{:url('Admin/Jurisdiction/unit_add')}')" class="btn btn-success-outline radius">新增机构</button>
-</div>
 <div class="page-container">
+	<button onClick="unit_add('新增机构','{:url('Admin/Jurisdiction/unit_add')}')" class="btn btn-success-outline radius">新增机构</button>
 		<ul class="cl portfolio-area">
 			{volist name="groupList" id="vo" key="k"}
 			<li class="item">
@@ -144,20 +139,11 @@ border-top:1px solid #f00;
 					</tr>
 				</thead>
 				<tbody id="list_yz">
-<!-- 					<tr class="text-c">
-						<td>默认医助</td>
-						<td><img src="__PUBLIC__/images/1517275559.jpg" alt="" style="width: 50px;height: 50px;"></td>
-						<td>15683302556</td>
-						<td>女</td>
-						<td>默认显示</td>
-						<td>10</td>
-						<td>操作</td>
-					</tr> -->
 				</tbody>
 			</table>
 		</div>
 	</div>
-</span>
+	</span>
 	<input type="hidden" value={$id} name="id">
 	<input type="hidden" value="" id="jg_id" name="jg_id">
 	<input type="hidden" value="1" name="submit_set">
@@ -167,11 +153,11 @@ border-top:1px solid #f00;
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript">
 $(function(){
-	$('.table-sort').dataTable({
-		"aaSorting": [[ 1, "desc" ]],//默认第几个排序
-		"bStateSave": true,//状态保存
-		"pading":false,
-	});
+	// $('.table-sort').dataTable({
+	// 	"aaSorting": [[ 1, "desc" ]],//默认第几个排序
+	// 	"bStateSave": true,//状态保存
+	// 	"pading":false,
+	// });
 	$(".portfolio-area li").Huihover();
 });
 //表单验证
@@ -231,7 +217,6 @@ function jg(id) {
 			type: 2,
 			area: ['500px', '500px'],
 			fixed: false, //不固定
-			maxmin: true,
 			content: url
 		});
 	}
@@ -264,7 +249,6 @@ function jg(id) {
 			type: 2,
 			area: ['500px', '500px'],
 			fixed: false, //不固定
-			maxmin: true,
 			content: '/public/Admin/jurisdiction/unit_add?id='+id
 		});
 	}
@@ -280,7 +264,6 @@ function jg(id) {
 			type: 2,
 			area: ['500px', '500px'],
 			fixed: false, //不固定
-			maxmin: true,
 			content: '/public/Admin/jurisdiction/unit_add?g_id='+jg_id+'&type=1'
 		});
 	}
@@ -296,7 +279,6 @@ function jg(id) {
 			type: 2,
 			area: ['500px', '500px'],
 			fixed: false, //不固定
-			maxmin: true,
 			content: '/public/Admin/jurisdiction/unit_add?g_id='+jg_id+'&type=2'
 		});
 	}
@@ -309,7 +291,6 @@ function jg(id) {
 			type: 2,
 			area: ['500px', '500px'],
 			fixed: false, //不固定
-			maxmin: true,
 			content: '/public/Admin/jurisdiction/unit_add?doctor_id='+id+'&type=1&g_id='+jg_id
 		});
 	}
@@ -343,7 +324,6 @@ function jg(id) {
 			type: 2,
 			area: ['500px', '500px'],
 			fixed: false, //不固定
-			maxmin: true,
 			content: '/public/Admin/jurisdiction/unit_add?assistant_doctor_id='+id+'&type=2&g_id='+jg_id
 		});
 	}

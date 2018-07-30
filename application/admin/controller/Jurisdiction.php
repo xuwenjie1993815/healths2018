@@ -5,7 +5,8 @@ use think\Controller;
 use app\admin\model\User;
 use think\Db;
 use think\Session;
-class Jurisdiction extends Controller{
+use app\admin\controller\Base;
+class Jurisdiction extends Base{
 	
 	public function index(){
 		//判断机构/医生

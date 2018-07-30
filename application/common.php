@@ -11,3 +11,15 @@
 
 // 应用公共文件
 error_reporting(E_ERROR | E_PARSE );
+
+// if (\think\Request::instance()->isMobile()) {
+
+//    define('VIEW_PATH', __DIR__ . '/../application/index/view/index/');
+
+// } else {
+
+//    define('VIEW_PATH', __DIR__ . '/../application/index/view/default/');
+
+
+
+// }  

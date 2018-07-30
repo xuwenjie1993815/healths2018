@@ -3,7 +3,8 @@ namespace app\admin\controller;
 use think\View;
 use think\Controller;
 use think\Session;
-class Patient extends Controller
+use app\admin\controller\Base;
+class Patient extends Base
 {
 	//获取患者列表
 	public function index(){
@@ -95,43 +96,37 @@ class Patient extends Controller
 				if ($bloodData_res AND !$bloodData_res['error']) {
 					$this->assign('bloodData',$bloodData_res);
 				}
-
 			//获取本周数据
-				$bloodData_data_week['patientId'] = $id;
-				$bloodData_data_week['startTime'] = date('Y-m-d H:i:s', strtotime("this week Monday", time()));
-				$bloodData_data_week['endTime'] = date('Y-m-d H:i:s');
-				$bloodData_url_week = config('path')."/bloodEntity/patientTimeData";
-				$bloodData_res_week = http_request($bloodData_url_week,$bloodData_data_week);
-				$bloodData_res_week = json_decode($bloodData_res_week,true);
-				if ($bloodData_res_week AND !$bloodData_res_week['error']) {
-					foreach ($bloodData_res_week as $key => $value) {
-						$bloodData_res_week[$key]['blood_data'] = explode(' ',$value["uploadTime"])[0];
-					}
-					foreach ($bloodData_res_week as $key => $value) {
-						$blood_data2[$value['blood_data']][] = $value;
-						$blood_q[$value['blood_data']][] = $value['systolicBloodPressure'];//收缩压
-						// $blood_q[$value['blood_data']][] = $value['heartRate'];//收缩压
-						// $blood_q[$value['blood_data']][] = $value['systolicBloodPressure'];//收缩压
-					}
-					ksort($blood_data2);
-					$star_week = strtotime("this week Monday", time());
-					for ($i=0; $i < 7; $i++) {
-						$star_week_q[$i] = date('Y-m-d',$star_week+$i*86400);
-						$week_count = count($blood_data2[$star_week_q[$i]]);
-						if ($week_count != 0) {
-							for ($e=0; $e < $week_count; $e++) {
-								$blood_data2[$star_week_q[$i]][$e]['systolicBloodPressure'];
-							}
+				// $bloodData_data_week['patientId'] = $id;
+				// $bloodData_data_week['startTime'] = date('Y-m-d H:i:s', strtotime("this week Monday", time()));
+				// $bloodData_data_week['endTime'] = date('Y-m-d H:i:s');
+				// $bloodData_url_week = config('path')."/bloodEntity/patientTimeData";
+				// $bloodData_res_week = http_request($bloodData_url_week,$bloodData_data_week);
+				// $bloodData_res_week = json_decode($bloodData_res_week,true);
+				// if ($bloodData_res_week AND !$bloodData_res_week['error']) {
+				// 	foreach ($bloodData_res_week as $key => $value) {
+				// 		$bloodData_res_week[$key]['blood_data'] = explode(' ',$value["uploadTime"])[0];
+				// 	}
+				// 	foreach ($bloodData_res_week as $key => $value) {
+				// 		$blood_data2[$value['blood_data']][] = $value;
+				// 		$blood_q[$value['blood_data']][] = $value['systolicBloodPressure'];//收缩压
+				// 		// $blood_q[$value['blood_data']][] = $value['heartRate'];//收缩压
+				// 		// $blood_q[$value['blood_data']][] = $value['systolicBloodPressure'];//收缩压
+				// 	}
+				// 	ksort($blood_data2);
+				// 	$star_week = strtotime("this week Monday", time());
+				// 	for ($i=0; $i < 7; $i++) {
+				// 		$star_week_q[$i] = date('Y-m-d',$star_week+$i*86400);
+				// 		$week_count = count($blood_data2[$star_week_q[$i]]);
+				// 		if ($week_count != 0) {
+				// 			for ($e=0; $e < $week_count; $e++) {
+				// 				$blood_data2[$star_week_q[$i]][$e]['systolicBloodPressure'];
+				// 			}
 							
-						}
-					}
-					// foreach ($blood_data2 as $key => $value) {
-					// 	var_dump($value);
-					// }
-					// var_dump(array_keys($blood_data2));
-					// var_dump($blood_data2);die;
-					$this->assign('bloodData_week',$bloodData_res_week);
-				}
+				// 		}
+				// 	}
+				// 	$this->assign('bloodData_week',$bloodData_res_week);
+				// }
 
 				
 			}
@@ -175,11 +170,7 @@ class Patient extends Controller
 		$_POST['doctorID'] = $_POST['ys_id'];
 		$_POST['assistantID'] = $_POST['yz_id'];
 		unset($_POST['unit'],$_POST['unit_id'],$_POST['ys_id'],$_POST['yz_id'],$_POST['passWord2']);
-		// die;
 		//新增患者接口
-		// $obj->AddPatientMapper = $_POST;
-  //       $data =  json_encode($obj);
-  // //       var_dump($data);die;
   		foreach ($_POST as $key => $value) {
   			$obj->$key = $value;
   		}
@@ -757,5 +748,33 @@ class Patient extends Controller
 		$url = config('path')."/patient/image/uploadToken";
 		$res = http_request($url);
 		return $res;
+	}
+
+	//筛选测量数据(表格)
+	public function screen_details_blood(){
+		switch ($_POST['statistics_type']) {
+			//血压数据
+			case '1':
+				unset($_POST['statistics_type']);
+				$_POST['startTime'] = $_POST['startTime'].' 00:00:00';
+				$_POST['endTime'] = $_POST['endTime'].' 23:59:59';
+				$url = config('path')."/bloodEntity/patientTimeData";
+				break;
+			//血糖数据
+			case '2':
+				# code...
+				break;
+		}
+		$res = http_request($url,$_POST);
+		$res = json_decode($res,true);
+		if ($res AND !$res['error']) {
+			$html = '';
+			foreach ($res as $key => $value) {
+				$html .= "<tr class='text-c'><td>".$value['uploadTime']."</td><td>".$value['systolicBloodPressure']."</td><td>".$value['diastolicBloodPressure']."</td><td>".$value['heartRate']."</td></tr>";
+			}
+			return array('code' => 1,'html' => $html);
+		}else{
+			return array('code' => 2,'msg' => $res['message']);
+		}
 	}
 }
