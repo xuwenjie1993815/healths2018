@@ -1,13 +1,12 @@
 {include file="../application/admin/view/Public/_header.html"/}
 <div class="page-container">
-	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" data-title="添加资讯" onClick="patient_history_extension_add('添加病史','{:url('Admin/Patient/patient_history_extension_add',array('id' => $id))}','700px','500px',)" title="添加病史"><i class="Hui-iconfont">&#xe600;</i> 添加病史</a></span>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a class="btn btn-primary radius" data-title="添加病史" onClick="patient_history_extension_add('添加病史','{:url('Admin/Patient/patient_history_extension_add',array('id' => $id))}','700px','400px',)" title="添加病史"><i class="Hui-iconfont">&#xe600;</i> 添加病史</a></span>
 	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
 	</div>
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover table-responsive table-sort">
 			<thead>
 				<tr class="text-c">
-					<th><input type="checkbox" name="" value=""></th>
 					<th>病史记录</th>
 					<th>分类</th>
 					<th>操作</th>
@@ -16,7 +15,6 @@
 			<tbody>
 				{volist name="medical_history_info.otherDisease" id="vo" key="k"}
 				<tr class="text-c">
-					<td><input type="checkbox" value={$vo.extensionId} name="extensionId"></td>
 					<td>{$vo.content}</td>
 					<td>{$vo.type}</td>
 					<td class="f-14 td-manage">
@@ -26,7 +24,6 @@
 				{/volist}
 				{volist name="medical_history_info.smokeHistory" id="vo" key="k"}
 				<tr class="text-c">
-					<td><input type="checkbox" value={$vo.extensionId} name="extensionId"></td>
 					<td>{$vo.content}</td>
 					<td>{$vo.type}</td>
 					<td class="f-14 td-manage">
@@ -36,7 +33,6 @@
 				{/volist}
 				{volist name="medical_history_info.allergy" id="vo" key="k"}
 				<tr class="text-c">
-					<td><input type="checkbox" value={$vo.extensionId} name="extensionId"></td>
 					<td>{$vo.content}</td>
 					<td>{$vo.type}</td>
 					<td class="f-14 td-manage">
@@ -46,7 +42,6 @@
 				{/volist}
 				{volist name="medical_history_info.famillyDisease" id="vo" key="k"}
 				<tr class="text-c">
-					<td><input type="checkbox" value={$vo.extensionId} name="extensionId"></td>
 					<td>{$vo.content}</td>
 					<td>{$vo.type}</td>
 					<td class="f-14 td-manage">
@@ -56,7 +51,6 @@
 				{/volist}
 				{volist name="medical_history_info.medicalRecord" id="vo" key="k"}
 				<tr class="text-c">
-					<td><input type="checkbox" value={$vo.extensionId} name="extensionId"></td>
 					<td>{$vo.content}</td>
 					<td>{$vo.type}</td>
 					<td class="f-14 td-manage">

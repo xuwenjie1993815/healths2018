@@ -37,7 +37,7 @@ class Patient extends Base
 		$url = config('path')."/patient/id/".$id;
         $res = http_request($url, $data);
         $res = json_decode($res,true);
-        if ($res) {
+        if ($res AND !$res['error']) {
         	$this->assign('info',$res);
         }
 		//既往病史
@@ -97,38 +97,69 @@ class Patient extends Base
 					$this->assign('bloodData',$bloodData_res);
 				}
 			//获取本周数据
-				// $bloodData_data_week['patientId'] = $id;
-				// $bloodData_data_week['startTime'] = date('Y-m-d H:i:s', strtotime("this week Monday", time()));
-				// $bloodData_data_week['endTime'] = date('Y-m-d H:i:s');
-				// $bloodData_url_week = config('path')."/bloodEntity/patientTimeData";
-				// $bloodData_res_week = http_request($bloodData_url_week,$bloodData_data_week);
-				// $bloodData_res_week = json_decode($bloodData_res_week,true);
-				// if ($bloodData_res_week AND !$bloodData_res_week['error']) {
-				// 	foreach ($bloodData_res_week as $key => $value) {
-				// 		$bloodData_res_week[$key]['blood_data'] = explode(' ',$value["uploadTime"])[0];
-				// 	}
-				// 	foreach ($bloodData_res_week as $key => $value) {
-				// 		$blood_data2[$value['blood_data']][] = $value;
-				// 		$blood_q[$value['blood_data']][] = $value['systolicBloodPressure'];//收缩压
-				// 		// $blood_q[$value['blood_data']][] = $value['heartRate'];//收缩压
-				// 		// $blood_q[$value['blood_data']][] = $value['systolicBloodPressure'];//收缩压
-				// 	}
-				// 	ksort($blood_data2);
-				// 	$star_week = strtotime("this week Monday", time());
-				// 	for ($i=0; $i < 7; $i++) {
-				// 		$star_week_q[$i] = date('Y-m-d',$star_week+$i*86400);
-				// 		$week_count = count($blood_data2[$star_week_q[$i]]);
-				// 		if ($week_count != 0) {
-				// 			for ($e=0; $e < $week_count; $e++) {
-				// 				$blood_data2[$star_week_q[$i]][$e]['systolicBloodPressure'];
-				// 			}
-							
-				// 		}
-				// 	}
-				// 	$this->assign('bloodData_week',$bloodData_res_week);
-				// }
-
-				
+				$bloodData_data_week['patientId'] = $id;
+				$bloodData_data_week['startDate'] = date('Y-m-d', strtotime("this week Monday", time()));
+				$bloodData_data_week['endDate'] = date('Y-m-d');
+				$bloodData_data_week['startTime'] = "00:00:00";
+				$bloodData_data_week['endTime'] = "23:59:59";
+				$bloodData_url_week = config('path')."/bloodEntity/specialTimeData";
+				$bloodData_res_week = http_request($bloodData_url_week,$bloodData_data_week);
+				$bloodData_res_week = json_decode($bloodData_res_week,true);
+				if ($bloodData_res_week AND !$bloodData_res_week['error']) {
+					foreach ($bloodData_res_week as $key => $value) {
+						if ($key == 0) {
+							$info_week['uploadTime'] = $value['uploadTime'];
+							$info_week['avgSys'] = $value['avgSys'];
+							$info_week['avgDias'] = $value['avgDias'];
+							$info_week['avgHear'] = $value['avgHear'];
+						}else{
+							$info_week['uploadTime'] .= ','.$value['uploadTime'];
+							$info_week['avgSys'] .= ','.$value['avgSys'];
+							$info_week['avgDias'] .= ','.$value['avgDias'];
+							$info_week['avgHear'] .= ','.$value['avgHear'];
+						}
+					}
+					$this->assign('info_week',$info_week);
+				}else{
+					$info_week['uploadTime'] = "'"."1,2"."'";
+					$info_week['avgSys'] = "'"."1,2"."'";
+					$info_week['avgDias'] = "'"."1,2"."'";
+					$info_week['avgHear'] = "'"."1,2"."'";
+					$info_week['check'] = '1';
+					$this->assign('info_week',$info_week);
+				}
+			//获取本月数据
+				$bloodData_data_month['patientId'] = $id;
+				$bloodData_data_month['startDate'] = date('Y-m-01', strtotime(date("Y-m-d")));
+				$bloodData_data_month['endDate'] = date('Y-m-d');
+				$bloodData_data_month['startTime'] = "00:00:00";
+				$bloodData_data_month['endTime'] = "23:59:59";
+				$bloodData_url_month = config('path')."/bloodEntity/specialTimeData";
+				$bloodData_res_month = http_request($bloodData_url_month,$bloodData_data_month);
+				$bloodData_res_month = json_decode($bloodData_res_month,true);
+				if ($bloodData_res_month AND !$bloodData_res_month['error']) {
+					foreach ($bloodData_res_month as $key => $value) {
+						if ($key == 0) {
+							$info_month['uploadTime'] = $value['uploadTime'];
+							$info_month['avgSys'] = $value['avgSys'];
+							$info_month['avgDias'] = $value['avgDias'];
+							$info_month['avgHear'] = $value['avgHear'];
+						}else{
+							$info_month['uploadTime'] .= ','.$value['uploadTime'];
+							$info_month['avgSys'] .= ','.$value['avgSys'];
+							$info_month['avgDias'] .= ','.$value['avgDias'];
+							$info_month['avgHear'] .= ','.$value['avgHear'];
+						}
+					}
+					$this->assign('info_month',$info_month);
+				}else{
+					$info_month['uploadTime'] = "'"."1,2"."'";
+					$info_month['avgSys'] = "'"."1,2"."'";
+					$info_month['avgDias'] = "'"."1,2"."'";
+					$info_month['avgHear'] = "'"."1,2"."'";
+					$info_month['check'] = '1';
+					$this->assign('info_month',$info_month);
+				}
 			}
 
 		//服务记录
@@ -586,6 +617,9 @@ class Patient extends Base
 		$medical_history_res = http_request($medical_history_url,$medical_history_data);
 		$medical_history_res = json_decode($medical_history_res,true);
 		if ($medical_history_res AND !$medical_history_res['error']) {
+			foreach ($medical_history_res as $key => $value) {
+					
+			}
         	$this->assign('medical_history_info',$medical_history_res);
         }
 		return $this->fetch();
@@ -750,31 +784,61 @@ class Patient extends Base
 		return $res;
 	}
 
-	//筛选测量数据(表格)
+	//筛选测量数据
 	public function screen_details_blood(){
-		switch ($_POST['statistics_type']) {
-			//血压数据
-			case '1':
-				unset($_POST['statistics_type']);
-				$_POST['startTime'] = $_POST['startTime'].' 00:00:00';
-				$_POST['endTime'] = $_POST['endTime'].' 23:59:59';
-				$url = config('path')."/bloodEntity/patientTimeData";
-				break;
-			//血糖数据
-			case '2':
-				# code...
-				break;
-		}
-		$res = http_request($url,$_POST);
-		$res = json_decode($res,true);
-		if ($res AND !$res['error']) {
-			$html = '';
-			foreach ($res as $key => $value) {
-				$html .= "<tr class='text-c'><td>".$value['uploadTime']."</td><td>".$value['systolicBloodPressure']."</td><td>".$value['diastolicBloodPressure']."</td><td>".$value['heartRate']."</td></tr>";
+		if ($_POST['statistics_type'] == 1) {
+			//血压(趋势图)
+			$data['patientId'] = $_POST['patientId'];
+			$data['startDate'] = $_POST["startDate"];
+			$data['endDate'] = $_POST["endDate"];
+			$data['startTime'] =$_POST["startTime"]?:'00:00:00';
+			$data['endTime'] = $_POST["endTime"]?:'23:59:59';
+			// $this->assign('TimeData',$data);
+			if (strlen(explode(':',$data['startTime'])[0])<2) {
+				$data['startTime'] = '0'.input("get.startTime");
 			}
-			return array('code' => 1,'html' => $html);
-		}else{
-			return array('code' => 2,'msg' => $res['message']);
+			if (strlen(explode(':',$data['endTime'])[0])<2) {
+				$data['endTime'] = '0'.input("get.endTime");
+			}
+			$url = config('path')."/bloodEntity/specialTimeData";
+			$res = http_request($url,$data);
+			$res = json_decode($res,true);
+
+			//血压表格
+			$data_t['patientId'] = $_POST['patientId'];
+			$data_t['startTime'] = $_POST['startDate'].' 00:00:00';
+			$data_t['endTime'] = $_POST['endDate'].' 23:59:59';
+			$url_t = config('path')."/bloodEntity/patientTimeData";
+			$res_t = http_request($url_t,$data_t);
+			$res_t = json_decode($res_t,true);
+			if ($res_t AND !$res_t['error']) {
+				$html = '<tbody id="statistics_blood_data_table">';
+				foreach ($res_t as $key => $value) {
+					$html .= "<tr class='text-c'><td>".$value['uploadTime']."</td><td>".$value['systolicBloodPressure']."</td><td>".$value['diastolicBloodPressure']."</td><td>".$value['heartRate']."</td></tr>";
+				}
+				$html .= '</tbody>';
+			}
+			if ($res AND !$res['error']) {
+				foreach ($res as $key => $value) {
+					if ($key == 0) {
+						$info['uploadTime'] = $value['uploadTime'];
+						$info['avgSys'] = $value['avgSys'];
+						$info['avgDias'] = $value['avgDias'];
+						$info['avgHear'] = $value['avgHear'];
+					}else{
+						$info['uploadTime'] .= ','.$value['uploadTime'];
+						$info['avgSys'] .= ','.$value['avgSys'];
+						$info['avgDias'] .= ','.$value['avgDias'];
+						$info['avgHear'] .= ','.$value['avgHear'];
+					}
+				}
+				return array('code' => 1,'msg' => $info,'html' => $html);
+			}else{
+				return array('code' => 2,'msg' => $res['message'],'html' => $html);
+			}
+
 		}
+		 
+		
 	}
 }

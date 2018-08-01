@@ -78,6 +78,8 @@ function checking_out(id) {
 					layer.msg('赠送成功', {icon: 1,time:500},function() {
 						parent.location.reload()
 					});
+				}else{
+					layer.msg(data.msg, {icon: 2,time:1000});
 				}
 			}
 		});
@@ -96,6 +98,8 @@ function checking_out(id) {
 						layer.msg('购买成功', {icon: 1,time:500},function(){
 							parent.location.reload()
 						});
+					}else{
+						layer.msg(data.msg, {icon: 2,time:1000});
 					}
 				}
 			});

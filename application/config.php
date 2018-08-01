@@ -243,10 +243,10 @@ return [
         '__APP__'   => SCRIPT_DIR . '/'                 //定义首页
     ],
     
-    'session'                => [
-        'prefix'         => 'think',
-        'type'           => '',
-        'auto_start'     => true,
-        'expire'         => 3600,
-    ]
+    // 'session'                => [
+    //     'prefix'         => 'think',
+    //     'type'           => '',
+    //     'auto_start'     => true,
+    //     'expire'         => 3600,
+    // ]
 ];

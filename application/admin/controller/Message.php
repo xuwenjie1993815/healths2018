@@ -36,7 +36,6 @@ class Message extends Base
 			$data['content'] = $_POST['content'];
 			//回答的类型：1服务团队；2医学团队；3技术团队；4客服
 			$data['answerType'] = $_POST['answerType'];
-			var_dump($data);die;
 			foreach ($data as $key => $value) {
 				$obj->$key=$value;
 			}

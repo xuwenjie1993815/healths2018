@@ -119,8 +119,8 @@ class Product extends Base
 
         //订单类型type 3:线下支付订单 4:赠送订单 
         $type = $_POST['type'];
-        if ($type == 3 OR $type == 4) {
-            $type == 3;
+        if ($type == 4) {
+            $type = 3;
         }
         $data['payWay'] = $type;
         foreach ($data as $key => $value) {
@@ -135,7 +135,7 @@ class Product extends Base
             if (!$res_j['error']) {
                 return array('code' => 1);
             }else{
-                return array('code' => 2,'msg' => $res['message']);
+                return array('code' => 2,'msg' => $res_j['message']);
             }
         }
     	//增加天数(接口)

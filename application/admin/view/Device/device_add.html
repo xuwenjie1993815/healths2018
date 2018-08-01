@@ -42,7 +42,7 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机构：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" style="width: 50%" class="input-text" value={$userMsg.info.userName} placeholder="" id="unit">&nbsp&nbsp<input class="btn btn-primary radius" type="button" id="select" value="搜索"><br>
+				<input type="text" style="width: 50%" class="input-text" value='' placeholder="" id="unit">&nbsp&nbsp<input class="btn btn-primary radius" type="button" id="select" value="搜索"><br>
 				<table style="display:none" id="unit_data" class="table table-border table-bordered">
 		            <thead>
 		              <tr>
@@ -137,7 +137,7 @@ $("#select").click(function(){
                     return data.msg;
                 });
             }else{
-                layer.msg(data.msg);
+                layer.msg(data.msg,{icon:2,time:1000});
             }
         }
     });

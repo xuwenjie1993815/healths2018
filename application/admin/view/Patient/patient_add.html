@@ -17,7 +17,7 @@
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>昵称：</label>
+			<label class="form-label col-xs-4 col-sm-3">昵称：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input type="text" class="input-text" value="" placeholder="" id="nickName" name="nickName">
 			</div>
@@ -77,10 +77,6 @@
 		              </tr>
 		            </thead>
 		            <tbody id="admin_info">
-		              <tr>
-		                <th>1</th>
-		                <td>健康源</td>
-		              </tr>
 		            </tbody>
 		        </table>
 
@@ -141,7 +137,7 @@ $("#select").click(function(){
             		return data.msg;
                 });
             }else{
-                layer.msg(data.msg);
+                layer.msg(data.msg,{icon:2,time:1000});
             }
         }
     });
@@ -236,6 +232,14 @@ $(function(){
 	
 	//表单验证
     $("#form-patient-add").validate({
+    	rules: {
+      	userName: "required",
+      	passWord: "required",
+      	passWord2: "required",
+      	phoneNum: "required",
+      	name: "required",
+      	sex: "required",
+      	},
         onkeyup:false,
         focusCleanup:true,
         success:"valid",

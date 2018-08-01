@@ -51,16 +51,19 @@ class Device extends Base{
 			$content = input('get.content');
 			//机构信息(接口)
 			//根据机构名称/id查询机构详情
-			// $data['name'] = $content;
-			// //接口未开启TODO
-			// $url = config('path')."/classification/group/getByName";
-			// $res = http_request($url,$data);
-			// $res = json_decode($res,true);
-			// foreach ($res as $key => $value) {
-	  		// $data .= "<tr onClick='admin_jg(".$value['id'].")' style='cursor:Pointer;' id='jg".$value['id']."'><th>1</th><td>".$value['name']."</td></tr>";
-			// }
-			$data = "<tr onClick='admin_jg(1)' style='cursor:Pointer;' id='jg1'><th>1</th><td>xuwenjie</td></tr>";
-	        return array('code' => 1,'msg' => $data);
+	        $url = config('path')."/classification/group/getByName?name=".$content;
+	        $res = http_request($url);
+	        $res = json_decode($res,true);
+	        if ($res AND !$res['error']) {
+	            $data = "<tbody id='admin_info'>";
+	            foreach ($res as $key => $value) {
+	                $data .= "<tr onClick='admin_jg(".$value['id'].")' style='cursor:Pointer;' id='jg".$value['id']."'><th><img style='width:30px;height: 30px;' src=".$value['imgUrl']."></th><td>".$value['name']."</td></tr>";
+	            }
+	            $data .= "</tbody>";
+	            return array('code' => 1,'msg' => $data);
+	        }else{
+	            return array('code' => 2,'msg' =>'暂无信息');
+	        }
 		}
 		if (input('?post.number') != false) {
 			$number = input('post.number');
@@ -174,7 +177,7 @@ class Device extends Base{
 		// }
 
 		$id = input('id');
-		//获取用户已绑定设备TODO(没有此接口)
+		//获取用户已绑定设备
 		$url = config("path")."/equipment/patientEquipment?patientId=".$id;
 		$res = http_request($url);
 		$user_el = json_decode($res,1);
