@@ -60,6 +60,19 @@ class Index extends Base
         //昨日新增患者
         
         //昨日订单
+       
+        
+        $userMsg = Session::get('userMsg');
+        $data['adminId']=$userMsg['id'];
+        // $data['adminId']='3';
+        if ($data['adminId']) {
+            $url = config('path')."/patient/all";
+            $res = http_request($url, $data);
+            $res = json_decode($res,true);
+        }
+        if ($res AND !$res['error']) {
+            $this->assign('info',$res);
+        }
         return $this->fetch();
     }
 

@@ -1,253 +1,205 @@
 ﻿{include file="../application/admin/view/Public/_header.html"/}
-<!--[if IE 6]>
-<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
-<script>DD_belatedPNG.fix('*');</script>
-<![endif]-->
-<style>
-h3{margin-left:2%;}
-table{width: 60%;margin-left:20%}
-</style>
 </head>
 <body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 
+<nav class="breadcrumb">
 	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
 </nav>
+<div class="page-container">
+	<button onclick="patient_add()" class="btn btn-success-outline radius">新增患者</button>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+			<thead>
+				<tr class="text-c">
+					<th>姓名</th>
+					<th>联系电话</th>
+					<th>性别</th>
+					<th>年龄</th>
+					<th>设备操作</th>
+					<th>服务包剩余时间</th>
+					<th>组别</th>
+					<th>标记星级</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				{volist name="info" id="vo"}
+				<tr class="text-c">
+					<td class="text-l"><u style="cursor:pointer" class="text-primary" onClick="patient_edit('{$vo.name}','{:url('admin/Patient/details',array('id' => $vo['id']))}')" title={$vo.name}>{$vo.name}</u></td>
+					<td>{$vo.phoneNum}</td>
+					<td>{$vo.sexy}</td>
+					<td>{$vo.age}</td>
+					<td>
+					{if condition="$vo.equipments.0.number neq ''"}
 
-<h3>今日预警:</h3>
-	<table class="table table-border table-bordered table-hover">
-		<thead>
-			<tr class="text-c">
-				<th>姓名</th>
-				<th>电话</th>
-				<th>血压</th>
-				<th>预警等级</th>
-				<th>时间</th>
-				<th>预警信息</th>
-				<th>操作</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="text-c">
-				<td id="number"><u style="cursor:pointer" class="text-primary" onClick="patient_edit('章思赞','{:url('Admin/Patient/details',array('id' => 12))}')" title="章思赞">章思赞</u></td>
-				<td>18622225555</td>
-				<td>140</td>
-				<td>2级</td>
-				<td>2018-06-13 08:44:48</td>
-				<td>当日超过临界值:3次,预警平均血压:142</td>
-				<td class="f-14 td-manage">
-					<a style="text-decoration:none" class="ml-5" onClick="send_msm(this,'10001')" href="javascript:;" title="短信通知"><i class="Hui-iconfont">&#xe6c5;</i></a>
-					<a style="text-decoration:none" class="ml-5" onClick="sign_warning(this,'10001')" href="javascript:;" title="标记处理"><i class="Hui-iconfont">&#xe6e1;</i></a>
-					<a style="text-decoration:none" class="ml-5" onClick="value_log('今日预警数据','value_log')" href="javascript:;" title="今日预警数据"><i class="Hui-iconfont">&#xe618;</i></a>
-				</td>
-			</tr>
-			<tr class="text-c">
-				<td><u style="cursor:pointer" class="text-primary" onClick="patient_edit('蒋金容','{:url('Admin/Patient/details',array('id' => 13))}')" title="蒋金容">蒋金容</u></td>
-				<td>18966665555</td>
-				<td>145</td>
-				<td>1级</td>
-				<td>2018-06-13 08:26:04</td>
-				<td>当日超过临界值:3次,预警平均血压:154</td>
-				<td class="f-14 td-manage">
-					<a style="text-decoration:none" class="ml-5" onClick="send_msm(this,'10001')" href="javascript:;" title="短信通知"><i class="Hui-iconfont">&#xe6c5;</i></a>
-					<a style="text-decoration:none" class="ml-5" onClick="sign_warning(this,'10001')" href="javascript:;" title="标记处理"><i class="Hui-iconfont">&#xe6e1;</i></a>
-					<a style="text-decoration:none" class="ml-5" onClick="value_log('今日预警数据','value_log')" href="javascript:;" title="今日预警数据"><i class="Hui-iconfont">&#xe618;</i></a>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-
-<h3>昨日新增患者:</h3>
-	<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
-		<thead>
-			<tr class="text-c">
-				<th>姓名</th>
-				<th>联系电话</th>
-				<th>性别</th>
-				<th>年龄</th>
-				<th>设备操作</th>
-				<th>服务包剩余时间</th>
-				<th>组别</th>
-				<th>标记星级</th>
-				<th>操作</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="text-c">
-				<td class="text-l"><u style="cursor:pointer" class="text-primary" onClick="patient_edit('黄晓燕','{:url('Admin/Patient/details',array('id' => $id))}')" title="黄晓燕">黄晓燕</u></td>
-				<td>17388202566</td>
-				<td>女</td>
-				<td>63</td>
-				<td><u style="cursor:pointer" onClick="bangding('{:url('Admin/Device/bangding',array('id'=>126))}')">06b31803040484A:血压计</u></td>
-				<td><u style="cursor:pointer" class="text-primary" onClick="product_list('服务包','{:url('Admin/Product/product_list?id=67')}','67','500px','600px')" title="服务包">16天</u></td>
-				<td class="td-status" onclick="group_set('12')">
-					<a class="label label-success radius">限盐组-王文-王梅仙</a>
-				</td>
-				{if condition="$star == 1"}
-				<td onclick="star_set('12')">
-					<img src="__PUBLIC__/images/star.png" alt="">
-				</td>
-				{else/}
-				<td onclick="star_cancel('12')">
-					<img src="__PUBLIC__/images/star1.png" alt="">
-				</td>
-				{/if}
-				<td class="f-14 td-manage">
-					<a style="text-decoration:none" class="ml-5" onClick="patient_del('10001')" href="javascript:;" title="删除">
-						<i class="Hui-iconfont">&#xe6e2;</i>
-					</a>
-				</td>
-			</tr>
-			<tr class="text-c">
-				<td class="text-l"><u style="cursor:pointer" class="text-primary" onClick="patient_edit('黄书碧','{:url('Admin/Patient/details?id=10002')}')" title="黄书碧">黄书碧</u></td>
-				<td>15823447903</td>
-				<td>女</td>
-				<td>68</td>
-				<td><u style="cursor:pointer">06b31803040437A:血压计</u></td>
-				<td><u style="cursor:pointer" class="text-primary" onClick="">已过期</u></td>
-				<td class="td-status"><span class="label label-success radius">限盐组-王文-曹蕾</span></td>
-				{if condition="$star == 1"}
-				<td onclick="star_set('12')">
-					<img src="__PUBLIC__/images/star.png" alt="">
-				</td>
-				{else/}
-				<td onclick="star_cancel('12')">
-					<img src="__PUBLIC__/images/star1.png" alt="">
-				</td>
-				{/if}
-				<td class="f-14 td-manage">
-					<a style="text-decoration:none" class="ml-5" onClick="patient_del('10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i>
-					</a>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-
-<h3>昨日订单:</h3>
-	<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
-		<thead>
-			<tr class="text-c">
-				<th>姓名</th>
-				<th>订单号</th>
-				<th>商品信息</th>
-				<th>商品价格</th>
-				<th>数量</th>
-				<th>订单价格</th>
-				<th>下单时间</th>
-				<th>订单状态</th>
-				<th>操作</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="text-c">
-				<td>张三</td>
-				<td>XXXXX001</td>
-				<td><u>"智能动态监测+营养行为干预"高血压管理服务包</u></td>
-				<td>360</td>
-				<td>1</td>
-				<td>360</td>
-				<td>2018-06-25 15:24:00</td>
-				<td>未付款</td>
-				<td><input class="btn btn-primary radius" type="button" onClick="order_del('删除订单','{:url('Admin/Order/order_del')}','12')" value="删除"></td>
-			</tr>
-			<tr class="text-c">
-				<td>李四</td>
-				<td>XXXXX002</td>
-				<td><u>"智能动态监测+营养行为干预"高血压管理服务包</u></td>
-				<td>360</td>
-				<td>12</td>
-				<td>0</td>
-				<td>2018-06-25 07:18:20</td>
-				<td>已完成</td>
-				<td><input class="btn btn-primary radius" type="button" onClick="order_del('删除订单','{:url('Admin/Order/order_del')}','12')" value="删除"></td>
-			</tr>
-		</tbody>
-	</table>
+					<u style="cursor:pointer" onClick="bangding('{:url('Admin/Device/bangding',array('id'=>$vo['id']))}')">
+						{$vo.equipments.0.number}({$vo.equipments.0.port}):
+						{switch name="$vo.equipments.0.type" }
+						    {case value="1"}血压计{/case}
+						    {case value="2"}血糖仪{/case}
+						{/switch}
+					</u>
+						<br>
+						<u style="cursor:pointer" onClick="bangding('{:url('Admin/Device/bangding',array('id'=>$vo['id']))}')">
+						{if condition="$vo.equipments.1.number neq ''"}
+							{$vo.equipments.1.number}({$vo.equipments.1.port}):{$vo.equipments.1.type}
+						{/if}
+						</u>
+						{else /}
+						<u style="cursor:pointer" onClick="bangding('{:url('Admin/Device/bangding',array('id'=>$vo['id']))}')">尚未绑定设备</u>
+					{/if}
+					</td>
+					<td><u style="cursor:pointer" class="text-primary" onClick="product_list('服务包','{:url('Admin/Product/product_list',array('id' => $vo['id']))}','500px','600px')" title="服务包">{if condition="$vo['leftDays'] eq ''"}已过期{else/}{$vo.leftDays}天{/if}</u></td>
+					<td class="td-status" onClick="group_set('{:url('Admin/patient/group_set',array('id' => $vo['id']))}')">
+						<a class="label label-success radius">{$vo.groupName}{if condition="$vo['doctorName'] neq ''"}-{$vo.doctorName}{/if}{if condition="$vo['assistantName'] neq ''"}-{$vo.assistantName}{/if}</a>
+					</td>
+					{if condition="$vo['isStar'] == 2"}
+					<td onclick="star_set({$vo.id})">
+						<img src="__PUBLIC__/images/star.png" alt="">
+					</td>
+					{else/}
+					<td onclick="star_cancel({$vo.id})">
+						<img src="__PUBLIC__/images/star1.png" alt="">
+					</td>
+					{/if}
+					<td class="f-14 td-manage">
+						<a style="text-decoration:none" class="ml-5" onClick="patient_del({$vo.id})" href="javascript:;" title="删除">
+							<i class="Hui-iconfont">&#xe6e2;</i>
+						</a>
+					</td>
+				</tr>
+				{/volist}
+			</tbody>
+		</table>
+	</div>
+</div>
 
 {include file="../application/admin/view/Public/_footer.html"/}
+
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript">
+$('.table-sort').dataTable({
+	"aaSorting": [[ 1, "desc" ]],//默认第几个排序
+	"bStateSave": true,//状态保存
+	"pading":false,
+});
 
-// 预警列表
-	/*设备-删除*/
-	function article_del(obj,id){
-		var number = $('#number').text();
-		layer.confirm('删除即解除此设备所有关联,确认要删除吗？',function(index){
-			$.ajax({
-				type: 'POST',
-				url: "{:url('Admin/Device/device_remove')}",
-				data:{number:number},
-				dataType: 'json',
-				success: function(data){
-					$(obj).parents("tr").remove();
-					layer.msg('已删除!',{icon:1,time:1000});
-				},
-				error:function(data) {
-					console.log(data.msg);
-				},
-			});		
-		});
-	}
+//设置分组
+function group_set(url) {
+	layer.open({
+        type: 2,
+      	title: '设置分组',
+      	shadeClose: true,
+      	shade: false,
+      	area: ['893px', '500px'],
+      	content: url
+    });
+}
 
-	// 发送短信
-	function send_msm() {
-		layer.msg('发送成功',{icon:1,time:1000});
-	}
+// 标识星级
+function star_set(id){
+	layer.confirm('确认要设置为星级用户吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: 'star_set',
+			dataType: 'json',
+			data:{id:id},
+			success: function(data){
+				if (data.code == 1) {
+					layer.msg('操作成功,请稍等...',{icon:1,time:500},function() {
+						location.reload();
+					})
+				}else{
+					layer.msg('设置失败');
+				}
+			}
+		});		
+	});
+}
 
-	//标记处理
-	function sign_warning() {
-		layer.confirm('确认处理吗?', {
-		  btn: ['确认','取消'] //按钮
-		}, function(){
-		  $.ajax({
-				type: 'POST',
-				url: "{:url('Admin/Warning/sign_warning')}",
-				data:{},
-				dataType: 'json',
-				success: function(data){
-					if (data.code == 1) {
-						layer.msg('操作成功,请稍等...',{icon:1,time:1000},function() {
-							location.reload();
-						})
-					}else{
-						layer.msg('操作失败')
-					}
-				},
-			});	
-		}, function(){
-		});
-	}
+// 标识星级
+function star_cancel(id){
+	layer.confirm('确认要取消此星级用户吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: 'star_cancel',
+			dataType: 'json',
+			data:{id:id},
+			success: function(data){
+				if (data.code == 1) {
+					layer.msg('操作成功,请稍等...',{icon:1,time:500},function() {
+						location.reload();
+					})
+				}else{
+					layer.msg('取消失败');
+				}
+			}
+		});		
+	});
+}
 
-	//今日预警记录
-	function value_log(title,url) {
-		layer.open({
-		  type: 2,
-		  area: ['800px', '450px'],
-		  fixed: false, //不固定
-		  content: url
-		});
-	}
+/*患者-编辑*/
+function patient_edit(title,url){
+	var index = layer.open({
+		type: 2,
+		title: title,
+		content:url,
+		area: ['893px', '500px'],
+	});
+	layer.full(index);
+}
 
-//订单
-	/*订单-删除*/
-	function order_del(title,url,id){
-		layer.confirm('确认要删除吗？',function(index){
-			$.ajax({
-				type: 'POST',
-				url: url,
-				dataType: 'json',
-				data:{id:id},
-				success: function(data){
-						if(data.code==1){
-							layer.msg('删除成功..稍等', {icon:1,time:500},function(){
-								location.reload();
-							});
-						}else{
-							layer.msg('删除失败');
-					}
-				},
-			});		
-		});
-	}
+/*设备操作*/
+function bangding(url){
+	layer.open({
+	  type: 2,
+	  area: ['800px', '450px'],
+	  fixed: false, //不固定
+	  content: url
+	});
+}
+
+/*服务包列表*/
+function product_list(title,url,id,w,h){
+	layer.open({
+        type: 2,
+      	title: title,
+      	shadeClose: true,
+      	shade: false,
+      	area: ['893px', '500px'],
+      	content: [url,'no']
+    });
+}
+
+/*患者-删除*/
+function patient_del(id){
+	layer.confirm('确认要删除吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: 'patient_del',
+			dataType: 'json',
+			data:{id:id},
+			success: function(data){
+				if (data.code == 1) {
+					layer.msg('操作成功,请稍等...',{icon:1,time:500},function() {
+						location.reload();
+					})
+				}else{
+					layer.msg(data.msg)
+				}
+			}
+		});		
+	});
+}
+
+function patient_add() {
+	var index = layer.open({
+		type: 2,
+		title: '新增患者',
+		content: "{:url('Admin/Patient/patient_add')}",
+		area: ['750px', '500px'],
+	});
+}
+
 </script> 
 </body>
 </html>

@@ -51,7 +51,7 @@ class Device extends Base{
 			$content = input('get.content');
 			//机构信息(接口)
 			//根据机构名称/id查询机构详情
-	        $url = config('path')."/classification/group/getByName?name=".$content;
+	        $url = config('path')."/classification/group/getByName?name=".urlencode($content);
 	        $res = http_request($url);
 	        $res = json_decode($res,true);
 	        if ($res AND !$res['error']) {
