@@ -1,9 +1,13 @@
 <div id="hui-footer">
-    <a href="javascript:hui.open('index/Index/login');" id="nav-clone">
+    <a href="javascript:hui.open('/public/index');" id="nav-home">
+        <div class="hui-footer-icons hui-icons-home"></div>
+        <div class="hui-footer-text">首页</div>
+    </a>
+    <a href="javascript:hui.open('/public/index/Index/user_data');" id="nav-clone">
         <div class="hui-footer-icons hui-icons-clone"></div>
         <div class="hui-footer-text">数据</div>
     </a>
-    <a href="javascript:hui.open('服务包');" id="nav-news">
+    <a href="javascript:hui.open('/public/index/Product/product_list');" id="nav-news">
         <div class="hui-footer-icons hui-icons-news"></div>
         <div class="hui-footer-text">服务包</div>
     </a>
@@ -11,17 +15,19 @@
         <div class="hui-footer-icons hui-icons-forum"></div>
         <div class="hui-footer-text">留言</div>
     </a>
-    <a href="javascript:hui.open('我的');" id="nav-my">
+    <a href="javascript:hui.open('/public/index/Index/user');" id="nav-my">
         <div class="hui-footer-icons hui-icons-my"></div>
         <div class="hui-footer-text">我的</div>
     </a>
-    <a href="javascript:hui.open('手册');" id="nav-msg">
+    {if condition=""}
+    {/if}
+    <a href="javascript:hui.open('/public/index/Index/login');" id="nav-msg">
         <div class="hui-footer-icons hui-icons-msg"></div>
         <div class="hui-footer-text">手册</div>
     </a>
 </div>
 <script type="text/javascript" src="__PUBLIC__/mobile/hui/js/hui.js"></script>
-<script type="text/javascript" src="__PUBLIC__/mobile/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
 <script type="text/javascript">
 var meuns = ['我的订单', '我的消息', '我的收藏', '退出登录'];
 var cancel = '关闭菜单';
@@ -31,4 +37,5 @@ hui('#hui-header-menu').click(function(){
         hui.toast(e.innerHTML);
     });
 });
+
 </script>

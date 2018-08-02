@@ -40,7 +40,7 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3">内容：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-                <textarea name="content" cols="" rows="" class="textarea" placeholder="服务内容" datatype="*5-100" dragonfly="true" nullmsg="服务内容不能为空!" onkeyup="$.Huitextarealength(this,200)">{$info.content}</textarea>
+                <textarea style="height:200px;" name="content" cols="" rows="" class="textarea" placeholder="服务内容" datatype="*5-1000" dragonfly="true" nullmsg="服务内容不能为空!" onkeyup="$.Huitextarealength(this,200)">{$info.content}</textarea>
 			</div>
 		</div>
 		<div class="row cl">
@@ -58,7 +58,7 @@
 <script type="text/javascript">
 $(".textarea").Huitextarealength({
     minlength:5,
-    maxlength:100
+    maxlength:1000
 });
 laydate.render({
   elem: '#time',

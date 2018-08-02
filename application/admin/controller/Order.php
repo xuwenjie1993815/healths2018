@@ -9,9 +9,13 @@ class Order extends Base
 	public function index(){
 		//获取数据(接口)
 		$userMsg = session::get('userMsg');
-		$url = config('path')."/goods/oder/groupOders?groupId=".$userMsg['id'];
+		$url = config('path')."/goods/oder/groupOders?adminId=".$userMsg['id'];
 		$res = http_request($url);
 		$res = json_decode($res,true);
+		//获取订单统计信息
+		$statistics_url = config('path')."/goods/oder/statistics?adminId=".$userMsg['id'];
+		$statistics_res = http_request($statistics_url);
+		$statistics_res = json_decode($statistics_res,true);
 		if ($res AND !$res['error']) {
 			foreach ($res as $key => $value) {
 				$p_url = config('path')."/patient/id/".$value['payUserId'];
@@ -20,6 +24,9 @@ class Order extends Base
 				$res[$key]['patientName'] = $p_res['name'];
 			}
 			$this->assign('list',$res);
+		}
+		if ($statistics_res AND !$statistics_res['error']) {
+			$this->assign('statistics',$statistics_res);
 		}
 		return $this->fetch();
 	}

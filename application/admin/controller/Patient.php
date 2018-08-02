@@ -211,12 +211,11 @@ class Patient extends Base
         $headers = array("Content-type:application/json;charset='utf-8'","Accept:application/json");
         $res = http_request($url, $data,$headers);
         $res = json_decode($res,true);
-        if ($res) {
+        if ($res AND !$res['error']) {
         	return array('code' => 1,'msg'=>'新增成功');
         }else{
         	return array('code' => 2,'msg'=>$res['message']);
         }
-        var_dump($res);die;
 	}
 
 	//标记星级用户
@@ -321,29 +320,15 @@ class Patient extends Base
 		$res = http_request($url,$data);
 		$res = json_decode($res,true);
 		$data['yz'] = $res;
-		// if (input('post.p_id') == 1) {
-		// 	$data = array('ys' => array('121' => array('name' => '朱玉婷','tel' => '1322131513'),'131' => array('name' => '徐医生','tel' => '56445112313')),'yz' => array('255' => array('name' => '肖莉','tel' => '22251111'),'620' => array('name' => '杨涛','tel' => '669955442')));
-		// }
-		// if (input('post.p_id') == 12) {
-		// 	$data = array('ys' => array('122' => array('name' => '徐医生','tel' => '1322131513'),'132' => array('name' => '杨医生','tel' => '56445112313')),'yz' => array('254' => array('name' => '谢晓燕','tel' => '22251111'),'619' => array('name' => '嘻嘻嘻','tel' => '669955442')));
-		// }
 
 		$html.="<tbody id='list'>";
 		$html_yz.="<tbody id='list_yz'>";
 		foreach ($data['ys'] as $key => $value) {
-			$html.="<tr class='text-c'><td><input name='doctor' type='radio' value=".$value['id']." id='doctor'></td><td>".$value['name']."</td><td>"."<img style='width:50px;height:50px' src=".$value['imgUrl'].">"."</td><td>".$value['phoneNum']."</td>";
+			$html.="<tr class='text-c'><td><input name='doctor' type='checkbox' value=".$value['id']." id='doctor'></td><td>".$value['name']."</td><td>"."<img style='width:50px;height:50px' src=".$value['imgUrl'].">"."</td><td>".$value['phoneNum']."</td>";
 			
 		}
 		foreach ($data['yz'] as $key => $value) {
-			// switch ($value['sex']) {
-			// 	case '1':
-			// 		$value['sex'] = '男';
-			// 		break;
-			// 	case '2':
-			// 		$value['sex'] = '女';
-			// 		break;
-			// }
-			$html_yz.="<tr class='text-c'><td><input name='yz' type='radio' value=".$value['id']." id='yz'></td><td>".$value['name']."</td><td>"."<img style='width:50px;height:50px' src=".$value['imgUrl'].">"."</td><td>".$value['phoneNum']."</td>";
+			$html_yz.="<tr class='text-c'><td><input name='yz' type='checkbox' value=".$value['id']." id='yz'></td><td>".$value['name']."</td><td>"."<img style='width:50px;height:50px' src=".$value['imgUrl'].">"."</td><td>".$value['phoneNum']."</td>";
 		}
 
 		$html.="</tbody>";

@@ -11,15 +11,15 @@
 			<li class="item">
 				<div class="portfoliobox" style="border:1px solid #C0C0C0;">
 					<div style="height: 25%;border-bottom:1px solid #C0C0C0;"><span class="label label-success radius">今日数据</span></div>
-					<div style="height: 25%">成交量:2</div>
-					<div style="height: 25%">成交额:￥2</div>
+					<div style="height: 25%">完成订单量:{$statistics.0.count}</div>
+					<div style="height: 25%">成交额:￥{$statistics.0.totalPrice}</div>
 				</div>
 			</li>
 			<li class="item">
 				<div class="portfoliobox" style="border:1px solid #C0C0C0;">
 						<div style="height: 25%;border-bottom:1px solid #C0C0C0;"><span class="label label-success radius">昨日数据</span></div>
-					<div style="height: 25%">成交量:10</div>
-					<div style="height: 25%">成交额:￥20</div>
+					<div style="height: 25%">成交量:{$statistics.1.count}</div>
+					<div style="height: 25%">成交额:￥{$statistics.0.totalPrice}</div>
 				</div>
 			</li>
 		</ul>
