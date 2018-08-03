@@ -3,21 +3,12 @@ namespace app\index\controller;
 use think\View;
 use think\Controller;
 use think\Session;
-class Index extends Controller
+use app\index\controller\Base;
+class Index extends Base
 {
-	public function _initialize()
-    {
-    }
     
     public function index()
     {
-
-        //检查是否已经登陆
-        if (Session::get('app_userMsg')) {
-            $this->assign('app_userMsg','1');
-        }else{
-            $this->assign('app_userMsg','0');
-        }
         return $this->fetch();die;
     }
 
@@ -39,9 +30,19 @@ class Index extends Controller
     public function login(){
         return $this->fetch();
     }
+    
+    //登陆
+    public function register(){
+        return $this->fetch();
+    }
 
     //我的数据
     public function user_data(){
+        return $this->fetch();
+    }
+
+    //手册
+    public function manual(){
         return $this->fetch();
     }
 

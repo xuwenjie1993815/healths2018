@@ -11,17 +11,22 @@
         <div class="hui-footer-icons hui-icons-news"></div>
         <div class="hui-footer-text">服务包</div>
     </a>
-    <a href="javascript:hui.open('留言');" id="nav-forum">
+    <a href="javascript:hui.open('/public/index/Message/index');" id="nav-forum">
         <div class="hui-footer-icons hui-icons-forum"></div>
         <div class="hui-footer-text">留言</div>
     </a>
+    {if condition="$app_userMsg eq 1"}
     <a href="javascript:hui.open('/public/index/Index/user');" id="nav-my">
         <div class="hui-footer-icons hui-icons-my"></div>
         <div class="hui-footer-text">我的</div>
     </a>
-    {if condition=""}
+    {else/}
+    <a href="javascript:hui.open('/public/index/Index/register');" id="nav-my">
+        <div class="hui-footer-icons hui-icons-my"></div>
+        <div class="hui-footer-text">注册</div>
+    </a>
     {/if}
-    <a href="javascript:hui.open('/public/index/Index/login');" id="nav-msg">
+    <a href="javascript:hui.open('/public/index/Index/manual');" id="nav-msg">
         <div class="hui-footer-icons hui-icons-msg"></div>
         <div class="hui-footer-text">手册</div>
     </a>
@@ -29,13 +34,13 @@
 <script type="text/javascript" src="__PUBLIC__/mobile/hui/js/hui.js"></script>
 <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
 <script type="text/javascript">
-var meuns = ['我的订单', '我的消息', '我的收藏', '退出登录'];
-var cancel = '关闭菜单';
-hui('#hui-header-menu').click(function(){
-    hui.actionSheet(meuns, cancel, function(e){
-        console.log(e.index);
-        hui.toast(e.innerHTML);
-    });
-});
+// var meuns = ['我的订单', '我的消息', '我的收藏', '退出登录'];
+// var cancel = '关闭菜单';
+// hui('#hui-header-menu').click(function(){
+//     hui.actionSheet(meuns, cancel, function(e){
+//         console.log(e.index);
+//         hui.toast(e.innerHTML);
+//     });
+// });
 
 </script>

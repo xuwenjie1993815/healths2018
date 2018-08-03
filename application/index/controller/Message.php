@@ -4,9 +4,9 @@ use think\View;
 use think\Controller;
 use think\Session;
 use app\index\controller\Base;
-class Product extends Base
+class Message extends Base
 {
-	public function product_list(){
+	public function index(){
 		return $this->fetch();
 	}
 }
