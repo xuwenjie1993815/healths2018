@@ -1,5 +1,5 @@
 {include file="../application/index/view/Public/header.html"/}
-<div class="hui-wrap">
+<div class="hui-wrap" style="height: 1000px;">
     <div class="hui-center-title" style="margin-top:35px;"><h1 style="border:0px;">注册成为新用户</h1></div>
     <div style="margin:20px 10px; margin-bottom:15px;" class="hui-form" id="form1">
         <div class="hui-form-items">
@@ -29,6 +29,8 @@
     <div style="padding:10px; padding-top:10px;">
         <button type="button" class="hui-button hui-button-large hui-primary" id="submit">立即注册</button>
     </div>
+
+
 </div>
 
 {include file="../application/index/view/Public/footer.html"}
@@ -41,4 +43,14 @@ hui('#submit').click(function(){
     //提交
     if(res){hui.iconToast('验证通过！');}
 });
+
+// 图片上传
+/*
+huiImgCuter 参数 
+1. 宽度和高度的比例 高度 / 宽度 默认 1
+2. 最终保存图片的宽度 默认 200px 高度根据宽高比自动调整
+*/
+var cuter = new huiImgCuter();
+//绑定底部的选择按钮
+cuter.bindSelect("#selectImgBtn");
 </script>
