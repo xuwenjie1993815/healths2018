@@ -90,6 +90,28 @@ class Device extends Base{
 			//添加设备操作(接口)
 			// return array('code' => '1','msg' => '健康源,机构编号:1');
 		}
+		if (input('?id')) {
+			if ($_POST['unit_id']) {
+				$data['id'] = input('id');
+				$data['groupId'] = $_POST['unit_id'];
+				$url = config('path')."/equipment/bangdingGroup";
+				$res = http_request($url,$data);
+				$res = json_decode($res,true);
+				if ($res AND !$res['error']) {
+					return array('code' => 1);
+				}else{
+					return array('code' => 2,'msg' => $res['message']);
+				}
+			}
+			$url = config('path')."/equipment/id/".input('id');
+			$res = http_request($url);
+			$res = json_decode($res,true);
+			if ($res AND !$res['error']) {
+				$this->assign('eq_info',$res);
+			}
+			$this->assign('bangdingGroup','1');
+
+		}
 		return $this->fetch();
 	}
 

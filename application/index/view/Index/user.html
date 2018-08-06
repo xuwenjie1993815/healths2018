@@ -1,26 +1,68 @@
 {include file="../application/index/view/Public/header.html"}
 <div class="hui-wrap">
-    <div class="hui-list" style="background:#FFFFFF; margin-top:28px;">
+    <div class="hui-list" style="background:#FFFFFF; margin-top:5%;">
         <a href="javascript:hui.toast('msg!');" style="height:auto; height:80px; padding-bottom:8px;">
             <div class="hui-list-icons" style="width:110px; height:80px;">
+                {if condition="$user_info.imgUrl"}
+                <img style="width:66px; margin:0px; border-radius:50%;" src={$user_info.imgUrl}/>
+                {else/}
                 <img src="__PUBLIC__/images/1517275559.jpg" style="width:66px; margin:0px; border-radius:50%;" />
+                {/if}
             </div>
             <div class="hui-list-text" style="height:79px; line-height:79px;">
                 <div class="hui-list-text-content">
-                    徐闻洁
+                {$user_info.name}
                 </div>
                 <div class="hui-list-info">
                     <span class="hui-icons hui-icons-right"></span>
                 </div>
             </div>
         </a>
-        <a href="javascript:hui.toast('msg!');">
-            <div class="hui-list-text">
-                设备 : A95623399542(A) | 积分 : 2000
+
+        <div class="hui-list-text">
+            绑定机构 : {$user_info.groupName}{if condition="$user_info['doctorName']"}-{$user_info.doctorName}{/if}{if condition="$user_info['assistantName']"}-{$user_info.assistantName}{/if}
+        </div>
+
+        <a href="javascript:hui.toast('Hello Hcoder UI !');">
+        <div class="hui-list-text">
+            服务包剩余时间 : {$user_info.leftDays}天
+            <div class="hui-list-info">
+                <span class="hui-icons hui-icons-right"></span>
             </div>
+        </div>
         </a>
+        
+        <a href="javascript:hui.toast('Hello Hcoder UI !');">
+        <div class="hui-list-text">
+            剩余积分 : {$user_info.appIntegralMapper.left}
+            <div class="hui-list-info">
+                <span class="hui-icons hui-icons-right"></span>
+            </div>
+        </div>
+        </a>
+
+        <div class="hui-common-title" style="margin-top:28px;">
+            <div class="hui-common-title-line"></div>
+            <div class="hui-common-title-txt">设备列表</div>
+            <div class="hui-common-title-line"></div>
+        </div>
+        {volist name="$user_info['appEquipmentMapperList']" id="vo"}
+        <a href="javascript:hui.toast({$vo.id});">
+        <div class="hui-list-text">
+            {switch name="$vo.type"}
+                {case value="1"}血压计:{/case}
+                {case value="2"}血糖仪:{/case}
+            {/switch}
+            {$vo.number}({$vo.port})
+            <div class="hui-list-info">
+                <span class="hui-icons hui-icons-right"></span>
+            </div>
+        </div>
+        </a>
+        {/volist}
     </div>
-    <div class="hui-list" style="background:#FFFFFF; margin-top:28px;">
+
+<!--     <div class="hui-list" style="background:#FFFFFF;">
         <ul>
             <li>
                 <a href="javascript:void(0);">
@@ -34,7 +76,7 @@
                         </div>
                     </div>
                 </a>
-               </li>
+            </li>
             <li>
                 <a href="javascript:void(0);">
                     <div class="hui-list-icons">
@@ -47,8 +89,8 @@
                         </div>
                     </div>
                 </a>
-               </li>
-               <li>
+            </li>
+            <li>
                 <a href="javascript:void(0);">
                     <div class="hui-list-icons">
                         <img src="__PUBLIC__/images/data.png" />
@@ -60,8 +102,8 @@
                         </div>
                     </div>
                 </a>
-               </li>
-               <li>
+            </li>
+            <li>
                 <a href="javascript:void(0);">
                     <div class="hui-list-icons">
                         <img src="__PUBLIC__/images/service.png" />
@@ -73,13 +115,14 @@
                         </div>
                     </div>
                 </a>
-               </li>
+            </li>
         </ul>
-    </div>
+    </div> -->
+
     <div style="background:#FFFFFF; margin-top:28px;">
         <button type="button" class="hui-button hui-button-large" onclick="hui.toast('退出');">
             <span class="hui-icons hui-icons-logoff"></span>退出登陆
-           </button>
+        </button>
     </div>
 </div>
 {include file="../application/index/view/Public/footer.html"}

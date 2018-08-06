@@ -5,18 +5,22 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>设备编号：</label>
 			<div class="formControls col-xs-8 col-sm-9">
+				{if condition="$bangdingGroup neq 1" }
 				<input type="text" class="input-text" value="" placeholder="" id="number" name="number">
+				{else/}
+				<input type="text" class="input-text" value={$eq_info.number}  {if condition="$bangdingGroup eq 1" } disabled {/if} placeholder="" id="number" name="number">
+				{/if}
 			</div>
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>类型：</label>
 			<div class="formControls col-xs-8 col-sm-9 skin-minimal">
 				<div class="radio-box">
-					<input name="type" type="radio" id="appa1" value="1" checked>
+					<input name="type" type="radio" id="appa1" value="1" {if condition="$eq_info.type eq 1" } checked {/if} {if condition="$bangdingGroup eq 1" } disabled {/if}>
 					<label for="appa1">血压计</label>
 				</div>
 				<div class="radio-box">
-					<input type="radio" id="appa2" value="2" name="type">
+					<input type="radio" id="appa2" value="2" name="type" {if condition="$eq_info.type eq 2" } checked {/if} {if condition="$bangdingGroup eq 1" } disabled {/if}>
 					<label for="appa2">血糖仪</label>
 				</div>
 			</div>
@@ -25,15 +29,15 @@
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>端口：</label>
 			<div class="formControls col-xs-8 col-sm-9 skin-minimal">
 				<div class="radio-box">
-					<input name="port" type="radio" id="null" value="" checked>
+					<input name="port" type="radio" id="null" value="" {if condition="$eq_info.port eq ''" } checked {/if} {if condition="$bangdingGroup eq 1" } disabled {/if}>
 					<label for="null">无</label>
 				</div>
 				<div class="radio-box">
-					<input type="radio" id="A" value="A" name="port">
+					<input type="radio" id="A" value="A" name="port" {if condition="$eq_info.port eq A" } checked {/if} {if condition="$bangdingGroup eq 1" } disabled {/if}>
 					<label for="A">A</label>
 				</div>
 				<div class="radio-box">
-					<input type="radio" id="B" value="B" name="port">
+					<input type="radio" id="B" value="B" name="port" {if condition="$eq_info.port eq B" } checked {/if} {if condition="$bangdingGroup eq 1" } disabled {/if}>
 					<label for="B">B</label>
 				</div>
 			</div>
@@ -62,20 +66,6 @@
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机构：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 			<input type="text" disabled="true" style="width: 50%" class="input-text" placeholder="" id="unit" value={$userMsg.info.userName}>
-<!-- 				<table style="display:none" id="unit_data" class="table table-border table-bordered">
-		            <thead>
-		              <tr>
-		                <th>机构编码</th>
-		                <th>机构名称</th>
-		              </tr>
-		            </thead>
-		            <tbody id="admin_info">
-		              <tr>
-		                <th>1</th>
-		                <td>健康源</td>
-		              </tr>
-		            </tbody>
-		        </table> -->
 			</div>
 			<input type="hidden" name="group_id" value={$userMsg.id}>
 		</div>

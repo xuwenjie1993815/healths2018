@@ -822,8 +822,7 @@ class Patient extends Base
 				return array('code' => 2,'msg' => $res['message'],'html' => $html);
 			}
 
-		}
-		 
+		} 
 		
 	}
 }

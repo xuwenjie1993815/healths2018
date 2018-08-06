@@ -11,7 +11,7 @@ class Base extends Controller
             $this->assign('app_userMsg','1');
         }else{
             //todo暂时不判断,上线后判断
-            $this->assign('app_userMsg','0');
+            $this->assign('app_userMsg','1');
         }
     } 
 }
