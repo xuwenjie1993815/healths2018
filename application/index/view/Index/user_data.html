@@ -1,5 +1,7 @@
 {include file="../application/index/view/Public/header.html"}
 <link type="text/css" rel="stylesheet" href="__PUBLIC__/mobile/hui/css/bootstrap.css" />
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/bootstrap-table-master/docs/assets/bootstrap/css/bootstrap.min.css" />
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/bootstrap-table-master/dist/bootstrap-table.css" />
     <div class="hui-tab">
         <div class="hui-tab-title">
             <div>血压数据</div>
@@ -7,7 +9,7 @@
         </div>
         <div class="hui-tab-body">
             <div class="hui-tab-body-items">
-              <div class="hui-tab-item" style="height: 1000px;">
+              <div class="hui-tab-item" style="height: 1500px;">
                     <!-- 基本信息 -->
                     <div class="hui-list" style="background:#FFFFFF; margin-top:28px;">
                         <a href="javascript:hui.toast('Hello Hcoder UI !');">
@@ -22,8 +24,8 @@
                     <!-- 血压趋势图 -->
                     <div id="main" style="width:100%;height:30%;"></div><br>
                     <!-- 表格 -->
-                    <table class="table">
-                      <thead>
+                    <table id="table" data-toggle="table">
+                      <!-- <thead>
                         <tr>
                           <th>时间</th>
                           <th>收缩压</th>
@@ -40,7 +42,7 @@
                           <td>{$vo.heartRate}</td>
                         </tr>
                         {/volist}
-                      </tbody>
+                      </tbody> -->
                     </table>
               </div>
                <div class="hui-tab-item">
@@ -53,6 +55,10 @@
 {include file="../application/index/view/Public/footer.html"}
 <script src="__PUBLIC__/mobile/hui/js/hui-tab.js" type="text/javascript"></script>
 <script src="__STATIC__/lib/echarts/3.4.0/echarts.common.min.js"></script>
+
+<script src="__PUBLIC__/bootstrap-table-master/docs/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="__PUBLIC__/bootstrap-table-master/dist/bootstrap-table.js"></script>
+<script src="__PUBLIC__/bootstrap-table-master/dist/locale/bootstrap-table-zh-CN.js"></script>
 <script type="text/javascript">
 hui.tab('.hui-tab');//参数为一个选择器用来选择选项卡外层
 
@@ -116,4 +122,74 @@ $(document).ready(function () {
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
 });
+
+$(function () {
+    $('#table').bootstrapTable({
+        url:"{:url('Index/inedx/order_del')}",
+        cache: false,
+        striped: true,
+        search: true,
+        searchOnEnterKey: true,
+        pagination: true,
+        <!-- pageList: [10, 20], -->
+        pageSize: 10,
+        pageNumber: 1,
+        showRefresh: true,
+        buttonsAlign: "left",
+        searchAlign: "left",
+        showToggle: false,
+        sortName: 'ctime',
+        sortOrder: 'desc',
+        columns: [{
+            checkbox:true,
+            align:'center',
+            visible:false
+        },{
+            field: 'id',
+            title: 'ID',
+            visible: false
+        },{
+            field: 'name',
+            title: '姓名',
+            align: 'center',
+            valign: 'middle'
+        },{
+            field: 'phone',
+            title: '电话',
+            align: 'center',
+            valign: 'middle'
+        },{
+            field: 'blood_ss',
+            title: '血压',
+            align: 'center',
+            valign: 'middle'
+        },{
+            field: 'level',
+            title: '预警等级',
+            align: 'center',
+            valign: 'middle'
+        },{
+            field: 'ctime',
+            title: '时间',
+            align: 'center',
+            valign: 'middle'
+        },{
+            field: 'mark',
+            title: '预警信息',
+            align: 'center',
+            valign: 'middle'
+        },{
+            title:'操作',
+            align:'center',
+            valign:'middle',
+            formatter: function (value, row, index) {
+                if (row.s_id) {
+                    return '<a href="__APP__/Patient/details/id/'+row.p_id+'" class="xiangqing" ><button class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-info-sign"></span> </button></a>' + '<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#delModal" style="margin:0px 2px 0px 2px" onclick="valueMethod(\'' + row.p_id + '\',\'' + row.name + '\',\'' + row.phone + '\')"><span class="glyphicon glyphicon-comment"></span> </button>'+ '<button class="btn btn-primary btn-sm" style="margin:0px 2px 0px 2px" disabled="disabled"><span class="glyphicon glyphicon-ok-sign"></span></button>'+ '<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#logModal" style="margin:0px 2px 0px 2px" onclick="valueMethod_log(\'' + row.p_id + '\',\'' + row.name + '\',\'' + row.ctime + '\')"><span class="glyphicon glyphicon-stats"></span> </button>';
+                }else{
+                    return '<a href="__APP__/Patient/details/id/'+row.p_id+'" class="xiangqing" ><button class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-info-sign"></span> </button></a>' + '<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#delModal" style="margin:0px 2px 0px 2px" onclick="valueMethod(\'' + row.p_id + '\',\'' + row.name + '\',\'' + row.phone + '\')"><span class="glyphicon glyphicon-comment"></span> </button>'+ '<button class="btn btn-primary btn-sm" style="margin:0px 2px 0px 2px" onclick="sign_warning(\'' + row.p_id + '\',\'' + row.id + '\')"><span class="glyphicon glyphicon-ok-sign"></span></button>' + '<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#logModal" style="margin:0px 2px 0px 2px" onclick="valueMethod_log(\'' + row.p_id + '\',\'' + row.name + '\',\'' + row.ctime + '\')"><span class="glyphicon glyphicon-stats"></span> </button>';
+                }
+            }
+        }]
+    });                                     
+}); 
 </script>

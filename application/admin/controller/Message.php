@@ -54,19 +54,19 @@ class Message extends Base
 		return $this->fetch();
 	}
 
-	//标记处理
-	public function sign(){
-		$id = $_POST['id'];
-		//处理
-		return array('code' => 1);
-	}
+	// //标记处理
+	// public function sign(){
+	// 	$id = $_POST['id'];
+	// 	//处理
+	// 	return array('code' => 1);
+	// }
 
-	//删除留言
-	public function message_del(){
-		$message_id = $_POST['id'];
-		//删除
-		return array('code' => 1);
-	}
+	// //删除留言
+	// public function message_del(){
+	// 	$message_id = $_POST['id'];
+	// 	//删除
+	// 	return array('code' => 1);
+	// }
 
 	//查看回复
 	public function check_amswer(){

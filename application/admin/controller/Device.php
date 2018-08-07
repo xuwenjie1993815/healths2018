@@ -13,24 +13,24 @@ class Device extends Base{
         $url = config('path')."/equipment/getAllEquipment?adminId=".$userMsg['id'];
         $res = http_request($url,$data);
         $res = json_decode($res,true);
-        if (!$res['error']) {
-        	$url = config('path')."/classification/group/getOne";
-        	foreach ($res as $key => $value) {
-        		$res[$key]['type'] = config('EQUIPMENT')[$value['type']];
-        		//根据groupId查机构信息
-        		$data1['groupId'] = $value['groupId'];
-        		$res1 = http_request($url,$data1);
-        		$res1 = json_decode($res1,true);
-        		$res[$key]['groupName'] = $res1['name'];
-        		//根据用户id获取用户信息
-        		if ($value['patientId']) {
-        			$patient_url = config('path')."/patient/id/".$value['patientId'];
-        			$patient_res = http_request($patient_url);
-        			$patient_res = json_decode($patient_res,true);
-        			$res[$key]['patientId'] = $patient_res['name'];
-        		}
-        		
-        	}
+        if ($res AND !$res['error']) {
+        	// $url = config('path')."/classification/group/getOne";
+        	// foreach ($res as $key => $value) {
+        	// 	$res[$key]['type'] = config('EQUIPMENT')[$value['type']];
+        	// 	//根据groupId查机构信息
+        	// 	$data1['groupId'] = $value['groupId'];
+        	// 	$res1 = http_request($url,$data1);
+        	// 	$res1 = json_decode($res1,true);
+        	// 	$res[$key]['groupName'] = $res1['name'];
+        	// 	//根据用户id获取用户信息
+        	// 	if ($value['patientId']) {
+        	// 		$patient_url = config('path')."/patient/id/".$value['patientId'];
+        	// 		$patient_res = http_request($patient_url);
+        	// 		$patient_res = json_decode($patient_res,true);
+        	// 		$res[$key]['patientId'] = $patient_res['name'];
+        	// 	}
+        	// 	var_dump($res);die;
+        	// }
         	$this->assign('list',$res);
         }
 		return $this->fetch('index');die;

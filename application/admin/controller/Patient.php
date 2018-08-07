@@ -99,7 +99,7 @@ class Patient extends Base
 			//获取本周数据
 				$bloodData_data_week['patientId'] = $id;
 				$bloodData_data_week['startDate'] = date('Y-m-d', strtotime("this week Monday", time()));
-				$bloodData_data_week['endDate'] = date('Y-m-d');
+				$bloodData_data_week['endDate'] = date('Y-m-d',strtotime("+1 day"));
 				$bloodData_data_week['startTime'] = "00:00:00";
 				$bloodData_data_week['endTime'] = "23:59:59";
 				$bloodData_url_week = config('path')."/bloodEntity/specialTimeData";
@@ -131,7 +131,7 @@ class Patient extends Base
 			//获取本月数据
 				$bloodData_data_month['patientId'] = $id;
 				$bloodData_data_month['startDate'] = date('Y-m-01', strtotime(date("Y-m-d")));
-				$bloodData_data_month['endDate'] = date('Y-m-d');
+				$bloodData_data_month['endDate'] = date('Y-m-d',strtotime("+1 day"));
 				$bloodData_data_month['startTime'] = "00:00:00";
 				$bloodData_data_month['endTime'] = "23:59:59";
 				$bloodData_url_month = config('path')."/bloodEntity/specialTimeData";

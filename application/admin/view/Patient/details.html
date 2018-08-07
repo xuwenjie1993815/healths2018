@@ -50,7 +50,7 @@
 					<label class="form-label col-xs-4 col-sm-2">
 						年龄：</label>
 					<div class="formControls col-xs-8 col-sm-9">
-						<input type="number" min="1" id="age" disabled="disabled" placeholder="" value="{$info.age}" class="input-text">
+						{$info.age}
 					</div>
 				</div>
 				<div class="row cl">
@@ -480,44 +480,75 @@
 			</div>
 		</div>
 	</div>
-	</div>
+</div>
 </div>
 <input type="hidden" id="uploadTime" value="{$screen_data.uploadTime}">
 <input type="hidden" id="avgSys" value="{$screen_data.avgSys}">
 <input type="hidden" id="avgDias" value="{$screen_data.avgDias}">
 <input type="hidden" id="avgHear" value="{$screen_data.avgHear}">
+
+<input type="hidden" id="info_week_check" value="{$info_week.check}">
+<input type="hidden" id="info_week_uploadTime" value="{$info_week.uploadTime}">
+<input type="hidden" id="info_week_avgSys" value="{$info_week.avgSys}">
+<input type="hidden" id="info_week_avgDias" value="{$info_week.avgDias}">
+<input type="hidden" id="info_week_avgHear" value="{$info_week.avgHear}">
+
+<input type="hidden" id="info_month_check" value="{$info_month.check}">
+<input type="hidden" id="info_month_uploadTime" value="{$info_month.uploadTime}">
+<input type="hidden" id="info_month_avgSys" value="{$info_month.avgSys}">
+<input type="hidden" id="info_month_avgDias" value="{$info_month.avgDias}">
+<input type="hidden" id="info_month_avgHear" value="{$info_month.avgHear}">
 {include file="../application/admin/view/Public/_footer.html"/}
 <script src="__STATIC__/lib/echarts/3.4.0/echarts.common.min.js"></script>
 <script type="text/javascript" src="__STATIC__/lib/ueditor/1.4.3/ueditor.config.js"></script>
 <script type="text/javascript" src="__STATIC__/lib/ueditor/1.4.3/ueditor.all.min.js"></script>
 <script type="text/javascript" src="__STATIC__/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
-<script type="text/javascript">
-$(document).ready(function () {
 
+<script type="text/javascript">
+	$(function(){
+		$('.skin-minimal input').iCheck({
+			checkboxClass: 'icheckbox-blue',
+			radioClass: 'iradio-blue',
+			increaseArea: '20%'
+		});
+		$("#tab-system").Huitab({
+			index:0
+		});
+
+	var info_week_check = $("#info_week_check").val();
+	var info_week_uploadTime = $("#info_week_uploadTime").val();
+	var info_week_avgSys = $("#info_week_avgSys").val();
+	var info_week_avgDias = $("#info_week_avgDias").val();
+	var info_week_avgHear = $("#info_week_avgHear").val();
 	//默认显示的本周的数据
-	if ({$info_week.check} == '1') {
+	if (info_week_check == '1') {
 		var info_week_uploadTime = ' ';
 		var info_week_avgSys = ' ';
 		var info_week_avgDias = ' ';
 		var info_week_avgHear = ' ';
 	}else{
-		var info_week_uploadTime = {$info_week.uploadTime}.split(',');
-		var info_week_avgSys = {$info_week.avgSys}.split(',');
-		var info_week_avgDias = {$info_week.avgDias}.split(',');
-		var info_week_avgHear = {$info_week.avgHear}.split(',');
+		var info_week_uploadTime = info_week_uploadTime.split(',');
+		var info_week_avgSys = info_week_avgSys.split(',');
+		var info_week_avgDias = info_week_avgDias.split(',');
+		var info_week_avgHear = info_week_avgHear.split(',');
 	}
 
+	var info_month_check = $("#info_month_check").val();
+	var info_month_uploadTime = $("#info_month_uploadTime").val();
+	var info_month_avgSys = $("#info_month_avgSys").val();
+	var info_month_avgDias = $("#info_month_avgDias").val();
+	var info_month_avgHear = $("#info_month_avgHear").val();
 	//默认显示的本月的数据
-	if ({$info_month.check} == ['1']) {
+	if (info_month_check == ['1']) {
 		var info_month_uploadTime = ' ';
 		var info_month_avgSys = ' ';
 		var info_month_avgDias = ' ';
 		var info_month_avgHear = ' ';
 	}else{
-		var info_month_uploadTime = {$info_month.uploadTime}.split(',');
-		var info_month_avgSys = {$info_month.avgSys}.split(',');
-		var info_month_avgDias = {$info_month.avgDias}.split(',');
-		var info_month_avgHear = {$info_month.avgHear}.split(',');
+		var info_month_uploadTime = info_month_uploadTime.split(',');
+		var info_month_avgSys = info_month_avgSys.split(',');
+		var info_month_avgDias = info_month_avgDias.split(',');
+		var info_month_avgHear = info_month_avgHear.split(',');
 	}
 
 	var uploadTime = $("#uploadTime").val();
@@ -631,27 +662,16 @@ $(document).ready(function () {
 	// 使用刚指定的配置项和数据显示图表。
 	myChart.setOption(option);
 	myChart1.setOption(option1);
-});
 
+
+
+	});
+</script>
+
+<script type="text/javascript">
 	$('.table-sort').dataTable({
 		"aaSorting": [[ 1, "desc" ]],//默认第几个排序
 		"bStateSave": true,//状态保存
-		"aoColumnDefs": [
-		  {
-		  // "orderable":false,"aTargets":[0,7]
-		  }// 制定列不参与排序
-		]
-	});
-
-	$(function(){
-		$('.skin-minimal input').iCheck({
-			checkboxClass: 'icheckbox-blue',
-			radioClass: 'iradio-blue',
-			increaseArea: '20%'
-		});
-		$("#tab-system").Huitab({
-			index:0
-		});
 	});
 
 	//更新基本信息
@@ -858,7 +878,7 @@ $(document).ready(function () {
 
 	//血糖数据删除
 	function sugar_del(url){
-	var sure=confirm('确认删除吗？'); 
+		var sure=confirm('确认删除吗？'); 
 		if (1==sure){
 			$.ajax({
 				url:url,
