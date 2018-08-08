@@ -25,7 +25,7 @@
                     <div id="main" style="width:100%;height:30%;"></div><br>
                     <!-- 表格 -->
                     <table id="table" data-toggle="table">
-                      <!-- <thead>
+                      <thead>
                         <tr>
                           <th>时间</th>
                           <th>收缩压</th>
@@ -42,10 +42,10 @@
                           <td>{$vo.heartRate}</td>
                         </tr>
                         {/volist}
-                      </tbody> -->
+                      </tbody>
                     </table>
               </div>
-               <div class="hui-tab-item">
+               <div class="hui-tab-item" style="height: 1500px;">
                     血糖数据：<br>
 					预警列表：
                </div>
@@ -102,19 +102,16 @@ $(document).ready(function () {
             {
                 name:'收缩压',
                 type:'line',
-                stack: '总量',
                 data: avgSystolic.split(',')
             },
             {
                 name:'舒张压',
                 type:'line',
-                stack: '总量',
                 data: avgDiastolic.split(',')
             },
             {
                 name:'心率',
                 type:'line',
-                stack: '总量',
                 data: avgHeart.split(',')
             }
         ]
@@ -125,7 +122,7 @@ $(document).ready(function () {
 
 $(function () {
     $('#table').bootstrapTable({
-        url:"{:url('Index/inedx/order_del')}",
+        url:"{:url('Index/inedx/get_table_data')}",
         cache: false,
         striped: true,
         search: true,

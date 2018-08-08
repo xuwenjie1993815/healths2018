@@ -13,14 +13,14 @@ class Message extends Base
 		$res = json_decode($res,true);
 		if ($res AND !$res['error']) {
 			//根据问题id获取回复的内容
-			foreach ($res as $key => $value) {
-				$answerUrl = config('path')."/board/question/".$value['id'];
-				$answerRes = http_request($answerUrl);
-				$answerRes = json_decode($answerRes,true);
-				if ($answerRes AND !$answerRes['error']) {
-					$res[$key]['amswer'] = $answerRes['answerMappers'];
-				}
-			}			
+			// foreach ($res as $key => $value) {
+			// 	$answerUrl = config('path')."/board/question/".$value['id'];
+			// 	$answerRes = http_request($answerUrl);
+			// 	$answerRes = json_decode($answerRes,true);
+			// 	if ($answerRes AND !$answerRes['error']) {
+			// 		$res[$key]['amswer'] = $answerRes['answerMappers'];
+			// 	}
+			// }			
 			$this->assign('MessageList',$res);
 			return $this->fetch();
 		}

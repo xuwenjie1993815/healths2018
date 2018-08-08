@@ -27,17 +27,17 @@ huiTabListBase = function(dom){
 	var _self = this;
 	//监测滑动
 	this.swipeIn.swipe(function (e){
-		this.isMove    = true;
-		if(_self.index >= _self.itemSize - 1 && e.deltaX < 0){
-			this.isMove    = false;
-			return false;
-		}else if(_self.index == 0 && e.deltaX > 0){
-			this.isMove    = false;
-			return false;
-		}
-		_self.moveScale  = e.deltaX / _self.width * - 1 * _self.scale * 1.5;
-		_self.moveScale += (_self.index) * _self.scale;
-		_self.swipeIn.dom[0].style.transform  = 'translate3d('+ (_self.moveScale * -100) +'%, 0px, 0px)';
+		// this.isMove    = true;
+		// if(_self.index >= _self.itemSize - 1 && e.deltaX < 0){
+		// 	this.isMove    = false;
+		// 	return false;
+		// }else if(_self.index == 0 && e.deltaX > 0){
+		// 	this.isMove    = false;
+		// 	return false;
+		// }
+		// _self.moveScale  = e.deltaX / _self.width * - 1 * _self.scale * 1.5;
+		// _self.moveScale += (_self.index) * _self.scale;
+		// _self.swipeIn.dom[0].style.transform  = 'translate3d('+ (_self.moveScale * -100) +'%, 0px, 0px)';
 	});
 	this.swipeIn.swipeEnd(function(e){
 		if(!this.isMove){return false;}

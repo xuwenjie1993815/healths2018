@@ -23,6 +23,7 @@ class Order extends Base
 				$p_res = json_decode($p_res,true);
 				$res[$key]['patientName'] = $p_res['name'];
 			}
+			var_dump($res);die;
 			$this->assign('list',$res);
 		}
 		if ($statistics_res AND !$statistics_res['error']) {

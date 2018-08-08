@@ -82,13 +82,25 @@ class Index extends Base
             }
             unset($_POST['form_data']['imgkey']);
 
-            var_dump($_POST);die;
-            //获取微信用户信息
+            //获取微信用户openid
             $weixin = new Weixin();
             $res = $weixin->authorization();
+            if ($res['code'] != '1') {
+                return $res;die;
+            }
             $openid=$res["openid"];
             $headurl=$res["headimgurl"];
             $nickname=$res["nickname"];
+            $_POST['openid'] = $openid;
+            $_POST = json_encode($_POST);
+            $url = config('path')."/app/register";
+            $res = http_request($url,$_POST,1);
+            $res = json_decode($res,true);
+            if ($res AND !$res['error']) {
+                return array('code' => 1);
+            }else{
+                return array('code' => 2,'msg' => $red['message']);
+            }
         }
 
         return $this->fetch();
@@ -142,6 +154,7 @@ class Index extends Base
                     $info['avgHeart'] .= ','.$value['avgHeart'];
                 }
             }
+            echo $info;
             var_dump($info);die;
             // $this->assign('bloodData',$info);
             // $this->assign('user_info',$res);

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)http://yanshi.sucaihuo.com/jquery/16/1673/demo/ -->
+<html style="font-size: 100px;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>
+			服务包详情
+		</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/mobile/product/style.css">
+		<script src="__PUBLIC__/mobile/product/common.js.下载"></script>
+        <script src="__PUBLIC__/mobile/product/jquery-3.1.1.min.js.下载"></script>
+    	<script src="__PUBLIC__/mobile/product/TouchSlide.1.1.js.下载"></script>
+        
+    </head>
+    <body> 
+    	<div id="slideBox" class="slideBox">
+          <div class="bd">
+              <div class="tempWrap" style="overflow:hidden; position:relative;"><ul style="width: 8000px; position: relative; overflow: hidden; padding: 0px; margin: 0px; transition-duration: 200ms; transform: translate(-4800px, 0px) translateZ(0px);">
+                  <li style="display: table-cell; vertical-align: top; width: 1600px;">
+                      <a class="pic" href="#">
+                        <img src={$info.goodUrl}>
+                      </a>
+                  </li>
+                </div>
+            </div>
+    
+            <div class="hd">
+                <ul><li class="">1</li><li class="">2</li><li class="on">3</li></ul>
+            </div>
+          </div>
+          <script type="text/javascript">
+              TouchSlide({ 
+                  slideCell:"#slideBox",
+                  titCell:".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+                  mainCell:".bd ul", 
+                  effect:"leftLoop", 
+                  autoPage:true,//自动分页
+              });
+          </script>   
+
+          <div class="clear"></div>
+    
+    		
+            <div class="xj">
+            	<p>{$info.goodName} </p>
+            	<p>{$info.discount_price}<span>{$info.price}</span> </p>
+            </div>
+    
+    		
+            
+            <div id="wrap">
+                <div id="tit">
+                    <span class="select">产品详情</span>
+                    <span>历史订单</span>
+                </div>
+                <div id="con">
+                    <div class="con show">
+                    	{$info.remark}
+                    </div>
+                    <div class="con">
+                    	<ul class="ren">
+                        	<li>
+                            	<div class="xqy-p">
+                                	<img src="./入伙_files/touxiang.png">
+                                </div>
+                                <div class="xqy-p1">
+                                	<span>名字</span>
+                                    <span style="margin-left:1rem;">2016-6-4 14:22:08 </span>
+                                    <span style="margin-left:1rem;">
+                                    	减少：
+                                        <span style="color:#fe798e">¥20元</span>
+                                     </span>
+                                </div>
+                                <div class="clear"></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $('#tit span').click(function() {
+                    var i = $(this).index();//下标第一种写法
+                    $(this).addClass('select').siblings().removeClass('select');
+                    $('.con').eq(i).show().siblings().hide();
+                });
+            </script>
+    
+    		<div class="foot">
+            	<div>
+                	<a href="#">价格￥{$info.discount_price}</a>
+                </div>
+            	<div>
+                	<a href="#">立即购买</a>
+                </div>
+            </div>
+</body></html>

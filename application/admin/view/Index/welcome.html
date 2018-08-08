@@ -100,7 +100,7 @@ function star_set(id){
 	layer.confirm('确认要设置为星级用户吗？',function(index){
 		$.ajax({
 			type: 'POST',
-			url: 'star_set',
+			url: "{:url('Admin/Patient/star_set')}",
 			dataType: 'json',
 			data:{id:id},
 			success: function(data){
@@ -121,7 +121,7 @@ function star_cancel(id){
 	layer.confirm('确认要取消此星级用户吗？',function(index){
 		$.ajax({
 			type: 'POST',
-			url: 'star_cancel',
+			url: "{:url('Admin/Patient/star_cancel')}",
 			dataType: 'json',
 			data:{id:id},
 			success: function(data){
@@ -175,7 +175,7 @@ function patient_del(id){
 	layer.confirm('确认要删除吗？',function(index){
 		$.ajax({
 			type: 'POST',
-			url: 'patient_del',
+			url: "{:url('Admin/Patient/patient_del')}",
 			dataType: 'json',
 			data:{id:id},
 			success: function(data){

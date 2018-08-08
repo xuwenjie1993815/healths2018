@@ -780,19 +780,23 @@ class Patient extends Base
 			$data['endTime'] = $_POST["endTime"]?:'23:59:59';
 			// $this->assign('TimeData',$data);
 			if (strlen(explode(':',$data['startTime'])[0])<2) {
-				$data['startTime'] = '0'.input("get.startTime");
+				$data['startTime'] = '0'.$_POST["startTime"];
 			}
 			if (strlen(explode(':',$data['endTime'])[0])<2) {
-				$data['endTime'] = '0'.input("get.endTime");
+				$data['endTime'] = '0'.$_POST["endTime"];
 			}
 			$url = config('path')."/bloodEntity/specialTimeData";
 			$res = http_request($url,$data);
 			$res = json_decode($res,true);
-
 			//血压表格
 			$data_t['patientId'] = $_POST['patientId'];
-			$data_t['startTime'] = $_POST['startDate'].' 00:00:00';
-			$data_t['endTime'] = $_POST['endDate'].' 23:59:59';
+			$data_t['startDate'] = $_POST["startDate"];
+			$data_t['endDate'] = $_POST["endDate"];
+			$data_t['startTime'] =$data["startTime"];
+			$data_t['endTime'] = $data["endTime"];
+			// $data_t['patientId'] = $_POST['patientId'];
+			// $data_t['startTime'] = $_POST['startDate'].' 00:00:00';
+			// $data_t['endTime'] = $_POST['endDate'].' 23:59:59';
 			$url_t = config('path')."/bloodEntity/patientTimeData";
 			$res_t = http_request($url_t,$data_t);
 			$res_t = json_decode($res_t,true);
@@ -821,8 +825,6 @@ class Patient extends Base
 			}else{
 				return array('code' => 2,'msg' => $res['message'],'html' => $html);
 			}
-
 		} 
-		
 	}
 }

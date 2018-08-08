@@ -1,4 +1,22 @@
 {include file="../application/index/view/Public/header.html"/}
+<style type="text/css">
+/* 必要的css  */
+.hui-news-list{padding:6px 10px;}
+.hui-news-list li{position:relative; width:100%; border-bottom:1px solid #E4E3E6; overflow:hidden;}
+.hui-news-list li:last-child{border:none;}
+.hui-news-list li a{display:block; overflow:hidden; padding:15px 0px;}
+.hui-news-list div{-webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box; word-break:break-word;}
+.hui-news-list-l{width:68%; float:left; line-height:1.6em; padding-right:10px; font-size:16px;}
+.hui-news-list-l span{color:#999999; font-size:11px;}
+.hui-news-list-r{width:32%; float:right;}
+.hui-news-list-r img{width:100%;}
+.hui-news-list-titile{line-height:1.6em; font-size:16px;}
+.hui-news-list-imgs{font-size:0px; padding-top:8px;}
+.hui-news-list-imgs img{display:block; width:33.3%; float:left; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box; word-break:break-word; padding-right:5px;}
+.hui-news-list-img{font-size:0px; padding:8px 0px 5px 0px;}
+.hui-news-list-img img{width:100%;}
+.hui-news-list-info{color:#999999; font-size:11px; padding-top:8px; line-height:18px;}
+</style>
 <link type="text/css" rel="stylesheet" href="__PUBLIC__/mobile/hui/css/bootstrap.css" />
 <div class="hui-wrap">
     <div style="padding:10px;">
@@ -11,7 +29,7 @@
     </div>
 </div>
 
-<div class="hui-wrap" style="height: 1000px;">
+<div class="hui-wrap" style="height: 100%;margin-bottom:10%;">
     <div class="hui-list">
         <a href="javascript:hui.toast('ok');" style="height:auto; height:80px; padding-bottom:8px;">
             <div class="hui-list-icons" style="width:110px; height:80px;">
@@ -31,9 +49,13 @@
         <div class="hui-list-text">
             绑定机构 : {$user_info.groupName}{if condition="$user_info['doctorName']"}-{$user_info.doctorName}{/if}{if condition="$user_info['assistantName']"}-{$user_info.assistantName}{/if}
         </div>
-        <a href="javascript:hui.toast('服务包列表入口');">
+        <a href=javascript:hui.open('/public/index/Product/product_list');>
         <div class="hui-list-text">
-            服务包剩余时间 : {$user_info.leftDays}天
+            {if condition="$user_info.leftDays eq ''"}
+                点击购买服务包
+                {else/}
+                服务包剩余时间 : {$user_info.leftDays}天
+            {/if}
             <div class="hui-list-info">
                 <span class="hui-icons hui-icons-right"></span>
             </div>
@@ -162,25 +184,35 @@
         <div class="hui-common-title-txt">温馨提示</div>
         <div class="hui-common-title-line"></div>
     </div>
-    <div class="hui-list" style="margin-top:22px;">
-        <ul>
-            <li>
-                <a href="javascript:hui.toast('ok!');">
-                    <div class="hui-list-text">你今天的的血压良好,请继续保持</div>
-                </a>
-            </li>
-            <li>
-                <a href="javascript:hui.toast('ok!');">
-                    <div class="hui-list-text">
-                        <div class="hui-list-text-content">
-                        你今天问题大了
-                        </div>
-                    </div>
-                </a>
-            </li>
-        </ul>
-    </div>
 
+    <div class="hui-wrap">
+        <div class="hui-news-list">
+            <ul>
+                <li>
+                    <a href="javascript:hui.toast('hi...');">
+                        <div class="hui-news-list-l">
+                            asxcqwe12e12e12e<br />
+                            <span>2018-07-24 15:45:19.0</span>
+                        </div>
+                        <div class="hui-news-list-r">
+                            <img src="__PUBLIC__/images/1517275559.jpg" />
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.baidu.com">
+                        <div class="hui-news-list-l">
+                            sadwed2e43w4rfc<br />
+                            <span>2018-07-24 15:44:37.0</span>
+                        </div>
+                        <div class="hui-news-list-r">
+                            <img src="__PUBLIC__/images/1517275559.jpg" />
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 </body>
 </html>
@@ -190,6 +222,7 @@
 <script src="__PUBLIC__/mobile/hui/js/hui-swipe.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 hui.tab('.hui-tab');
+
 var swipe = new huiSwpie('#swipe');
 swipe.loop = true;
 swipe.autoPlay = false;

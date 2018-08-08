@@ -23,11 +23,7 @@
 							{$vo.content}
 						</td>
 						<td>
-							{if	condition="$vo.amswer eq ''"}
-								暂未处理
-								{else/}
-								<u style="cursor:pointer;" onclick="check_amswer('查看回复','{:url("Admin/Message/check_amswer",array("id"=>$vo["id"]))}')">查看回复</u>
-							{/if}
+							<u style="cursor:pointer;" onclick="check_amswer('查看回复','{:url("Admin/Message/check_amswer",array("id"=>$vo["id"]))}')">查看回复</u>
 						</td>
 						<td>
 							{$vo.patientName}

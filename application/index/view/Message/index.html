@@ -1,3 +1,39 @@
 {include file="../application/index/view/Public/header.html"}
-信息
+<div class="hui-wrap">
+    <div class="hui-common-title" style="margin-top:15px;">
+        <div class="hui-common-title-line"></div>
+        <div class="hui-common-title-txt">你的留言</div>
+        <div class="hui-common-title-line"></div>
+    </div>
+    <div class="hui-list" style="margin-top:22px;">
+		<div class="hui-accordion">
+			{volist name="list" id="vo"}
+				<div class="hui-accordion-title" onclick="check({$vo.id})" id="check{$vo.id}">{$vo.content}</div>
+				<div id="answer{$vo.id}" style="display: none;">
+					{volist name="$vo.answerMappers" id="v" key="k"}
+					<div class="hui-accordion-content hui-list" style="display: block;">
+						<div class="hui-content" style="padding:10px;">
+					        <h2>{$v.createTime}</h2>
+					        <p>{$v.content}</p>
+					    </div>
+					</div>
+			        {/volist}
+				</div>
+	        {/volist}
+		</div>
+	</div>
+</div>
 {include file="../application/index/view/Public/footer.html"}
+<script>
+	function check(id) {
+		var a_class = $("#check"+id).attr('class');
+		if (a_class == 'hui-accordion-title') {
+			$("#check"+id).addClass("hui-accordion-title-up");
+			$("#answer"+id).css("display",'block');
+		}else{
+			$("#check"+id).attr('class','hui-accordion-title');
+			$("#answer"+id).css("display",'none');
+		}
+		// hui.upToast(a_class);
+	}
+</script>
